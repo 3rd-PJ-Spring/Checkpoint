@@ -1,4 +1,3 @@
-
 # 3rd-PJ-Spring
 
 세 번째 프로젝트: HTML + CSS + Javascript[FE] + Spring[BE] + DB
@@ -6,15 +5,15 @@
 
 ## 🗓️ 프로젝트 기간: 25/01/06 ~ 25/01/24
 
-
 ## 👤 프로젝트 맴버
+
 [![GitHub Badge](https://img.shields.io/badge/tony24123-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/tony24123)
 [![GitHub Badge](https://img.shields.io/badge/ThoI－i-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/ThoI-i)
 [![GitHub Badge](https://img.shields.io/badge/chchch928-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/chchch928)
 [![GitHub Badge](https://img.shields.io/badge/Mabbakk-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/Mabbakk)
 
-
 ## ⚙️ Tech Stack with Tools
+
 ![HTML5 Badge](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
 ![CSS3 Badge](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
 ![JavaScript Badge](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black&labelColor=F7DF1E)<br>
@@ -27,28 +26,30 @@
 ![Discord Badge](https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white)
 ![Notion Badge](https://img.shields.io/badge/Notion-000000?logo=notion&logoColor=white)
 
-
 ![VS Code Badge](https://img.shields.io/badge/Visual%20Studio%20Code_1.95.0-007ACC?logo=visual-studio-code&logoColor=white)
 ![IntelliJ IDEA Badge](https://img.shields.io/badge/IntelliJ_IDEA_2024.2.2(Community_Edition)-000000?logo=intellijidea&logoColor=white&labelColor=000000)<br>
 ![Chrome Badge](https://img.shields.io/badge/Chrome-4285F4?logo=googlechrome&logoColor=white)
 ![Windows 11 Badge](https://img.shields.io/badge/Windows%2011-0078D6?logo=windows&logoColor=white)
 
-
 ## 🎬 시연 영상
+
 ### 🔹
 
 ## 📜 [회의록](https://www.notion.so/17320f09dc2a805e9460e881e7f78aba?v=17320f09dc2a81eab4d3000cd15fcb7a&pvs=4)
 
 ## 📌 트래블 슈팅
+
 🔹<br>
 ➽  
 🔔
 
 ## 🔄 업데이트 예정
+
 🔹
 - 
 
 ## 💡 느낀점
+
 [![GitHub Badge](https://img.shields.io/badge/tony24123-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/tony24123) <br>
 ___
 [![GitHub Badge](https://img.shields.io/badge/ThoI－i-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/ThoI-i) <br>
@@ -70,7 +71,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter @Setter @ToString
+@Getter
+@Setter
+@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
@@ -81,6 +84,7 @@ public class Hashtag {
     private LocalDateTime createdAt;
 }
 ```
+
 </details>
 
 <details>
@@ -198,11 +202,75 @@ public class Hashtag {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/07/월: </b></summary>	
-		ㅤㅤㅤ내용
-	</details>
-</details>
+		<summary><b>ㅤ25/01/07/월: 문서 작성 / FileOutputStream, FileInputStream</b></summary>	
+		   ㅤㅤㅤㅤ<b>README / Notion 회의록 작성, GitHub 연결</b>
+    <details>
+		<summary><b>ㅤㅤㅤFileOutputStream: 바이트 기반 스트림 이미지 / 영상 / 소스코드 파일 저장</b></summary>
 
+```java
+public class FileOutputExample {
+    public static void main(String[] args) {
+        try {// 바이트 기반 출력 스트림 : 파일을 내보낸다 - Save기능
+            FileOutputStream fos = new FileOutputStream(FileExample.ROOT_PATH + "/pet.txt"
+                    fos.write(new byte[]{97, 99, 101});
+        } catch (Exception e) {
+            System.out.println("해당 경로를 찾을 수 없습니다.");
+        }
+    }
+}
+```
+
+</details>
+      <details>
+		    <summary><b>ㅤㅤㅤFileOutputStream: 파일 읽기 | try ~ with ~ resource : 메모리 누수 코드 자동 클로징</b></summary>
+
+```java
+public class FileInputExample {
+    public static void main(String[] args) {
+        // try ~ with ~ resource : 메모리 누수가 있을 수 있는 코드를 자동 해제
+        try (FileInputStream fis = new FileInputStream(FileExample.ROOT_PATH + "/pet.txt")) {
+            int data = 0;
+            while ((data = fis.read()) != -1) {
+                System.out.write(data);  // 아스키 코드를 문자로 출력
+            }
+            System.out.flush();          // 출력 버퍼 비우기
+        } catch (Exception e) {
+            System.out.println("파일 로드에 실패했습니다");
+        }
+    }
+}
+```
+
+</details>
+     <details>
+		    <summary><b>ㅤㅤㅤFileOutputStream: 파일 읽기 | finally (레거시) : 메모리 누수 방지 클로징 코드</b></summary>
+
+```java
+public class FileInputExample {
+    public static void main(String[] args) {
+        FileinputStream fis = null;
+        try {
+            fis = new FileInputStream(FileExample.ROOT_PATH + "/pet.txt"
+            int data = 0;
+            while ((data = fis.read()) != -1) {
+                System.out.write(data);  // 아스키 코드를 문자로 출력
+            }
+            System.out.flush();          // 출력 버퍼 비우기
+        } catch (Exception e) {
+            System.out.println("파일 로드에 실패했습니다");
+        } finally {  // 예외에 관계없이 실행할 코드
+            try {  // 메모리 해제 - 누수 방지
+                if (fis != null) fis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+</details>
+</details>
+</details>
 <details>
   <summary><b>🐹chchch928's footprint</b></summary>
 	<details>
@@ -280,8 +348,10 @@ function initCreateFeedModal() {
 }
 export default initCreateFeedModal;
 ```
+
 - index.js에 모든 태그가 렌더링되면 실행되는 것을 만든다.
--  모든 태그가 렌더링 되면 실행되는 이벤트: DOMContentLoaded
+- 모든 태그가 렌더링 되면 실행되는 이벤트: DOMContentLoaded
+
 ```
 import initStories from './components/stories.js';
 import initCreateFeedModal from './components/create-feed-modal.js';
@@ -291,13 +361,18 @@ document.addEventListener('DOMContentLoaded', () => {
   initCreateFeedModal(); // 피드 생성 관련 js
 }); 
 ```
+
 - create-feed-modal.js에 피드생성 모달을 전역관리
+
 ```
 let $modal = null;
 $modal = document.getElementById('createPostModal')
 ```
+
 - 피드 생성 모달 열기 이벤트 생성
-- menu-item이라는 클래스가 다른 곳에도 존재하기 때문에 한곳에만 해당하는 클래스인 fa-square-plus를 가져와 closest로 menu-item에 접근해서 클릭이벤트 생성해서 click시에 openModal함수가 발생하도록 코딩
+- menu-item이라는 클래스가 다른 곳에도 존재하기 때문에 한곳에만 해당하는 클래스인 fa-square-plus를 가져와 closest로 menu-item에 접근해서 클릭이벤트 생성해서 click시에
+  openModal함수가 발생하도록 코딩
+
 ```
  document
         .querySelector('.fa-square-plus')
@@ -322,6 +397,7 @@ const openModal = e => {
 - 모달 관련 돔들을 저장할 객체를 만든다.
 - 일단 당장의 기능을 만드는데 사용해야할 요소들을 가져온다. (필요할때마다 가져오기)
 - 모달을 닫기 위해서는 x버튼을 눌렀을 때와 뒤 검은배경을 눌렀을때 닫혀야 하므로 두개의 요소 가져온다
+
 ```
 // 모달 관련 DOM들을 저장할 객체
 const elements = {
@@ -329,11 +405,15 @@ const elements = {
     $backdrop: $modal.querySelector('.modal-backdrop'),
 };
 ```
+
 - setUpModalEvents 함수에 필요한 요소 두개 가져온다.
+
 ```
 const { $closeBtn, $backdrop } = elements;
 ```
-- x 버튼을 눌렀을때와 백드롭 눌렀을때  이벤트 생성
+
+- x 버튼을 눌렀을때와 백드롭 눌렀을때 이벤트 생성
+
 ```
 	// X버튼 눌렀을 때
     $closeBtn.addEventListener('click', closeModal);
@@ -342,7 +422,9 @@ const { $closeBtn, $backdrop } = elements;
     $backdrop.addEventListener('click', closeModal);
 
 ```
+
 - 모달 닫기 함수 만들기
+
 ```
   const closeModal = e => {
     e.preventDefault();
@@ -358,11 +440,14 @@ openModal에
 ```
  document.body.style.overflow = 'hidden';  // 배경 바디 스크롤 방지
 ```
+
 closeModal에
 
 ```
 document.body.style.overflow = 'auto'; // 배경 바디 스크롤 방지 해제
 ```
+
+</details>
 </details>
 
 <details>
