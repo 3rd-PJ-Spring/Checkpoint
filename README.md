@@ -204,7 +204,7 @@ public class Hashtag {
 </details>
 
 <details>
-  <summary><b>🐾chchch928's footprint</b></summary>
+  <summary><b>🐹chchch928's footprint</b></summary>
 	<details>
 		<summary><b>ㅤ25/01/23/목:</b></summary>	
 		ㅤㅤㅤ내용
@@ -258,9 +258,111 @@ public class Hashtag {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/07/월: </b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/06/월: 인스타그램 초기세팅 및 피드 모달 열고 닫기 공부 </b></summary>
+        <h3>1. 초기 세팅 : 데이터베이스 생성</h3> 
+            - yml로 가서 spring:datasource:url을 데이터베이스를 생성한 이름과 동일하게
+        <h3>2. 프로젝트 초기 실행방법</h3>
+            - routecontroller로 index jsp를 읽도록 만든다.
+            ```
+            @GetMapping("/")
+            public String index() {
+            return "index";
+            }
+            ```
+            - index jsp에는 모든 css, index.js, 각 섹션에 해당하는 components jsp들을 읽어온다.
+          <h3>3. 피드 생성 모달 열기</h3> 
+- js의 component 아래에 create-feed-modal.js를 만들고 그곳에 initCreateFeedModal 함수 생성하고 외부에 내보내야하므로 export 사용
+
+```
+// 모달 관련 JS 함수 - 외부에 노출
+function initCreateFeedModal() {
+    console.log('모달관련 함수실행!')
+}
+export default initCreateFeedModal;
+```
+- index.js에 모든 태그가 렌더링되면 실행되는 것을 만든다.
+-  모든 태그가 렌더링 되면 실행되는 이벤트: DOMContentLoaded
+```
+import initStories from './components/stories.js';
+import initCreateFeedModal from './components/create-feed-modal.js';
+// 모든 태그가 렌더링되면 실행
+document.addEventListener('DOMContentLoaded', () => {
+  initStories(); // 스토리 관련 js
+  initCreateFeedModal(); // 피드 생성 관련 js
+}); 
+```
+- create-feed-modal.js에 피드생성 모달을 전역관리
+```
+let $modal = null;
+$modal = document.getElementById('createPostModal')
+```
+- 피드 생성 모달 열기 이벤트 생성
+- menu-item이라는 클래스가 다른 곳에도 존재하기 때문에 한곳에만 해당하는 클래스인 fa-square-plus를 가져와 closest로 menu-item에 접근해서 클릭이벤트 생성해서 click시에 openModal함수가 발생하도록 코딩
+```
+ document
+        .querySelector('.fa-square-plus')
+        .closest('.menu-item')
+        .addEventListener('click', openModal);
+
+-create-feed-modal의 js에 initCreateFeedModal 속에 openModal 함수생성
+
+const openModal = e => { 
+    e.preventDefault();
+    // 모달 열기
+    $modal.style.display = 'flex';
+  };
+```
+
+- 코드가 길어지기 때문에 함수를 분리한다.
+  ->  이벤트 바인딩 관련함수 function bindEvents와 피드생성 모달관련 이벤트 함수 setUpModalEvent 생성한다.
+  그리고 bindEvents에 setUpModalEvents 함수를 실행하도록 하고 initCreateFeedModal 함수에 적어놨던 것들을 모두 빼서 setUpModalEvents에 넣는다.
+
+- 그리고 initCreateFeedModal함수에 bindEvents를 넣는다.
+
+- 모달 관련 돔들을 저장할 객체를 만든다.
+- 일단 당장의 기능을 만드는데 사용해야할 요소들을 가져온다. (필요할때마다 가져오기)
+- 모달을 닫기 위해서는 x버튼을 눌렀을 때와 뒤 검은배경을 눌렀을때 닫혀야 하므로 두개의 요소 가져온다
+```
+// 모달 관련 DOM들을 저장할 객체
+const elements = {
+    $closeBtn: $modal.querySelector('.modal-close-button'),
+    $backdrop: $modal.querySelector('.modal-backdrop'),
+};
+```
+- setUpModalEvents 함수에 필요한 요소 두개 가져온다.
+```
+const { $closeBtn, $backdrop } = elements;
+```
+- x 버튼을 눌렀을때와 백드롭 눌렀을때  이벤트 생성
+```
+	// X버튼 눌렀을 때
+    $closeBtn.addEventListener('click', closeModal);
+
+    // 백드롭 눌렀을 때
+    $backdrop.addEventListener('click', closeModal);
+
+```
+- 모달 닫기 함수 만들기
+```
+  const closeModal = e => {
+    e.preventDefault();
+    $modal.style.display = 'none';  
+};
+
+```
+
+- 모달이 열렸을 때 스크롤하면 백드롭화면 움직이는 것 방지하기위해 openModal 과 closeModal 함수에 기능추가
+
+openModal에
+
+```
+ document.body.style.overflow = 'hidden';  // 배경 바디 스크롤 방지
+```
+closeModal에
+
+```
+document.body.style.overflow = 'auto'; // 배경 바디 스크롤 방지 해제
+```
 </details>
 
 <details>
