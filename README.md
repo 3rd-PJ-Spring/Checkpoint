@@ -88,7 +88,7 @@ public class Hashtag {
 </details>
 
 <details>
-  <summary><b>🐾tony24123's footprint</b></summary>
+  <summary><b>🐢tony24123's footprint</b></summary>
 	<details>
 		<summary><b>ㅤ25/01/23/목:</b></summary>	
 		ㅤㅤㅤ내용
