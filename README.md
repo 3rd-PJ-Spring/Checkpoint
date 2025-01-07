@@ -94,11 +94,11 @@ public class Hashtag {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/23/목:</b></span></summary>	
+		<summary><b>ㅤ25/01/23/목:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/21/화:</b></span></summary>	
+		<summary><b>ㅤ25/01/21/화:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
@@ -154,11 +154,11 @@ public class Hashtag {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/23/목:</b></span></summary>	
+		<summary><b>ㅤ25/01/23/목:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/21/화:</b></span></summary>	
+		<summary><b>ㅤ25/01/21/화:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
@@ -278,11 +278,11 @@ public class FileInputExample {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/23/목:</b></span></summary>	
+		<summary><b>ㅤ25/01/23/목:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/21/화:</b></span></summary>	
+		<summary><b>ㅤ25/01/21/화:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
@@ -457,11 +457,11 @@ document.body.style.overflow = 'auto'; // 배경 바디 스크롤 방지 해제
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/23/목:</b></span></summary>	
+		<summary><b>ㅤ25/01/23/목:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/21/화:</b></span></summary>	
+		<summary><b>ㅤ25/01/21/화:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
@@ -501,7 +501,7 @@ document.body.style.overflow = 'auto'; // 배경 바디 스크롤 방지 해제
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/07/화: 팀플 회의_ 전체적인 방향 설정 및 목표 설정</b></summary>	
+		<summary><b>ㅤ25/01/07/화: 팀플 회의_방향 설정 및 목표 설정</b></summary>	
 		  <h3>1. 전체적인 방향 설정 </h3>
             <h4>개인의 역량을 높일 수 있도록 철저하고 꾸준한 공부 그리고 그에 대한 결과물 데모버전 도출.</h4>
                 (공통 주제 설정 : 기본 홈페이지)<br></br>
