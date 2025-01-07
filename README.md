@@ -507,6 +507,5 @@ document.body.style.overflow = 'auto'; // 배경 바디 스크롤 방지 해제
 	<details>
 		<summary><b>ㅤ25/01/07/월: 인스타그램 클론 연습 강의 복습</b></summary>	
 		ㅤㅤㅤ피드 목록 조회 API 만들기 까지 복습
-		+ java 헷갈리는 개념 추가 정리
 	</details>
 </details>
