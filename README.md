@@ -335,23 +335,81 @@ public class FileInputExample {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/07/화:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
-	<details>
-		<summary><b>ㅤ25/01/06/월: 인스타그램 초기세팅 및 피드 모달 열고 닫기 공부 </b></summary>
-        <h3>1. 초기 세팅 : 데이터베이스 생성</h3> 
-            - yml로 가서 spring:datasource:url을 데이터베이스를 생성한 이름과 동일하게
-        <h3>2. 프로젝트 초기 실행방법</h3>
-            - routecontroller로 index jsp를 읽도록 만든다.
-            ```
+		<summary><b>ㅤ25/01/07/화: 인스타그램 업로드한 이미지 파일읽기 </b></summary>
+    
+1. 파일을 여러개 선택하게 하고 이미지 파일만 올릴 수 있도록 제약한다.
+   그리고 기존의 input버튼 모양이 아닌 다른 모양으로 설정할 수 있도록 한다.
+- create-post-modal.jsp로 들어가서 모달바디의 업로드 부분에 input의 type이 file이고
+  id가 fileInput 뒤에 multiple을 걸어서 다중선택이 가능한 것을 확인한다.
+- input의 accept부분에 올릴 수 있는 파일을 지정할 수 있다 (예를 들어 image/*할 경우에는 image파일만 올릴 수 있다)
+- input의 스타일로 하면 style = display : none으로 변경하고 새 버튼을 만든다.
+
+```js
+ <input 
+            type="file" 
+            id="fileInput" 
+            multiple
+            accept="image/*"
+            style="display: none;"
+          >
+ <button class="upload-button">컴퓨터에서 선택</button>
+
+```
+
+2. 파일 업로드 버튼을 누르면 파일 선택창이 열리도록 하게한다.
+- 새 버튼으로 적용 시키기 위해서 elements에 업로드 버튼과 fileInput을 추가한다.
+- 파일을 업로드 시키는 기능을 만들기위해서 create-feed-modal.js에서 파일 업로드 관련 이벤트 함수를 만든다.
+- elements로 업로드 버튼과 파일Input을 가져오고, 업로드 버튼을 누르면 파일 선택창이 대신 눌리도록 조작한다.
+- 파일 선택이 끝났을 때 파일정보를 읽는 이벤트를 만든다.
+- function setUpModalEvents에 파일 업로드한 함수가 실행되도록 setUpFileUploadEvents를 추가한다.
+- 파일 선택이 완료되었을 때 변경되기 위해서는 change이벤트를 걸어 추가한 파일 정보를 읽어온다.
+
+
+```js
+let elements = {
+  $closeBtn: $modal.querySelector('.modal-close-button'),
+  $backdrop: $modal.querySelector('.modal-backdrop'),
+  $uploadBtn: $modal.querySelector('.upload-button'),
+  $fileInput: $modal.querySelector('#fileInput'),
+};
+
+// 파일 업로드 관련 이벤트 함수
+function setUpFileUploadEvents() {
+  const { $uploadBtn, $fileInput } = elements;
+  // 업로드 버튼을 누르면 파일선택창이 대신 눌리도록 조작
+  $uploadBtn.addEventListener('click', e => $fileInput.click());
+  // 파일 선택이 끝났을 때 파일정보를 읽는 이벤트
+  $fileInput.addEventListener('change', e => {
+    console.log(e.target.files);
+    
+  });
+}
+
+function bindEvents() {
+  setUpModalEvents();
+  setUpFileUploadEvents();
+}
+```
+</details>
+<details>
+  <summary><b>ㅤ25/01/06/월: 인스타그램 초기세팅 및 피드 모달 열고 닫기 공부 </b></summary>
+
+  <h3>1. 초기 세팅 : 데이터베이스 생성</h3> 
+
+- yml로 가서 spring:datasource:url을 데이터베이스를 생성한 이름과 동일하게
+  <h3>2. 프로젝트 초기 실행방법</h3>
+
+- routecontroller로 index jsp를 읽도록 만든다.
+
+```
             @GetMapping("/")
             public String index() {
             return "index";
             }
-            ```
-            - index jsp에는 모든 css, index.js, 각 섹션에 해당하는 components jsp들을 읽어온다.
-          <h3>3. 피드 생성 모달 열기</h3> 
+```
+
+- index jsp에는 모든 css, index.js, 각 섹션에 해당하는 components jsp들을 읽어온다.
+  <h3>3. 피드 생성 모달 열기</h3>
 - js의 component 아래에 create-feed-modal.js를 만들고 그곳에 initCreateFeedModal 함수 생성하고 외부에 내보내야하므로 export 사용
 
 ```
@@ -391,9 +449,12 @@ $modal = document.getElementById('createPostModal')
         .querySelector('.fa-square-plus')
         .closest('.menu-item')
         .addEventListener('click', openModal);
+        
+```
 
--create-feed-modal의 js에 initCreateFeedModal 속에 openModal 함수생성
+- create-feed-modal의 js에 initCreateFeedModal 속에 openModal 함수생성
 
+```
 const openModal = e => { 
     e.preventDefault();
     // 모달 열기
