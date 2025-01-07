@@ -464,7 +464,7 @@ document.body.style.overflow = 'auto'; // 배경 바디 스크롤 방지 해제
 </details>
 
 <details>
-  <summary><b>🐾Mabbakk's footprint</b></summary>
+  <summary><b>👩‍🦲Mabbakk's footprint</b></summary>
 	<details>
 		<summary><b>ㅤ25/01/23/목:</b></summary>	
 		ㅤㅤㅤ내용
@@ -514,11 +514,17 @@ document.body.style.overflow = 'auto'; // 배경 바디 스크롤 방지 해제
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/07/화:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/07/화: 팀플 회의_ 전체적인 방향 설정 및 목표 설정</b></summary>	
+		  <h3>1. 전체적인 방향 설정 </h3>
+            <h4>개인의 역량을 높일 수 있도록 철저하고 꾸준한 공부 그리고 그에 대한 결과물 데모버전 도출.</h4>
+                (공통 주제 설정 : 기본 홈페이지)<br></br>
+		<h3> 2. 목표 설정 </h3>
+      <h4>· 내가 구현하고 싶은 기능 ? → 프론트엔드</h4>
+      <h4>· 부족한 부분 ? → 숙달되지 않은 자바스크립트 이벤트 구현</h4>
+      <h4>· 구현하고자 하는 기능 ? → 회원가입 (로그인) 기능 ...등 추가 구상</h4>
 	</details>
 	<details>
 		<summary><b>ㅤ25/01/07/월: 인스타그램 클론 연습 강의 복습</b></summary>	
-		ㅤㅤㅤ피드 목록 조회 API 만들기 까지 복습
+		ㅤㅤㅤ<h4>피드 목록 조회 API 만들기 까지 복습 (FE/BE)</h4>
 	</details>
 </details>
