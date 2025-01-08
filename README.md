@@ -59,34 +59,6 @@ ___
 [![GitHub Badge](https://img.shields.io/badge/Mabbakk-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/Mabbakk) <br>
 
 ## ✏️ Daily Study
-
-<details>
-  <summary><b>예시) Hashtag.java[타이틀]</b></summary>
-hashtag.java 코드 공유[주요 내용]
-
-```java
-package com.example.instagramclone.domain.hashtag.entity;
-
-import lombok.*;
-
-import java.time.LocalDateTime;
-
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Hashtag {
-  private Long id;
-  private String name;
-  private LocalDateTime createdAt;
-}
-```
-
-</details>
-
 <details>
   <summary><b>🐢tony24123's footprint</b></summary>
 	<details>
@@ -94,7 +66,7 @@ public class Hashtag {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/23/목:</b></summary>	
+		<summary><b>ㅤ25/01/22/수:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
@@ -192,7 +164,7 @@ public class Hashtag {
                 ex)상품 등록 , 상품 담기 , 상품 조회 , 상품 삭제 , 로그인 기능
       </details>
       <details>
-          <summary><b>ㅤ25/01/07/월: </b></summary>	
+          <summary><b>ㅤ25/01/06/월: </b></summary>	
           ㅤㅤㅤ내용
       </details>
 </details>
@@ -204,7 +176,7 @@ public class Hashtag {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/23/목:</b></span></summary>	
+		<summary><b>ㅤ25/01/22/수:</b></span></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
@@ -348,6 +320,7 @@ package chap2_6.inner;
      }
 }
 ```
+</details>
 </details>
 	<details>
 		<summary><b>ㅤ25/01/07/화: 파일 입출력[(바이트 기반 스트림/텍스트 기반 스트림], 객체 파일 입출력</b></summary>	
@@ -546,7 +519,9 @@ public class LoadSnack {
   }
 }
 ```
-</details></details></details>
+</details>
+</details>
+</details>
 <details>
 		<summary><b>ㅤ25/01/06/월: 문서 작성 / FileOutputStream, FileInputStream</b></summary>	
 		   ㅤㅤㅤㅤ<b>README / Notion 회의록 작성, GitHub 연결</b>
@@ -616,6 +591,7 @@ public class FileInputExample {
 </details>
 </details>
 </details>
+</details>
 <details>
   <summary><b>🐹chchch928's footprint</b></summary>
 	<details>
@@ -623,7 +599,7 @@ public class FileInputExample {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/23/목:</b></summary>	
+		<summary><b>ㅤ25/01/22/수:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
@@ -842,7 +818,7 @@ function bindEvents() {
 <details>
   <summary><b>ㅤ25/01/06/월: 인스타그램 초기세팅 및 피드 모달 열고 닫기 공부 </b></summary>
 
-<h3>1. 초기 세팅 : 데이터베이스 생성</h3> 
+<h3>1. 초기 세팅 : 데이터베이스 생성</h3>
 
 - yml로 가서 spring:datasource:url을 데이터베이스를 생성한 이름과 동일하게
 
@@ -858,7 +834,7 @@ function bindEvents() {
 ```
 
 - index jsp에는 모든 css, index.js, 각 섹션에 해당하는 components jsp들을 읽어온다.
-  
+
 <h3>3. 피드 생성 모달 열기</h3>
 
 - js의 component 아래에 create-feed-modal.js를 만들고 그곳에 initCreateFeedModal 함수 생성하고 외부에 내보내야하므로 export 사용
@@ -982,7 +958,7 @@ document.body.style.overflow = 'auto'; // 배경 바디 스크롤 방지 해제
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/23/목:</b></summary>	
+		<summary><b>ㅤ25/01/22/수:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
