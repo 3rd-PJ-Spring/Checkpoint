@@ -211,7 +211,7 @@ public class Hashtag {
 public class FileOutputExample {
     public static void main(String[] args) {
         try {// 바이트 기반 출력 스트림 : 파일을 내보낸다 - Save기능
-            FileOutputStream fos = new FileOutputStream(FileExample.ROOT_PATH + "/pet.txt"
+            FileOutputStream fos = new FileOutputStream(FileExample.ROOT_PATH + "/pet.txt");
                     fos.write(new byte[]{97, 99, 101});
         } catch (Exception e) {
             System.out.println("해당 경로를 찾을 수 없습니다.");
@@ -250,7 +250,7 @@ public class FileInputExample {
     public static void main(String[] args) {
         FileinputStream fis = null;
         try {
-            fis = new FileInputStream(FileExample.ROOT_PATH + "/pet.txt"
+            fis = new FileInputStream(FileExample.ROOT_PATH + "/pet.txt");
             int data = 0;
             while ((data = fis.read()) != -1) {
                 System.out.write(data);  // 아스키 코드를 문자로 출력
@@ -497,8 +497,28 @@ document.body.style.overflow = 'auto'; // 배경 바디 스크롤 방지 해제
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/08/수:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/08/수: 프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE</b></summary>	
+		ㅤㅤㅤ<h3>1. 프로젝트 방향 설정</h3>
+						<h4>·어떤 홈페이지를 만들 것인가?</h4>
+						쇼핑몰 홈페이지 구현.<br>
+						<h4>·어떤 레이아웃과 디자인으로 진행할 것인가?</h4>
+						→ 이미지 참조<br>
+						<h4>·어떤 기능을 구현할 것인가?</h4>
+						FE 기능 구현을 우선적 목표로 한다.<br>
+						+ 홈페이지에 필요한 정보를 포함하여 전체 디자인.<br>
+						그 후 가능하다면 BE도 진행. (회원가입 및 로그인)<br>
+						<h3>3. 회원가입 FE/BE_1</h3>
+						<div style="text-align: center;">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_1.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_2.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_3.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_4.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_5.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_6.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_7.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_8.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_9.png">
+						</div>
 	</details>
 	<details>
 		<summary><b>ㅤ25/01/07/화: 팀플 회의_방향 설정 및 목표 설정</b></summary>	
