@@ -509,7 +509,7 @@ document.body.style.overflow = 'auto'; // 배경 바디 스크롤 방지 해제
 						그 후 가능하다면 BE도 진행. (회원가입 및 로그인)<br>
 						<h3>3. 회원가입 FE/BE_1</h3>
 						<div style="text-align: center;">
-							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_1.png">
+							<img src="https://github.com/3rd-PJ-Spring/Checkpoint/blob/219069cc37d73b2531b87a866ee27095d709b899/img/Mabbakk/250108(%EC%88%98)/%233_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EB%B0%A9%ED%96%A5%20%EC%84%A4%EC%A0%95%20%EB%B0%8F%20%EB%9E%98%ED%8D%BC%EB%9F%B0%EC%8A%A4%20%EC%84%9C%EC%B9%98%2C%20%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85%20BE%20_1.png">
 							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_2.png">
 							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_3.png">
 							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_4.png">
