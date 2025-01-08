@@ -94,11 +94,11 @@ public class Hashtag {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/23/목:</b></span></summary>	
+		<summary><b>ㅤ25/01/23/목:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/21/화:</b></span></summary>	
+		<summary><b>ㅤ25/01/21/화:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
@@ -204,11 +204,11 @@ public class Hashtag {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/23/목:</b></span></summary>	
+		<summary><b>ㅤ25/01/23/목:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/21/화:</b></span></summary>	
+		<summary><b>ㅤ25/01/21/화:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
@@ -440,7 +440,7 @@ public class LoadSnack {
 public class FileOutputExample {
     public static void main(String[] args) {
         try {// 바이트 기반 출력 스트림 : 파일을 내보낸다 - Save기능
-            FileOutputStream fos = new FileOutputStream(FileExample.ROOT_PATH + "/pet.txt"
+            FileOutputStream fos = new FileOutputStream(FileExample.ROOT_PATH + "/pet.txt");
                     fos.write(new byte[]{97, 99, 101});
         } catch (Exception e) {
             System.out.println("해당 경로를 찾을 수 없습니다.");
@@ -476,23 +476,24 @@ public class FileInputExample {
 
 ```java
 public class FileInputExample {
-  public static void main(String[] args) {
-    FileinputStream fis = null;
-    try {
-      fis = new FileInputStream(FileExample.ROOT_PATH + "/pet.txt"
-      int data = 0;
-      while ((data = fis.read()) != -1) {
-        System.out.write(data);  // 아스키 코드를 문자로 출력
-      }
-      System.out.flush();          // 출력 버퍼 비우기
-    } catch (Exception e) {
-      System.out.println("파일 로드에 실패했습니다");
-    } finally {  // 예외에 관계없이 실행할 코드
-      try {  // 메모리 해제 - 누수 방지
-        if (fis != null) fis.close();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+    public static void main(String[] args) {
+        FileinputStream fis = null;
+        try {
+            fis = new FileInputStream(FileExample.ROOT_PATH + "/pet.txt");
+            int data = 0;
+            while ((data = fis.read()) != -1) {
+                System.out.write(data);  // 아스키 코드를 문자로 출력
+            }
+            System.out.flush();          // 출력 버퍼 비우기
+        } catch (Exception e) {
+            System.out.println("파일 로드에 실패했습니다");
+        } finally {  // 예외에 관계없이 실행할 코드
+            try {  // 메모리 해제 - 누수 방지
+                if (fis != null) fis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
   }
 }
@@ -507,11 +508,11 @@ public class FileInputExample {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/23/목:</b></span></summary>	
+		<summary><b>ㅤ25/01/23/목:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/21/화:</b></span></summary>	
+		<summary><b>ㅤ25/01/21/화:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
@@ -866,11 +867,11 @@ document.body.style.overflow = 'auto'; // 배경 바디 스크롤 방지 해제
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/23/목:</b></span></summary>	
+		<summary><b>ㅤ25/01/23/목:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/21/화:</b></span></summary>	
+		<summary><b>ㅤ25/01/21/화:</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
@@ -906,11 +907,31 @@ document.body.style.overflow = 'auto'; // 배경 바디 스크롤 방지 해제
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/08/수:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/08/수: 프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE</b></summary>	
+		ㅤㅤㅤ<h3>1. 프로젝트 방향 설정</h3>
+						<h4>·어떤 홈페이지를 만들 것인가?</h4>
+						쇼핑몰 홈페이지 구현.<br>
+						<h4>·어떤 레이아웃과 디자인으로 진행할 것인가?</h4>
+						→ 이미지 참조<br>
+						<h4>·어떤 기능을 구현할 것인가?</h4>
+						FE 기능 구현을 우선적 목표로 한다.<br>
+						+ 홈페이지에 필요한 정보를 포함하여 전체 디자인.<br>
+						그 후 가능하다면 BE도 진행. (회원가입 및 로그인)<br>
+						<h3>3. 회원가입 FE/BE_1</h3>
+						<div style="text-align: center;">
+							<img src="https://github.com/3rd-PJ-Spring/Checkpoint/blob/219069cc37d73b2531b87a866ee27095d709b899/img/Mabbakk/250108(%EC%88%98)/%233_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EB%B0%A9%ED%96%A5%20%EC%84%A4%EC%A0%95%20%EB%B0%8F%20%EB%9E%98%ED%8D%BC%EB%9F%B0%EC%8A%A4%20%EC%84%9C%EC%B9%98%2C%20%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85%20BE%20_1.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_2.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_3.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_4.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_5.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_6.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_7.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_8.png">
+							<img src="./img/Mabbakk/250108(수)/#3_프로젝트 방향 설정 및 래퍼런스 서치, 회원가입 BE_9.png">
+						</div>
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/07/화: 팀플 회의_ 전체적인 방향 설정 및 목표 설정</b></summary>	
+		<summary><b>ㅤ25/01/07/화: 팀플 회의_방향 설정 및 목표 설정</b></summary>	
 		  <h3>1. 전체적인 방향 설정 </h3>
             <h4>개인의 역량을 높일 수 있도록 철저하고 꾸준한 공부 그리고 그에 대한 결과물 데모버전 도출.</h4>
                 (공통 주제 설정 : 기본 홈페이지)<br></br>
