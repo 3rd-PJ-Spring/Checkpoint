@@ -204,11 +204,11 @@ public class Hashtag {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/23/목:</b></summary>	
+		<summary><b>ㅤ25/01/23/목:</b></span></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/21/화:</b></summary>	
+		<summary><b>ㅤ25/01/21/화:</b></span></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
@@ -244,9 +244,111 @@ public class Hashtag {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/08/수:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/08/수: 인터페이스(Interface), 내부 클래스(Inner), 익명 클래스(Anonymous)</b></summary>
+
+|                 | 인터페이스 (Interface)                                | 내부 클래스 (Inner)                                   | 익명 클래스 (Anonymous)               |
+|-----------------|-------------------------------------------------------|-------------------------------------------------------|----------------------------------|
+| **재사용**      | O                                                     | 클래스 내부에서 재사용                                | 1회용                              |
+| **구현 여부**   | 인터페이스(설계도) + 실체 클래스(구현체) + 동작 클래스(Main) | 인터페이스(설계도) + 동작 클래스(Main)               | 동작 클래스(Main) + 동작 클래스(Main - 축약) |
+<details>
+		<summary><b>ㅤㅤ인터페이스(Interface): 재사용 多</b></summary>
+
+```java
+package chap2_6.inner;
+
+public interface Calculator {
+
+    int operate(int n1, int n2); // 두개의 정수를 가지고 연산
+}
+```
+```java
+package chap2_6.inner;
+
+public class AddCalculator implements Calculator {
+    @Override
+    public int operate(int n1, int n2) {
+        return n1 + n2;
+    }
+}
+```
+```java
+package chap2_6.inner;
+
+public class Main {
+    public static void main(String[] args) {
+        Calculator addCal = new AddCalculator();
+        int result1 = addCal.operate(50, 30);
+        System.out.println("result1 = " + result1);
+        }
+    }
+```
+</details>
+<details>
+		<summary><b>ㅤㅤ내부 클래스(Inner Class)</b></summary>	
+
+```java
+// 재활용하지 X 클래스 (해당 클래스 내부에서만 쓸 거 같다)
+private static class
+```
+```java
+package chap2_6.inner;
+
+public interface Calculator {
+
+    int operate(int n1, int n2); // 두개의 정수를 가지고 연산
+}
+```
+```java
+package chap2_6.inner;
+
+public class Main {
+
+    private static class SubCalculator implements Calculator {
+        @Override
+        public int operate(int n1, int n2) {
+            return n1 - n2;
+        }
+public static void main(String[] args) {
+        
+        SubCalculator subCal = new SubCalculator();
+	        int result2 = subCal.operate(100, 25);
+	        System.out.println("result2 = " + result2);
+    }
+```
+</details>
+<details>
+		<summary><b>ㅤㅤ익명 클래스 (Anonymous class)</b></summary>
+
+```java
+// 내부 클래스에서 단, 1번만 쓸거다.
+
+Calculator multiCal = class MultiCalculator implements Calculator{}
+↓
+Calculator multiCal = (class MultiCalculator) implements Calculator{}
+↓
+Calculator multiCal = implements Calculator {}
+↓
+Calculator multiCal = new Calculator() {}
+       implements를 대체 <<┘       ┖>> class를 의미
+```
+```java
+package chap2_6.inner;
+	public class Main {
+	   public static void main(String[] args) {     
+	          
+	          Calculator multiCal =  new Calculator() {
+            // 클래스 블록 내부
+            @Override
+            public int operate(int n1, int n2) {
+                return n1 * n2;
+            }
+        };
+           int result3 = multiCal.operate(6, 11);
+		       System.out.println("result3 = " + result3);
+     }
+}
+```
+</details>
 	<details>
 		<summary><b>ㅤ25/01/07/화: 파일 입출력[(바이트 기반 스트림/텍스트 기반 스트림], 객체 파일 입출력</b></summary>	
 
@@ -400,7 +502,21 @@ public class Snack implements Serializable {
 </details>
 <details>
 		<summary><b>ㅤㅤㅤ역직렬화 (Deserialize) ~ 역직렬화 보조스트림 (ObjectInputStream)</b></summary>
+<h3>Q: 아래 구문이 왜 필요해?</h3>
 
+```java
+List<Snack> snackList = (List<Snack>) ois.readObject();
+```
+```java
+// ↓
+    public final Object readObject()
+        throws IOException, ClassNotFoundException {
+        return readObject(Object.class);
+    }
+    
+// readObject(); 메서드는 직렬화한 객체가 아닌 Object 객체로 가져옴
+// Object → 사용자가 생성한 List<Snack>로 다운캐스팅 진행 → 역직렬화 완료(객체화)
+```
 ```java
 package chap2_5.fileio.objstream;
 
@@ -440,7 +556,7 @@ public class LoadSnack {
 public class FileOutputExample {
     public static void main(String[] args) {
         try {// 바이트 기반 출력 스트림 : 파일을 내보낸다 - Save기능
-            FileOutputStream fos = new FileOutputStream(FileExample.ROOT_PATH + "/pet.txt");
+            FileOutputStream fos = new FileOutputStream(FileExample.ROOT_PATH + "/pet.txt"
                     fos.write(new byte[]{97, 99, 101});
         } catch (Exception e) {
             System.out.println("해당 경로를 찾을 수 없습니다.");
@@ -476,24 +592,23 @@ public class FileInputExample {
 
 ```java
 public class FileInputExample {
-    public static void main(String[] args) {
-        FileinputStream fis = null;
-        try {
-            fis = new FileInputStream(FileExample.ROOT_PATH + "/pet.txt");
-            int data = 0;
-            while ((data = fis.read()) != -1) {
-                System.out.write(data);  // 아스키 코드를 문자로 출력
-            }
-            System.out.flush();          // 출력 버퍼 비우기
-        } catch (Exception e) {
-            System.out.println("파일 로드에 실패했습니다");
-        } finally {  // 예외에 관계없이 실행할 코드
-            try {  // 메모리 해제 - 누수 방지
-                if (fis != null) fis.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+  public static void main(String[] args) {
+    FileinputStream fis = null;
+    try {
+      fis = new FileInputStream(FileExample.ROOT_PATH + "/pet.txt"
+      int data = 0;
+      while ((data = fis.read()) != -1) {
+        System.out.write(data);  // 아스키 코드를 문자로 출력
+      }
+      System.out.flush();          // 출력 버퍼 비우기
+    } catch (Exception e) {
+      System.out.println("파일 로드에 실패했습니다");
+    } finally {  // 예외에 관계없이 실행할 코드
+      try {  // 메모리 해제 - 누수 방지
+        if (fis != null) fis.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 }
