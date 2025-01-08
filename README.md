@@ -79,16 +79,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Hashtag {
-    private Long id;
-    private String name;
-    private LocalDateTime createdAt;
+  private Long id;
+  private String name;
+  private LocalDateTime createdAt;
 }
 ```
 
 </details>
 
 <details>
-  <summary><b>🐾tony24123's footprint</b></summary>
+  <summary><b>🐢tony24123's footprint</b></summary>
 	<details>
 		<summary><b>ㅤ25/01/23/목:</b></summary>	
 		ㅤㅤㅤ내용
@@ -134,17 +134,67 @@ public class Hashtag {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/08/수:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
-	<details>
-		<summary><b>ㅤ25/01/07/화:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
-	<details>
-		<summary><b>ㅤ25/01/07/월: </b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/08/수:의존성 주입, 스프링 빈 관리</b></summary>	
+		ㅤㅤㅤ<h3> 의존성 주입 </h3>
+             의존성 주입: 객체 간의 의존성을 관리할 수 있는 설계 패턴<br> 
+             객체는 필요한 의존성을 외부에서 주입받음.<br>
+             -> 결합도는 낮추고 , 코드의 재사용성과 유지보수가 높아짐<br>
+             크게 생성자 주입, 세터 주입, 필드 주입 3가지 방법 사용 가능<br>
+             <h4>생성자 주입</h4>
+             - 3가지 방법 중에 가장 좋은 방법<br>
+             - 모든 의존성을 주입받아야 하므로 객체가 일관되게 생성된다.<br>
+             - 애플리케이션 시작 시점에 문제 발견이 가능하다.<br>              
+             <h4>세터 주입 </h4>
+             - 세터 주입을 사용하면 유지보수측면에서 생성자 주입보다 어려울 수 있다.<br>
+             - NULL체크도 해줘야한다.<br>
+             - 중간에 객체가 변경될 수 있다.<br>
+             - 런타임 시점까지 문제 발생이 되지않아서 애플리케이션 실행이 예기치 않게 실패할 수 있다.<br>
+             <h4>필드 주입</h4>
+             - 테스트와 유지보수 특면에서 어려운 점이 많아 비추천<br>
+              <h3>스프링 빈 관리</h3>
+             - 스프링이 대신해서 관리를 해줌 <br>
+              <h4>자바 클래스 방식</h4>
+              ex)@Configuration //스프링이 클래스를 관리<br>
+                 @ Bean //어떤 객체를 관리할지 메서드로 설정<br>
+              <h4>애너테이션 방식</h4>
+              <h4>`@Component`</h4>
+              - 가장 일반적인 스프링 빈을 정의하는 애너테이션<br>
+              - 주로 특수한 역할이 없는 일반적인 빈에 사용된다.<br>
+              <h4>`@Service`</h4>
+              - 비즈니스 로직을 담고 있는 서비스 클래스에 사용<br>
+              - `@Service` 애너테이션을 통해 해당 클래스가 서비스 계층을 담당함을 명시적 나타낸다.<br>
+              <h4>`@Repository`</h4>              
+              - 데이터 접근 계층(DAO) 클래스에 사용<br>
+              -  데이터베이스와의 통신을 담당하는 클래스를 나타내며, 데이터 접근 예외를 처리.<br>         
+              <h4>`@Controller`</h4>              
+              - 애플리케이션에서 컨트롤러 역할을 하는 클래스에 사용<br>
+              - 웹 요청을 처리하고, 모델 데이터를 뷰로 전달하는 역할.<br>
+              <h4>@Autowired</h4>
+              의존성 주입을 수행하기 위한 애너테이션<br>
+              <h4>@Qualifier</h4>
+              @Autowired와 함께 사용하여, 같은 타입의 빈이 여러 개 있을 때 어떤 빈을 주입할지 명시적으로 지정하는 방법             
+      </details>
+      <details>
+          <summary><b>ㅤ25/01/07/화: 프로젝트 방향성 회의</b></summary>	
+          ㅤㅤㅤ<h3>프로젝트 진행 방향 결정</h3>
+               <h4>회의 내용</h4>
+               <h4>문제 상황</h4> 
+                1.개발 능력 향상을 위해 추가 공부가 필요하다 판단됨<br>
+                2.프로젝트 분량 조절에 아쉬움이 각자 남을수있음<br>
+               <h4>회의 결과</h4>
+                개인 공부에 더 집중하기로 결정<br>
+                ->향후 프로젝트들에 있어 가장 큰 도움이 될이라 판단<br>              
+                체계적인 관리를 위해 루틴을 정함<br>  
+                -> 매일 오후 5시 공부 내용 푸쉬<br>  
+                <h3>나의 공부 방향</h3>
+                <h4>백엔드(자바,스프링,데이터베이스)에 집중해보고 싶음</h4>
+                <h4>쇼핑몰 기본적인 로직 구현해보기 </h4>
+                ex)상품 등록 , 상품 담기 , 상품 조회 , 상품 삭제 , 로그인 기능
+      </details>
+      <details>
+          <summary><b>ㅤ25/01/07/월: </b></summary>	
+          ㅤㅤㅤ내용
+      </details>
 </details>
 
 <details>
@@ -198,15 +248,194 @@ public class Hashtag {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/07/화:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
-	<details>
-		<summary><b>ㅤ25/01/07/월: 문서 작성 / FileOutputStream, FileInputStream</b></summary>	
+		<summary><b>ㅤ25/01/07/화: 파일 입출력[(바이트 기반 스트림/텍스트 기반 스트림], 객체 파일 입출력</b></summary>	
+
+| 출력 (Output)                                  | 입력 (Input)                                  |
+|-----------------------------------------------|----------------------------------------------|
+| Save: 저장할 정보 전송                         | Load: 저장된 데이터 읽기                     |
+| FileOutputStream                               | FileInputStream                              |
+| Writer                                        | Reader                                       |
+
+|             | FileInputStream                                    | Reader                                  |
+|-------------|-----------------------------------------------|----------------------------------------------|
+| **타입**    | 바이트 기반 스트림                             | 텍스트 기반 스트림                            |
+| **입력 방식** | 한 글자씩                                    | 한 라인씩 (BufferedReader - `readLine()`)   |
+
+<details>
+		<summary><b>ㅤㅤ객체 파일 입출력</b></summary>
+<details>
+		<summary><b>ㅤㅤㅤ객체 보조 스트림 (implements Serializable)</b></summary>	
+		ㅤㅤㅤㅤㅤ<b>객체→스트림 통과(개념 필요)를 위해 직렬화[Serializable(저장 시)]</b>
+
+```java
+List<Snack> snackList = List.of(
+...
+        );
+
+        ┌>>> 직렬화 O
+// List<Snack>
+┕>>> 직렬화 X
+
+public class Snack implements Serializable
+```
+```java
+package chap2_5.fileio.objstream;
+
+import chap2_5.fileio.FileExample;
+
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.List;
+import java.util.ArrayList;
+
+public class SaveSnack {
+
+  public static void main(String[] args) {
+
+    // 과자 객체 전부 세이브파일로 저장
+    List<Snack> snackList = List.of(
+            new Snack("콘칲", 1970, 1500, Snack.Taste.GOOD)
+            , new Snack("오징어집", 1985, 1800, Snack.Taste.GOOD)
+            , new Snack("사브레", 1980, 3000, Snack.Taste.BAD)
+    );
+
+    try (FileOutputStream fos = new FileOutputStream(FileExample.ROOT_PATH + "/snack.sav")) {
+      // 객체를 바이트로 변환해주는 보조 스트림
+      ObjectOutputStream oos = new ObjectOutputStream(fos);
+      // 객체가 스트림을 통과하려면 직렬화라는 개념이 필요함
+      oos.writeObject(snackList);
+      System.out.println("객체 저장 성공!");
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+}
+```
+```java
+package chap2_5.fileio.objstream;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+// Snack이 스트림을 통과할 수 있도록 직렬화 명시
+public class Snack implements Serializable {
+
+  public enum Taste {
+    GOOD, BAD
+  }
+
+  private String snackName;
+  private int year; // 출시년도
+  private int price; // 가격
+  private Taste taste; // 맛
+
+  public Snack() {
+  }
+
+  public Snack(String snackName, int year, int price, Taste taste) {
+    this.snackName = snackName;
+    this.year = year;
+    this.price = price;
+    this.taste = taste;
+  }
+
+  public String getSnackName() {
+    return snackName;
+  }
+
+  public void setSnackName(String snackName) {
+    this.snackName = snackName;
+  }
+
+  public int getYear() {
+    return year;
+  }
+
+  public void setYear(int year) {
+    this.year = year;
+  }
+
+  public int getPrice() {
+    return price;
+  }
+
+  public void setPrice(int price) {
+    this.price = price;
+  }
+
+  public Taste getTaste() {
+    return taste;
+  }
+
+  public void setTaste(Taste taste) {
+    this.taste = taste;
+  }
+
+  @Override
+  public String toString() {
+    return "Snack{" +
+            "snackName='" + snackName + '\'' +
+            ", year=" + year +
+            ", price=" + price +
+            ", taste=" + taste +
+            '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Snack snack = (Snack) o;
+    return year == snack.year && price == snack.price && Objects.equals(snackName, snack.snackName) && taste == snack.taste;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(snackName, year, price, taste);
+  }
+}
+```
+</details>
+<details>
+		<summary><b>ㅤㅤㅤ역직렬화 (Deserialize) ~ 역직렬화 보조스트림 (ObjectInputStream)</b></summary>
+
+```java
+package chap2_5.fileio.objstream;
+
+import chap2_5.fileio.FileExample;
+
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.util.List;
+
+public class LoadSnack {
+
+  public static void main(String[] args) {
+
+    try (FileInputStream fis = new FileInputStream(FileExample.ROOT_PATH + "/snack.sav")) {
+      // 저장된 객체를 불러온 후 역직렬화
+      ObjectInputStream ois = new ObjectInputStream(fis);
+
+      List<Snack> snackList = (List<Snack>) ois.readObject();
+
+      for (Snack snack : snackList) {
+        System.out.println(snack);
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+}
+```
+</details></details></details>
+<details>
+		<summary><b>ㅤ25/01/06/월: 문서 작성 / FileOutputStream, FileInputStream</b></summary>	
 		   ㅤㅤㅤㅤ<b>README / Notion 회의록 작성, GitHub 연결</b>
     <details>
 		<summary><b>ㅤㅤㅤFileOutputStream: 바이트 기반 스트림 이미지 / 영상 / 소스코드 파일 저장</b></summary>
-
 ```java
 public class FileOutputExample {
     public static void main(String[] args) {
@@ -226,18 +455,18 @@ public class FileOutputExample {
 
 ```java
 public class FileInputExample {
-    public static void main(String[] args) {
-        // try ~ with ~ resource : 메모리 누수가 있을 수 있는 코드를 자동 해제
-        try (FileInputStream fis = new FileInputStream(FileExample.ROOT_PATH + "/pet.txt")) {
-            int data = 0;
-            while ((data = fis.read()) != -1) {
-                System.out.write(data);  // 아스키 코드를 문자로 출력
-            }
-            System.out.flush();          // 출력 버퍼 비우기
-        } catch (Exception e) {
-            System.out.println("파일 로드에 실패했습니다");
-        }
+  public static void main(String[] args) {
+    // try ~ with ~ resource : 메모리 누수가 있을 수 있는 코드를 자동 해제
+    try (FileInputStream fis = new FileInputStream(FileExample.ROOT_PATH + "/pet.txt")) {
+      int data = 0;
+      while ((data = fis.read()) != -1) {
+        System.out.write(data);  // 아스키 코드를 문자로 출력
+      }
+      System.out.flush();          // 출력 버퍼 비우기
+    } catch (Exception e) {
+      System.out.println("파일 로드에 실패했습니다");
     }
+  }
 }
 ```
 
@@ -266,6 +495,7 @@ public class FileInputExample {
             }
         }
     }
+  }
 }
 ```
 </details>
@@ -318,27 +548,204 @@ public class FileInputExample {
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/08/수:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
-	<details>
-		<summary><b>ㅤ25/01/07/화:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
-	<details>
-		<summary><b>ㅤ25/01/06/월: 인스타그램 초기세팅 및 피드 모달 열고 닫기 공부 </b></summary>
-        <h3>1. 초기 세팅 : 데이터베이스 생성</h3> 
-            - yml로 가서 spring:datasource:url을 데이터베이스를 생성한 이름과 동일하게
-        <h3>2. 프로젝트 초기 실행방법</h3>
-            - routecontroller로 index jsp를 읽도록 만든다.
-            ```
+		<summary><b>ㅤ25/01/08/수: 인스타그램 이미지 파일 검증 및 모달 스텝이동하고 이동버튼 이벤트 바인딩하기</b></summary>	
+
+<h3>1. 이미지 파일 검증: 10메가 용량을 넘는 파일과 이미지가 아닌 파일은 필터링으로 제외한다.</h3>
+
+(1) 일단 필터링을 사용하기 위해서는 파일정보를 배열로 만들고 함수를 handleFiles라는 함수를 적용시켜 files를 검증할 준비를 한다.
+- 현재 console에서 Prototype상 유사배열이기때문에 배열로 변경한다.  -> [...e.target.files]
+- 만일 파일 업로드했다면 handleFiles라는 함수로 그 파일을 검증하게 한다.
+
+setUpFileUploadEvents의 함수에서
+
+```js
+// 파일 선택이 끝났을 때 파일정보를 읽는 이벤트
+  $fileInput.addEventListener('change', e => {
+    const files =[...e.target.files];
+if(files.length >0) handleFiles(files)
+  });
+```
+
+(2) 파일을 검사하고 다음단계로 이동하는 handleFiles라는 함수를 만들어 files를 검사한다.
+- 파일의 수가 10개 넘는다면 알림창을 통해 '최대 10개의 파일만 선택가능하다'고 알려주고 리턴으로 내보낸다
+
+```js
+ // 파일을 검사하고 다음 단계로 이동하는 함수
+  const handleFiles = files => {
+      // 파일의 개수가 10개가 넘는지 검사
+      if (files.length > 10) {
+          alert('최대 10개의 파일만 선택 가능합니다.');
+          return;
+      }
+  }
+```
+
+(3) 파일이 이미지인지 확인하는 함수를 validFiles라는 함수를 만들어 filter를 적용한다.
+- 1차검증으로 filter로 파일의 타입이 만일 image로 시작하지 않으면 알림창을 통해 파일이름과 함께 '이미지가 아닙니다'로 알려주고 false값으로 내보내고 맞다면 true값으로 내보낸다.
+- 그리고 2차검증으로 filter로 파일의 사이즈가 10메가바이트를 초과한다면 알림창을 통해 파일이름과 함께 '10MB를 초과합니다'로 알려주고 false값으로 내보내고 맞다면 true로 내보낸다.
+
+```js
+ // 파일이 이미지인지 확인
+    const validFiles = files.filter(file => {
+      if (!file.type.startsWith('image')) {
+        alert(`${file.name}은(는) 이미지가 아닙니다.`);
+        return false;
+      }
+      return true;
+    }).filter(file => { 
+      if (file.size > 10 * 1024 * 1024) {
+        alert(`${file.name}은(는) 10MB를 초과합니다.`);
+        return false;
+      }
+      return true;
+    });
+```
+
+<h3>2. 모달 스텝이동하기</h3>
+
+(1) 모달 바디 스텝을 이동하는 함수 goToStep을 만든다.
+- 각 스탭인 업로드 (step1),미리보기 및 편집(step2),내용작성(step3)의 컨테이너들의 클래스로 step을 달아주었기 때문에 모달에서 step 클래스를 갖고있는 요소들을 모두 가져온다.
+-  active 클래스를 display:flex로 만들었기 때문에 각 스탭 컨테이너에 active클래스를 부여하면 출력되고 active를 제거하면 출력되지 않는 시스템이다.
+   -해당 스탭에 맞는 active를 가져오기 위해서는 가져온 요소들을 모두 배열로 변환한다
+- forEach문으로 step클래스가 있는 컨테이너에 $stepContainer를 부여하고 toggle을 이용해서 해당 step과 index+1이 같아질때만 $stepContainer에 active 클래스를 붙이도록한다.
+
+
+```js
+function goToStep(step) {
+  // 기존 스텝 컨테이너의 active를 제거하고 해당 step컨테이너에 active부여
+  [...$modal.querySelectorAll('.step')].forEach(($stepContainer, index) => { 
+    $stepContainer.classList.toggle('active', step === index + 1);
+  });
+}
+
+```
+
+(2). handleFiles 함수의 마지막에 goToStep(2)로 스탭을 지정하고 , 각 스텝에 맞는 버튼을 가져오기
+
+- 모달관련 DOM들을 저장할 객체인 elements에 $backStepBtn, $nextStepBtn, $modalTitle을 가져오고 goToStep함수에도  추가한다.
+
+- 각 스탭에 맞는 버튼을 설정한다.
+- 스탭1에서는 두버튼 다 보이지 않게하고 modal제목을 편집으로 설정, 스탭2에서는 두버튼 다 보이고 modal제목을 편집으로 설정, 스탭3에서는 next버튼의 내용을 공유하기, modal제목을 새 게시물 만들기로 설정한다.
+- 여기서 주의해야 할점은 스탭3에서 next버튼의 내용을 변경했기때문에 스탭3에서 스탭2로 되돌아갈때를 염려해서 스탭2의 next버튼 내용을 기존내용으로 다시 설정해줘야 한다는 것이다.
+
+
+```js
+const elements = {
+    $closeBtn: $modal.querySelector('.modal-close-button'),
+    $backdrop: $modal.querySelector('.modal-backdrop'),
+    $uploadBtn: $modal.querySelector('.upload-button'),
+    $fileInput: $modal.querySelector('#fileInput'),
+    $backStepBtn: $modal.querySelector('.back-button'),
+    $nextStepBtn: $modal.querySelector('.next-button'),
+    $modalTitle: $modal.querySelector('.modal-title'),
+};
+
+function goToStep(step) {
+  const { $backStepBtn, $nextStepBtn, $modalTitle, $fileInput } = elements;
+
+  // 각 스텝별 버튼 활성화/비활성화 처리
+    if (step === 1) {
+        $nextStepBtn.style.display = 'none';
+        $backStepBtn.style.visibility = 'hidden';
+        $modalTitle.textContent = '새 게시물 만들기';
+    } else if (step === 2) {
+        $nextStepBtn.style.display = 'block';
+        $backStepBtn.style.visibility = 'visible';
+        $modalTitle.textContent = '편집';
+        $nextStepBtn.textContent = '다음';
+    } else if (step === 3) {
+        $nextStepBtn.textContent = '공유하기';
+        $modalTitle.textContent = '새 게시물 만들기';
+    }
+}
+
+```
+ㅤㅤㅤ
+
+
+</details>
+<details>
+		<summary><b>ㅤ25/01/07/화: 인스타그램 업로드한 이미지 파일읽기 </b></summary>
+
+
+<h3>1. 파일을 여러개 선택하게 하고 이미지 파일만 올릴 수 있도록 제약한다. 그리고 기존의 input버튼 모양이 아닌 다른 모양으로 설정할 수 있도록 한다.</h3>
+
+
+- create-post-modal.jsp로 들어가서 모달바디의 업로드 부분에 input의 type이 file이고
+  id가 fileInput 뒤에 multiple을 걸어서 다중선택이 가능한 것을 확인한다.
+- input의 accept부분에 올릴 수 있는 파일을 제약하도록 지정할 수 있다 (예를 들어 image/*할 경우에는 image파일만 올릴 수 있다)
+- input의 스타일로 하면 보기좋지 않으므로 style = display : none으로 변경하고 새 버튼을 만든다.
+
+```js
+ <input 
+            type="file" 
+            id="fileInput" 
+            multiple
+            accept="image/*"
+            style="display: none;"
+          >
+ <button class="upload-button">컴퓨터에서 선택</button>
+
+```
+
+<h3>2. 파일 업로드 버튼을 누르면 파일 선택창이 열리도록 하게한다.</h3>
+- 새 버튼으로 적용 시키기 위해서 elements에 $uploadBtn과 $fileInput을 추가한다.
+- 파일을 업로드 시키는 기능을 만들기위해서 create-feed-modal.js에서 파일 업로드 관련 이벤트 함수를 만든다.
+- elements로 $uploadBtn과 $fileInput을 가져오고, 업로드 버튼을 누르면 파일 선택창이 대신 눌리도록 조작한다.
+- 파일 선택이 끝났을 때 파일정보를 읽는 이벤트를 만든다.
+- bindEvents 함수에 파일 업로드한 함수가 실행되도록 setUpFileUploadEvents를 추가한다.
+- 파일 선택이 완료되었을 때 서버로 보내기 위해서는 change 이벤트를 걸어 추가한 파일 정보를 읽어온다.
+
+
+```js
+let elements = {
+  $closeBtn: $modal.querySelector('.modal-close-button'),
+  $backdrop: $modal.querySelector('.modal-backdrop'),
+  $uploadBtn: $modal.querySelector('.upload-button'),
+  $fileInput: $modal.querySelector('#fileInput'),
+};
+
+// 파일 업로드 관련 이벤트 함수
+function setUpFileUploadEvents() {
+  const { $uploadBtn, $fileInput } = elements;
+  // 업로드 버튼을 누르면 파일선택창이 대신 눌리도록 조작
+  $uploadBtn.addEventListener('click', e => $fileInput.click());
+  // 파일 선택이 끝났을 때 파일정보를 읽는 이벤트
+  $fileInput.addEventListener('change', e => {
+    console.log(e.target.files);
+    
+  });
+}
+
+function bindEvents() {
+  setUpModalEvents();
+  setUpFileUploadEvents();
+}
+```
+</details>
+
+<details>
+  <summary><b>ㅤ25/01/06/월: 인스타그램 초기세팅 및 피드 모달 열고 닫기 공부 </b></summary>
+
+<h3>1. 초기 세팅 : 데이터베이스 생성</h3> 
+
+- yml로 가서 spring:datasource:url을 데이터베이스를 생성한 이름과 동일하게
+
+<h3>2. 프로젝트 초기 실행방법</h3>
+
+- routecontroller로 index jsp를 읽도록 만든다.
+
+```
             @GetMapping("/")
             public String index() {
             return "index";
             }
-            ```
-            - index jsp에는 모든 css, index.js, 각 섹션에 해당하는 components jsp들을 읽어온다.
-          <h3>3. 피드 생성 모달 열기</h3> 
+```
+
+- index jsp에는 모든 css, index.js, 각 섹션에 해당하는 components jsp들을 읽어온다.
+  
+<h3>3. 피드 생성 모달 열기</h3>
+
 - js의 component 아래에 create-feed-modal.js를 만들고 그곳에 initCreateFeedModal 함수 생성하고 외부에 내보내야하므로 export 사용
 
 ```
@@ -378,9 +785,12 @@ $modal = document.getElementById('createPostModal')
         .querySelector('.fa-square-plus')
         .closest('.menu-item')
         .addEventListener('click', openModal);
+        
+```
 
--create-feed-modal의 js에 initCreateFeedModal 속에 openModal 함수생성
+- create-feed-modal의 js에 initCreateFeedModal 속에 openModal 함수생성
 
+```
 const openModal = e => { 
     e.preventDefault();
     // 모달 열기
@@ -531,7 +941,7 @@ document.body.style.overflow = 'auto'; // 배경 바디 스크롤 방지 해제
       <h4>· 구현하고자 하는 기능 ? → 회원가입 (로그인) 기능 ...등 추가 구상</h4>
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/07/월: 인스타그램 클론 연습 강의 복습</b></summary>	
+		<summary><b>ㅤ25/01/06/월: 인스타그램 클론 연습 강의 복습</b></summary>	
 		ㅤㅤㅤ<h4>피드 목록 조회 API 만들기 까지 복습 (FE/BE)</h4>
 	</details>
 </details>
