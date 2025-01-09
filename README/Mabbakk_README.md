@@ -43,14 +43,12 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-  <summary><b>25/01/09/목: 인스타 클론 - 회원가입 BE 2</b></summary>
+  <summary><b>ㅤ25/01/09/목: 인스타 클론 - 회원가입 BE 2</b></summary>
 
 ## 1. 입력값 DTO 생성 및 엔터티 변환
 ### SignUpRequest 클래스
 회원가입 입력값을 처리하기 위해 **SignUpRequest** DTO를 작성한다.
 입력값을 Member 엔터티로 변환하는 `toEntity()` 메서드를 생성한다.
-</details>
-
 
 ```java
 public Member toEntity() {
