@@ -43,8 +43,27 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/09/목:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/09/목:회원 관리 시스템 구현 백엔드 흐름 연습해보기</b></summary>
+<h2>회원 관리 시스템 구현 흐름</h2>
+<h3>1. User Entity 생성</h3>
+목표: 회원 정보를 저장할 엔티티 클래스 생성<br>
+속성: id, username, password, email, createAt<br>
+설명: 회원 정보가 담길 엔티티를 생성하여 데이터베이스 테이블과 매핑<br>
+<h3>UserRepository 생성 (@Mapper)</h3>
+목표: MyBatis를 사용하여 데이터베이스와 연결할 리포지토리 생성<br>
+설명: @Mapper 어노테이션을 이용해 MyBatis와의 연결을 설정하고, insertUser()와 같은 데이터베이스 작업을 위한 메서드 정의<br>
+<h3>UserMapper.xml 생성</h3>
+목표: SQL 쿼리 작성 및 매핑<br>
+설명: UserRepository에서 정의한 메서드에 대한 SQL 쿼리를 resources/mapper/UserMapper.xml 파일에 작성하여 데이터베이스와 연동<br>
+<h3>UserService 생성</h3>
+목표: 비즈니스 로직 처리<br>
+설명: UserService 클래스에서 회원 생성, 조회, 전체 유저 조회 등의 비즈니스 규칙을 구현<br>
+UserRepository와의 연결을 통해 데이터를 처리하는 역할을 담당<br>
+<h3>UserController 생성</h3>
+목표: 사용자 요청 처리<br>
+설명: @PostMapping, @GetMapping 등을 사용하여 HTTP 요청을 받아 UserService를 호출, 요청 처리 후 그 결과를 클라이언트에 응답<br>
+<h3>핵심 흐름: User Entity -> UserRepository -> UserMapper.xml -> UserService -> UserController</h3>
+각 계층을 통해 데이터베이스와 상호작용하고, 비즈니스 로직을 처리하며, 최종적으로 사용자에게 데이터를 응답
 	</details>
 	<details>
 		<summary><b>ㅤ25/01/08/수:의존성 주입, 스프링 빈 관리</b></summary>	
