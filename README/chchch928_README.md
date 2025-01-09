@@ -46,13 +46,13 @@
 		<summary><b>ㅤ25/01/09/목: 인스타그램 스텝 이동 버튼 바인딩 및 이미지 캐러셀 클래스 설계</b></summary>	
 
 <h3>1.스텝 이동 버튼 이벤트 바인딩 </h3> 
-(1) currentStep 변수 설정하기 
-- create-feed-modal.js에서 setUpModalEvents 함수의 elements에 백스텝버튼과 넥스트 스텝버튼 가져오기
-- step 모듈 내에서 전역관리 할 수 있도록 currentStep 지정
-- goTostep 함수에서 currentStep이 step으로 작동하도록 하고, 스탭 1,2,3밖에 존재하지 않으므로 1,2,3 이외의 숫자가 step이 되지 않도록 if문을 통해  조건에 해당하지 않는 것들은 return
+(1) currentStep 변수 설정하기<br> 
+- create-feed-modal.js에서 setUpModalEvents 함수의 elements에 백스텝버튼과 넥스트 스텝버튼 가져오기<br>
+- step 모듈 내에서 전역관리 할 수 있도록 currentStep 지정<br>
+- goTostep 함수에서 currentStep이 step으로 작동하도록 하고, 스탭 1,2,3밖에 존재하지 않으므로 1,2,3 이외의 숫자가 step이 되지 않도록 if문을 통해  조건에 해당하지 않는 것들은 return<br>
 
-(2) 모달, 이전 다음 스텝에 해당하는 이벤트 발생시키기
-- 백스텝 버튼을 클릭했을때 현재 스텝에서 -1, 넥스트버튼을 클릭했을때 현재스텝이 만일 현재의 스텝이  3보다 작을 경우에는 다음 스텝으로 넘어가도록 하고, 3보다 커질 경우에는 서버로 게시물을 공유하도록 한다.
+(2) 모달, 이전 다음 스텝에 해당하는 이벤트 발생시키기<br>
+- 백스텝 버튼을 클릭했을때 현재 스텝에서 -1, 넥스트버튼을 클릭했을때 현재스텝이 만일 현재의 스텝이 3보다 작을 경우에는 다음 스텝으로 넘어가도록 하고, 3보다 커질 경우에는 서버로 게시물을 공유하도록 한다.
 
 ```js
 let currentStep = 1;
@@ -82,15 +82,15 @@ const { $closeBtn, $backdrop, $backStepBtn, $nextStepBtn} = elements;
 ```
 
 <h3>2. 이미지 캐러셀 클래스 설계</h3>
-(1) 객체지향 프로그램으로 만들기 위해 Carousel Manager.js 따로 만들기
-- 생성자인 constructor를 만들고 container를 외부에서 가져오도록 한다. (캐러셀은 공통적으로 존재하기 때문에 가져올 수 없고 캐러셀의 상위에 있는 부모로 구분하기 위해)
-- 생성자에서 container를 받아와서 실제 이미지가 배치될 공간인 track을 carousel-track의 클래스로 가져오고,  실제 이미지 파일을 배열할 slides를 생성자에 추가한다.
-- 초기의 이미지 파일 배열을 받아오는 init 메서드를 생성한다. (files를 받아서 slides를 files로 초기화 )
-- 슬라이드를 이미지 렌더링할 setUpPreview메서드를 만든다
-- setUpPreview에서 slides 배열을 forEach문으로 순회하면서 이미지 element를 생성하고 전달받은 file객체를 브라우저에서 표시할 수 있는 URL로 변환한다.
-- 미리 준비한 css를 활용해 이미지를 div태그에 감싸는 컨테이너를 생성하고 그 감싼 이미지들을 track에 추가시킨다.
--  init메서드에 setUpPreview 함수를 적용한다.
-- 이미지가 누적되는 것을 방지하기 위해 setUpPreview의 가장 처음에 이미지 트랙을 초기화한다.
+(1) 객체지향 프로그램으로 만들기 위해 Carousel Manager.js 따로 만들기<br>
+- 생성자인 constructor를 만들고 container를 외부에서 가져오도록 한다. (캐러셀은 공통적으로 존재하기 때문에 가져올 수 없고 캐러셀의 상위에 있는 부모로 구분하기 위해)<br>
+- 생성자에서 container를 받아와서 실제 이미지가 배치될 공간인 track을 carousel-track의 클래스로 가져오고,  실제 이미지 파일을 배열할 slides를 생성자에 추가한다.<br>
+- 초기의 이미지 파일 배열을 받아오는 init 메서드를 생성한다. (files를 받아서 slides를 files로 초기화 )<br>
+- 슬라이드를 이미지 렌더링할 setUpPreview메서드를 만든다<br>
+- setUpPreview에서 slides 배열을 forEach문으로 순회하면서 이미지 element를 생성하고 전달받은 file객체를 브라우저에서 표시할 수 있는 URL로 변환한다.<br>
+- 미리 준비한 css를 활용해 이미지를 div태그에 감싸는 컨테이너를 생성하고 그 감싼 이미지들을 track에 추가시킨다.<br>
+-  init메서드에 setUpPreview 함수를 적용한다.<br>
+- 이미지가 누적되는 것을 방지하기 위해 setUpPreview의 가장 처음에 이미지 트랙을 초기화한다.<br>
 - CarouselManager를 내보내야 하므로 export한다.
 
 ```js
