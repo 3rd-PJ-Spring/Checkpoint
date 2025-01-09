@@ -59,7 +59,7 @@ ___
 [![GitHub Badge](https://img.shields.io/badge/Mabbakk-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/Mabbakk) <br>
 
 ## ✏️ Daily Study
-<h4><a href="#" style="text-decoration: none; color: inherit;">🐢tony24123's footprint</a></h4>
-<h4><a href="#" style="text-decoration: none; color: inherit;">🐻‍❄️ThoI-i's footprint</a></h4>
-<h4><a href="#" style="text-decoration: none; color: inherit;">🐹chchch928's footprint</a></h4>
-<h4><a href="#" style="text-decoration: none; color: inherit;">👩‍🦲Mabbakk's footprint</a></h4>
+<h4><a href="https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/README/tony24123_README.md" style="text-decoration: none; color: inherit;">🐢tony24123's footprint</a></h4>
+<h4><a href="https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/README/ThoI-i_README.md" style="text-decoration: none; color: inherit;">🐻‍❄️ThoI-i's footprint</a></h4>
+<h4><a href="https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/README/chchch928_README.md" style="text-decoration: none; color: inherit;">🐹chchch928's footprint</a></h4>
+<h4><a href="https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/README/Mabbakk_README.md" style="text-decoration: none; color: inherit;">👩‍🦲Mabbakk's footprint</a></h4>
