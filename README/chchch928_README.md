@@ -43,9 +43,120 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/09/목:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/09/목: 인스타그램 스텝 이동 버튼 바인딩 및 이미지 캐러셀 클래스 설계</b></summary>	
+
+<h3>1.스텝 이동 버튼 이벤트 바인딩 </h3> 
+(1) currentStep 변수 설정하기 
+- create-feed-modal.js에서 setUpModalEvents 함수의 elements에 백스텝버튼과 넥스트 스텝버튼 가져오기
+- step 모듈 내에서 전역관리 할 수 있도록 currentStep 지정
+- goTostep 함수에서 currentStep이 step으로 작동하도록 하고, 스탭 1,2,3밖에 존재하지 않으므로 1,2,3 이외의 숫자가 step이 되지 않도록 if문을 통해  조건에 해당하지 않는 것들은 return
+
+(2) 모달, 이전 다음 스텝에 해당하는 이벤트 발생시키기
+- 백스텝 버튼을 클릭했을때 현재 스텝에서 -1, 넥스트버튼을 클릭했을때 현재스텝이 만일 현재의 스텝이  3보다 작을 경우에는 다음 스텝으로 넘어가도록 하고, 3보다 커질 경우에는 서버로 게시물을 공유하도록 한다.
+
+```js
+let currentStep = 1;
+
+function goToStep(step) {
+
+    if (step < 1 || step > 3) return;
+
+    currentStep = step;
+}
+
+function setUpModalEvents() {
+const { $closeBtn, $backdrop, $backStepBtn, $nextStepBtn} = elements;
+
+// 모달 이전, 다음 스텝 클릭이벤트
+    $backStepBtn.addEventListener('click', () => goToStep(currentStep - 1));
+    $nextStepBtn.addEventListener('click', () => {
+        if (currentStep < 3) {
+            goToStep(currentStep + 1);
+        } else {
+            alert('서버로 게시물을 공유합니다.');
+            // 차후에 서버 AJAX 통신 구현...        
+        }
+    })
+};
+
+```
+
+<h3>2. 이미지 캐러셀 클래스 설계</h3>
+(1) 객체지향 프로그램으로 만들기 위해 Carousel Manager.js 따로 만들기
+- 생성자인 constructor를 만들고 container를 외부에서 가져오도록 한다. (캐러셀은 공통적으로 존재하기 때문에 가져올 수 없고 캐러셀의 상위에 있는 부모로 구분하기 위해)
+- 생성자에서 container를 받아와서 실제 이미지가 배치될 공간인 track을 carousel-track의 클래스로 가져오고,  실제 이미지 파일을 배열할 slides를 생성자에 추가한다.
+- 초기의 이미지 파일 배열을 받아오는 init 메서드를 생성한다. (files를 받아서 slides를 files로 초기화 )
+- 슬라이드를 이미지 렌더링할 setUpPreview메서드를 만든다
+- setUpPreview에서 slides 배열을 forEach문으로 순회하면서 이미지 element를 생성하고 전달받은 file객체를 브라우저에서 표시할 수 있는 URL로 변환한다.
+- 미리 준비한 css를 활용해 이미지를 div태그에 감싸는 컨테이너를 생성하고 그 감싼 이미지들을 track에 추가시킨다.
+-  init메서드에 setUpPreview 함수를 적용한다.
+- 이미지가 누적되는 것을 방지하기 위해 setUpPreview의 가장 처음에 이미지 트랙을 초기화한다.
+- CarouselManager를 내보내야 하므로 export한다.
+
+```js
+class CarouselManager {
+  // 생성자
+  constructor(container) {
+    // 캐러셀을 감싸는 전체 부모태그
+    this.container = container;
+    // 이미지 트랙(실제 이미지가 배치될 공간)
+    this.track = this.container.querySelector('.carousel-track');
+    
+    // 실제 이미지 파일 배열
+    this.slides = [];
+  }
+  // 초기 이미지파일 배열 받기
+  init(files) {
+    this.slides = files;
+    // 슬라이드 띄우기
+    this.setUpPreview();
+  }
+  // 슬라이드 이미지 렌더링
+  setUpPreview() {
+    // 이미지 트랙 리셋
+    this.track.innerHTML = '';
+    this.slides.forEach(file => { 
+      // 이미지 생성
+      const $img = document.createElement('img');
+      // raw file을 image url로 변환
+      $img.src = URL.createObjectURL(file);
+      // 이미지를 감쌀 박스 생성
+      const $slideDiv = document.createElement('div');
+      $slideDiv.classList.add('carousel-slide');
+      $slideDiv.append($img);
+      this.track.append($slideDiv);
+    });
+  }
+}
+export default CarouselManager;
+``` 
+
+(2) setUpFileUploadEvents에 이미지 슬라이드를 생성
+- setUpFileUploadEvents에 CarouselManager를 불러와야 하므로 import한다 (이때 자동완성시에 js가 붙지않으므로 주의!)
+-  스텝2로 이동하기 전에 이미지 슬라이드를 생성하는 구간을 넣는다
+- preview-container가 클래스인 컨테이너를 제어해야 하므로 carouselManger의 함수에서 사용되도록step2Carousel로 가져온다.
+- step2Carousel에 init된 파일을 보낸다.
+- step3Carousel도 step2Carousel과 마찬가지로 캐러셀을 설정하고 step3는 preview-container가 아닌 write-container로만 변경해주면 된다.
+
+```js
+import CarouselManager from "../ui/CarouselManager.js";
+
+function setUpFileUploadEvents() {
+
+    // 이미지 슬라이드 생성
+    const step2Carousel = new CarouselManager($modal.querySelector('.preview-container'));
+    step2Carousel.init(validFiles);
+    const step3Carousel = new CarouselManager(
+      $modal.querySelector('.write-container')
+    );
+    step3Carousel.init(validFiles);
+
+    // 모달 step 2로 이동
+    goToStep(2);
+}
+```
+
+</details>
 	<details>
 		<summary><b>ㅤ25/01/08/수: 인스타그램 이미지 파일 검증 및 모달 스텝이동하고 이동버튼 이벤트 바인딩하기</b></summary>	
 
