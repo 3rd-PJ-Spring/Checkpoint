@@ -1,5 +1,5 @@
 ## ✏️ Daily Study
-### [↩ Go Back Main READMD](https://github.com/3rd-PJ-Spring/Checkpoint?tab=readme-ov-file#%EF%B8%8F-daily-study)
+### [↩ Go Back Main README](https://github.com/3rd-PJ-Spring/Checkpoint?tab=readme-ov-file#%EF%B8%8F-daily-study)
 <details>
   <summary><b>🐻‍❄️ThoI-i's footprint</b></summary>
 	<details>
@@ -43,9 +43,155 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/09/목:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/09/목: 동작의 추상화 | 인터페이스 + List 인터페이스</b></summary>
+
+```java
+// 실행 순서
+1. Apple 클래스 → 생성자로 Apple(무게, 색상)의 Apple 타입 생성
+2. Main 클래스 → List<Apple> appleBasket = List.of(....)
+                 ㄴ List 인터페이스 + Apple 타입의 appleBasket 객체 생성
+3-1. FilterApple 클래스 → List<Apple> filterGreenApples(List<Apple> basket) {
+   ㄴ List 인터페이스 + Apple 타입의 filterGreenApples 매서드 + List 인터페이스 + Apple 타입의 basket를 매개변수로 받음
+3-2. for (Apple apple : basket) {
+     if (apple.getColor() == Color.GREEN) {
+         greenBasket.add(apple);
+      }
+        }
+    ㄴ 녹색 사과만 넣을 Basket 배열 생성 
+    + iter 배열 전용 반복문으로 초록색이면 greenBaket.add(apple)
+    greenBasket를 return ※return으로 지역변수 생존시킴
+4. Main 클래스 → List<Apple> greenApples = filterGreenApples(appleBasket);
+					        System.out.println("greenApples = " + greenApples);
+     ㄴ List 인터페이스 Apple 타입 greenApples 객체에 
+           filterGreenApples 초록 사과만 필터링하는 매서드에 appleBasket 필터링할 데이터를 넣음
+     System.out.println("greenApples = " + greenApples);
+     ㄴ초록 사과만 들어있는 배열을 출력함
+```
+```java
+package chap2_7.lambda;
+
+import java.util.Objects;
+
+public class Apple {
+
+    private int weight; // 무게
+    private Color color; // 색상
+
+    public Apple() {
+    }
+
+    public Apple(int weight, Color color) {
+        this.weight = weight;
+        this.color = color;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    @Override
+    public String toString() {
+        return "Apple{" +
+                "weight=" + weight +
+                ", color=" + color +
+                '}';
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Apple apple = (Apple) o;
+        return weight == apple.weight && color == apple.color;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(weight, color);
+    }
+}
+```
+```java
+package chap2_7.lambda;
+
+public enum Color {
+    RED, GREEN, YELLOW
+}
+```
+```java
+package chap2_7.lambda;
+
+import chap1_6.modi.pac1.A;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+// import static chap2_7.lambda.Color.*;
+
+// 사과를 여러가지 방법으로 필터링
+public class FilterApple {
+
+    public static List<Apple> filterGreenApples(List<Apple> basket) {
+        // 1. 녹색 사과들만 담을 새 바구니 생성
+        List<Apple> greenBasket = new ArrayList<>();
+
+        // 2. 반복문과 조건문을 통해 녹색 사과를 필터링
+        for (Apple apple : basket) {
+            if (apple.getColor() == Color.GREEN) {
+//          if (apple.getColor() == GREEN) {
+// ALT+ENTER: Add on-demand static import for 'chap2_7.lambda.Color'
+                greenBasket.add(apple);
+            }
+        }
+        return greenBasket;
+    }
+	}
+```
+```java
+package chap2_7.lambda;
+
+import java.util.List;
+
+import static chap2_7.lambda.Color.*;
+import static chap2_7.lambda.FilterApple.*;
+import static chap2_7.lambda.MappingApple.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        // 사과 바구니 생성
+        List<Apple> appleBasket = List.of(
+                new Apple(80, GREEN)
+                , new Apple(155, GREEN)
+                , new Apple(120, RED)
+                , new Apple(97, RED)
+                , new Apple(200, GREEN)
+                , new Apple(50, RED)
+                , new Apple(85, YELLOW)
+                , new Apple(75, YELLOW)
+        );
+
+        List<Apple> greenApples = filterGreenApples(appleBasket);
+        System.out.println("greenApples = " + greenApples);
+```
+```java
+// 출력 결과
+greenApples = [Apple{weight=80, color=GREEN}, Apple{weight=155, color=GREEN}, Apple{weight=200, color=GREEN}]
+```
+
+
+</details>
 	<details>
 		<summary><b>ㅤ25/01/08/수: 인터페이스(Interface), 내부 클래스(Inner), 익명 클래스(Anonymous)</b></summary>
 
