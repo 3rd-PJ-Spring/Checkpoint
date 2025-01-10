@@ -39,11 +39,99 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/10/금:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/10/금: 동작의 추상화 | ① 동작(기능/메서드)의 추상화 ② 내부(중첩)/익명 클래스 </b></summary>	
+<h4>ApplePredicate 인터페이스, AppleWeightPredicate/AppleSomething 클래스 추가</h4>
+
+```java
+package chap2_7.lambda;
+
+public interface ApplePredicate { // 사과를 전달받아 특정 조건에 의해 사과를 필터링
+    boolean test(Apple apple);
+}
+```
+```java
+package chap2_7.lambda;
+
+import chap1_6.modi.pac1.A;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+// 사과를 여러가지 방법으로 필터링
+public class FilterApple {
+    public static List<Apple> filterApples(List<Apple> basket, ApplePredicate a) {
+        // 1. 필터링된 사과들만 담을 새 바구니 생성
+        List<Apple> filteredBasket = new ArrayList<>();
+
+        // 2. 반복문과 조건문을 통해 특정 조건의 사과를 필터링
+        for (Apple apple : basket) {
+            if (a.test(apple)) {
+                filteredBasket.add(apple);
+            }
+        }
+        return filteredBasket;
+    }
+}
+```
+```java
+package chap2_7.lambda;
+
+public class AppleWeightPredicate implements ApplePredicate {
+    @Override
+    public boolean test(Apple apple) {
+        return apple.getWeight() >= 150;
+    }
+}
+```
+```java
+package chap2_7.lambda;
+
+public class AppleSomething implements ApplePredicate {
+    @Override
+    public boolean test(Apple apple) {
+        return apple.getColor() == Color.RED && apple.getWeight() < 150;
+    }
+}
+```
+```java
+package chap2_7.lambda;
+
+import java.util.List;
+
+import static chap2_7.lambda.Color.*;
+import static chap2_7.lambda.FilterApple.*;
+import static chap2_7.lambda.MappingApple.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        // 사과 바구니 생성
+        List<Apple> appleBasket = List.of(
+                new Apple(80, GREEN)
+                , new Apple(155, GREEN)
+                , new Apple(120, RED)
+                , new Apple(97, RED)
+                , new Apple(200, GREEN)
+                , new Apple(50, RED)
+                , new Apple(85, YELLOW)
+                , new Apple(75, YELLOW)
+        );
+
+        // 무게가 150 이상인 사과를 필터링
+        List<Apple> weightGT150 = filterApples(appleBasket, new AppleWeightPredicate());
+        System.out.println("weightGT150 = " + weightGT150);
+
+        // 빨강색이면서 무게가 150 미만인 사과를 필터링
+        List<Apple> applesSomethings = filterApples(appleBasket, new AppleSomething());
+        System.out.println("applesSomethings = " + applesSomethings);
+    }
+}
+```
+
+</details>
 	<details>
-		<summary><b>ㅤ25/01/09/목: 동작의 추상화 | 인터페이스 + List 인터페이스</b></summary>
+		<summary><b>ㅤ25/01/09/목: 동작의 추상화 | ⓞ List 인터페이스</b></summary>
 
 ```java
 // 실행 순서
@@ -199,6 +287,20 @@ greenApples = [Apple{weight=80, color=GREEN}, Apple{weight=155, color=GREEN}, Ap
 |-----------------|-------------------------------------------------------|-------------------------------------------------------|----------------------------------|
 | **재사용**      | O                                                     | 클래스 내부에서 재사용                                | 1회용                              |
 | **구현 여부**   | 인터페이스(설계도) + 실체 클래스(구현체) + 동작 클래스(Main) | 인터페이스(설계도) + 동작 클래스(Main)               | 동작 클래스(Main) + 동작 클래스(Main - 축약) |
+
+<h3>⭐️ 내부(중첩) 클래스 ~ Inner(Nested)</h3>
+**① 역할(Responsibilitiy) 분리 필요 시**
+    → 한 클래스 내 관련 로직을 내부 클래스로 모아둠<br>
+**② 여러 메서드가 결과 값을 공유하는 경우(캡슐화 1)**
+    → 물건 구매-할인 적용-포인트 적립-현재 포인트 조회<br>
+**③ 개인/중요 정보 외부에서 접근/변경 방지(캡슐화 2)**
+    → 내부 클래스에서 private 선언<br>
+**④ 디자인 패턴(Iterator, Builder) 활용**
+
+<h3>⭐️ 익명 클래스(Anonymous)</h3>
+**단, 한 번 결과값을 보고 재사용하지 않는 경우** <br>
+인터페이스/추상 클래스(또는 일반 클래스)를 구현/상속 → 메서드 오버라이드 → 인스턴스 생성
+
 <details>
 		<summary><b>ㅤㅤ인터페이스(Interface): 재사용 多</b></summary>
 
