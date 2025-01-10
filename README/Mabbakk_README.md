@@ -39,8 +39,178 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/10/금:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/10/금: 인스타 클론 - 회원가입 BE 3</b></summary>
+
+## 비밀번호 암호화 및 회원가입 API 요청 정리
+
+## 11. 비밀번호 암호화
+
+### 11-1. 데이터 삭제
+데이터베이스에 암호화되지 않은 비밀번호가 저장되어 있다면 먼저 해당 데이터를 삭제한다.
+SQL 워크벤치에서 아래 명령어를 실행한다:
+
+```sql
+DELETE FROM users;
+COMMIT;
+```
+
+### 11-2. Spring Security로 비밀번호 암호화
+Spring Security를 사용하여 강력한 암호화 알고리즘을 구현할 수 있다.
+
+#### PasswordEncoderConfig 파일 생성
+`main/java` 폴더 안에 `config` 폴더를 생성하고, `PasswordEncoderConfig` 파일을 작성한다.
+
+```java
+package com.example.instagramclone.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@Configuration
+public class PasswordEncoderConfig {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
+```
+
+- `@Configuration`: 해당 클래스를 Spring이 관리하는 클래스로 지정한다.
+- `@Bean`: 메서드의 리턴값을 애플리케이션 전체에서 사용 가능한 Singleton Bean으로 관리한다.
+
+#### @Configuration과 @Bean의 동작 원리
+- **SingleTon**: Spring은 기본적으로 하나의 객체를 전역적으로 공유함.
+- **CGLIB**: Spring이 @Configuration 클래스 내부에서 SingleTon을 보장하기 위해 사용하는 기술임.<br><br>
+#### 결론 
+- @Configuration 로 인해 동일한 @Bean 메서드가 여러 번 호출되더라도 하나의 Singleton 인스턴스만 반환.
+- CGLIB 작동 시 @Bean 메서드를 호출할 때마다 새로운 객체 생성 X, 이미 생성된 객체를 반환.
+
+#### MemberService에 PasswordEncoder 주입
+생성한 `PasswordEncoder`를 `MemberService` 클래스에 주입받아 비밀번호를 암호화한다.
+
+```java
+@Service
+@Slf4j
+@Transactional
+@RequiredArgsConstructor
+public class MemberService {
+
+    private final PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
+
+    public void signUp(SignUpRequest signUpRequest) {
+        // 비밀번호 암호화
+        String rawPassword = signUpRequest.getPassword();
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+
+        // 회원 정보를 엔터티로 변환 및 암호화된 비밀번호 설정
+        Member newMember = signUpRequest.toEntity();
+        newMember.setPassword(encodedPassword);
+
+        // 데이터베이스 저장
+        memberRepository.insert(newMember);
+    }
+}
+```
+
+### 11-3. Postman으로 테스트
+1. 서버를 재실행한다.
+2. Postman에서 회원가입 요청을 보내고, 데이터베이스에 저장된 비밀번호가 암호화되었는지 확인.
+
+---
+
+## 12. 회원가입 API 요청
+
+### 12-1. 프론트엔드 코드 작성
+`JS` 폴더의 `signUp.js` 파일에 회원가입 API 요청 메서드를 작성한다.
+
+#### DOMContentLoaded 이벤트
+
+```javascript
+document.addEventListener('DOMContentLoaded', initSignUp);
+
+function initSignUp() {  // 이벤트 함수
+    // 입력값 읽어오기
+}
+```
+
+#### 사용자 입력값 읽어오기
+`signUp.jsp` 파일의 입력값을 가져온다.
+
+```javascript
+const emailOrPhone = document.querySelector('input[name="email"]').value;
+const name = document.querySelector('input[name="name"]').value;
+const username = document.querySelector('input[name="username"]').value;
+const password = document.querySelector('input[name="password"]').value;
+
+const payload = {
+    emailOrPhone: emailOrPhone,
+    name: name,
+    username: username,
+    password: password
+};
+```
+key 값을 꼭 저렇게 설정해야 할까?
+: SignUpRequest에서 설정된 필드명이기 때문이다. 서버가 요청한 값대로 전달해야 한다.
+
+#### 폼의 submit 이벤트 처리
+
+submit 이벤트는 새로고침이 일어나기 때문에 e.preventDefault(); 를 추가해주어 이를 방지한다.
+```javascript
+const $form = document.querySelector('.auth-form');
+
+$form.addEventListener('submit', e => {
+    e.preventDefault(); // 새로고침 방지
+
+    // 입력값 읽기
+    const emailOrPhone = document.querySelector('input[name="email"]').value;
+    const name = document.querySelector('input[name="name"]').value;
+    const username = document.querySelector('input[name="username"]').value;
+    const password = document.querySelector('input[name="password"]').value;
+
+    const payload = {
+        emailOrPhone: emailOrPhone,
+        name: name,
+        username: username,
+        password: password
+    };
+
+    console.log(payload);
+
+    // 서버로 데이터 전송
+    fetchToSignUp(payload);
+});
+```
+
+#### 서버로 데이터 전송
+
+```javascript
+async function fetchToSignUp(userData) {
+    const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+    });
+
+    if (response.ok) {
+        window.location.href = '/'; // 로그인 페이지로 이동
+    } else {
+        alert('회원가입에 실패했습니다.');
+    }
+}
+```
+
+### 12-2. 테스트
+1. 서버를 재실행.
+2. 회원가입 입력값을 작성 후 데이터를 제출.
+3. 데이터베이스에 정상적으로 저장되었는지 확인.
+
+---
+
+위 과정을 통해 비밀번호 암호화 및 회원가입 API 요청 처리 완료!<br>
 	</details>
 	<details>
   <summary><b>ㅤ25/01/09/목: 인스타 클론 - 회원가입 BE 2</b></summary>
