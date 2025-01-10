@@ -39,8 +39,94 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/10/금:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/10/금: RequestDto 복습 </b></summary>
+<h2>DTO</h2>
+<h3>DTO(Data Transfer Object)는 클라이언트와 서버 간 데이터를 전송하는 데 사용되는 객체로, 데이터베이스 엔티티(Entity)와는 구분된다</h3>
+<h4>-목적-</h4> 
+데이터 전송 간 필요한 정보만 제공하고,<br> 민감한 데이터를 보호하거나 데이터 포맷을 변환하는 데 사용.<br>
+<h4>-장점-</h4>
+데이터 보안 강화 (민감 정보 마스킹 가능)<br>
+클라이언트 요구사항에 맞춘 데이터 제공<br>
+API 설계의 유연성 및 유지보수성 증가<br>
+
+```java
+package com.example.instagramclone.shop.user;
+
+import lombok.*;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class UserDto {
+
+    private Long userId;           // 유저 ID
+    private String name;           // 유저 이름
+    private String userEmail;      // 이메일 (마스킹 처리)
+    private String userPassword;   // 비밀번호 (마스킹 처리)
+    private String date;           // 가입일자 (포맷 변경)
+
+    // User 엔티티를 DTO로 변환하는 생성자
+    public UserDto(User u) {
+        this.userId = u.getId();
+        this.name = u.getUsername();
+        this.userEmail = u.getEmail().length() > 5 ? u.getEmail().substring(0, 5) + "..." : u.getEmail();
+        this.userPassword = u.getPassword().length() > 6 ? u.getPassword().substring(0, u.getPassword().length() - 2) + "**" : u.getPassword();
+        this.date = u.getCreateAt().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+    }
+}
+```
+
+<h3>개선 전 코드</h3>
+
+```java
+@GetMapping
+public ResponseEntity<List<User>> getAllUser() {
+    List<User> users = userService.getAllUsers();
+    return ResponseEntity.ok(users); // User 엔티티 리스트를 반환
+}
+
+```
+보안 문제: 이메일과 비밀번호가 그대로 노출<br>
+데이터 포맷 문제: 가입일자 등 클라이언트가 보기 어려운 형식 그대로 반환됨<br>
+응답 데이터 구조의 가독성 부족: 클라이언트는 불필요한 데이터를 처리해야 할 수도 있음<br>
+```java
+@GetMapping
+public ResponseEntity<List<UserDto>> UserList() {
+    List<User> users = userService.getAllUsers();
+
+    if (users.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 데이터가 없을 때 처리
+    }
+
+    List<UserDto> userDtos = users.stream()
+                                  .map(UserDto::new)  // User -> UserDto 변환
+                                  .collect(Collectors.toList());
+
+    return ResponseEntity.ok(userDtos);  // 변환된 DTO 리스트 반환
+}
+
+```
+<h3>보안성 강화</h3>
+이메일과 비밀번호가 마스킹 처리되어 클라이언트에게 민감 정보가 그대로 노출되지 않음.<br>
+<h3>클라이언트 요구사항에 맞춘 데이터 반환</h3>
+가입일자는 yyyy/MM/dd 형식으로 변경되어 클라이언트가 즉시 사용 가능<br>
+불필요한 데이터가 제거된 DTO를 반환하여 데이터 효율성 증가<br>
+<h3>응답 데이터의 명확성</h3>
+DTO를 통해 API 응답 구조가 정리되고, 클라이언트와의 데이터 교환이 명확해짐<br>
+<h3>유지보수 용이성</h3>
+데이터 전송 구조를 엔티티와 분리했으므로, 엔티티 변경이 클라이언트 응답에 영향을 미치지 않음<br>
+필요 시 DTO의 필드나 변환 로직만 수정하여 쉽게 확장 가능<br>
+<h3>가독성 및 간결성</h3>
+Stream API를 활용한 map 메서드로 DTO 변환이 간결하게 처리됨<br>
+기존의 엔티티 리스트를 반환하는 코드보다 더 명확한 의도를 전달<br>
+ㅤㅤ
 	</details>
 	<details>
 		<summary><b>ㅤ25/01/09/목:회원 관리 시스템 구현 백엔드 흐름 연습해보기</b></summary>
@@ -49,19 +135,195 @@
 목표: 회원 정보를 저장할 엔티티 클래스 생성<br>
 속성: id, username, password, email, createAt<br>
 설명: 회원 정보가 담길 엔티티를 생성하여 데이터베이스 테이블과 매핑<br>
+```java
+package com.example.instagramclone.shop.user;
+
+import lombok.*;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode
+public class User {
+
+    private Long id;
+    private String username;
+    private String email;
+    private String password;
+    private LocalDateTime createAt;
+}
+
+```
 <h3>UserRepository 생성 (@Mapper)</h3>
 목표: MyBatis를 사용하여 데이터베이스와 연결할 리포지토리 생성<br>
 설명: @Mapper 어노테이션을 이용해 MyBatis와의 연결을 설정하고, insertUser()와 같은 데이터베이스 작업을 위한 메서드 정의<br>
+```java
+package com.example.instagramclone.shop.repository;
+
+
+import com.example.instagramclone.domain.post.entity.Post;
+import com.example.instagramclone.shop.user.User;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+import java.util.Optional;
+
+@Mapper
+public interface UserRepository {
+    //유저 생성
+    void insert(User user);
+
+    //유저 조회
+    Optional<User> findById(Long id);
+
+    //전체 유저 조회
+    List<User> findAll();
+}
+
+```
 <h3>UserMapper.xml 생성</h3>
 목표: SQL 쿼리 작성 및 매핑<br>
 설명: UserRepository에서 정의한 메서드에 대한 SQL 쿼리를 resources/mapper/UserMapper.xml 파일에 작성하여 데이터베이스와 연동<br>
+```java
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.instagramclone.shop.repository.UserRepository">
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO user
+        (username, password, email)
+        VALUES
+        (#{username}, #{password}, #{email})
+    </insert>
+
+    <select id="findById" resultType="com.example.instagramclone.shop.user.User">
+        SELECT
+        *
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <select id="findAll" resultType="com.example.instagramclone.shop.user.User">
+        SELECT
+        *
+        FROM user
+    </select>
+
+</mapper>
+```
 <h3>UserService 생성</h3>
 목표: 비즈니스 로직 처리<br>
 설명: UserService 클래스에서 회원 생성, 조회, 전체 유저 조회 등의 비즈니스 규칙을 구현<br>
 UserRepository와의 연결을 통해 데이터를 처리하는 역할을 담당<br>
+```java
+package com.example.instagramclone.shop.service;
+
+import com.example.instagramclone.shop.repository.UserRepository;
+import com.example.instagramclone.shop.user.User;
+import com.example.instagramclone.shop.user.UserDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class UserService {
+
+    private final UserRepository userRepository;
+
+//    @Autowired
+//    public UserService(UserRepository userRepository) {
+//        this.userRepository = userRepository;
+//    }
+
+    //유저 생성
+    public void createUser(User user) {
+        userRepository.insert(user);
+    }
+
+    //유저 조회
+    public User getUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+    }
+
+    //전체 유저 조회
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(u -> new UserDto(u))
+                .collect(Collectors.toList());
+    }
+}
+
+```
 <h3>UserController 생성</h3>
 목표: 사용자 요청 처리<br>
 설명: @PostMapping, @GetMapping 등을 사용하여 HTTP 요청을 받아 UserService를 호출, 요청 처리 후 그 결과를 클라이언트에 응답<br>
+```java
+package com.example.instagramclone.shop.controller;
+
+
+import com.example.instagramclone.shop.repository.UserRepository;
+import com.example.instagramclone.shop.service.UserService;
+import com.example.instagramclone.shop.user.User;
+import com.example.instagramclone.shop.user.UserDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/user")
+public class UserController {
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping
+    public String  create(@RequestBody User user) {
+        userService.createUser(user);
+        return "insert success";
+    }
+
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable Long id) {
+        return userService.getUser(id);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getAllUser() {
+        List<UserDto> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+//    @GetMapping
+//    public ResponseEntity<?> UserList() {
+//        List<UserDto> users = new ArrayList<>(userService.getAllUsers())
+//                .stream()
+//                .map(u-> new UserDto(u))
+//                .collect(Collectors.toList());
+//
+//        return ResponseEntity.ok().body(users);
+//    }
+
+}
+
+```
 <h3>핵심 흐름: User Entity -> UserRepository -> UserMapper.xml -> UserService -> UserController</h3>
 각 계층을 통해 데이터베이스와 상호작용하고, 비즈니스 로직을 처리하며, 최종적으로 사용자에게 데이터를 응답
 	</details>
