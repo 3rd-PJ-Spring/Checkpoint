@@ -31,16 +31,214 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/14/화:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/14/화: ⭐객체와 인스턴스 | ② 내부(중첩)/익명 클래스</b></summary>	
+
+| **구분**       | **클래스 / 인터페이스 / 추상화 (설계도)**        | **객체 (new 키워드)**                   | **인스턴스 (결과물)**                  |
+|--------------|--------------------------------------------------|-----------------------------------------|----------------------------------------|
+| **필드 / 메서드** | 정의만 존재 (설계도 상태, 필드/메서드 정의)       | 값이 미입력된 상태 (null, 0, false)      | 모든 필드 값이 할당됨, 메서드 실행 가능 |
+| **메모리**      | 미생성                                            | 생성                                    | 값 입력                                |
+
+</details>
 	<details>
-		<summary><b>ㅤ25/01/13/월:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/13/월: ⭐⭐️① 동작의 추상화 분석 + 복수 메서드(조건) + 스트림 API + 데이터 재활용(서버)과 SQL</b></summary>
+<h3>① 인터페이스(메서드 형식(규격)을 설계/생성해서 필요한 기능을 바로바로 넣을 수 있게 만듬</h3>
+
+```java
+public interface ApplePredicate {
+    boolean test(Apple apple);
+}
+```
+<h3>② FilterApple 클래스에서 ApplePredicate a 파라미터를 통해서 1개의 조건(메서드)</h3>
+```java
+public class FilterApple {
+    public static List<Apple> filterApples(List<Apple> basket, ApplePredicate a) {
+        // ⓐ 필터링된 사과들만 담을 새 바구니 생성
+        List<Apple> filteredBasketA = new ArrayList<>();
+
+        // ⓑ 반복문과 조건문을 통해 특정 조건의 사과를 필터링
+        for (Apple apple : basket) {
+            if (a.test(apple)) { // ⓒ-1 a.test(apple)가 참이면
+                filteredBasketA.add(apple); // ⓒ-2 apple 정보를 filteredBasket 배열에 추가함
+            }
+        }
+        return filteredBasketA; // ⓓ 반복문 종료 후 filteredBasketA 배열을 반환함
+    }
+}         
+```
+<h3>③ 만약 파라미터 수 = 조건(메서드) 수 = 새 배열 수 = 필터링 수 = 조건에 맞게 반환해야한다면?</h3>
+<h4>⭐️⭐️1개의 메서드 = 1개의 결과값을 반환</h4>
+```java
+public class FilterApple {      // 필터링할 사과 객체들이 담긴 리스트 <┐            ┌>조건을 정의하는 객체
+    public static Map<String, List<Apple>> filterApples(List<Apple> basket, ApplePredicate a, ApplePredicate b, ApplePredicate c, ApplePredicate d) {
+              // 메서드 반환 타입 Map<String, List<Apple>> → 복수의 조건 결과를 한 번에 반환하기 위해
+        // Key(String): BasketA, BasketB  <┘ 	      ┗> Value: List<Apple>: 특정 조건에 맞는 사과 리스트
+
+        List<Apple> filteredBasketA = new ArrayList<>(); // 각 조건에 맞는 사과를 담을 리스트 생성
+        List<Apple> filteredBasketB = new ArrayList<>();
+        List<Apple> filteredBasketC = new ArrayList<>();
+        List<Apple> filteredBasketD = new ArrayList<>();
+
+        for (Apple apple : basket) {         // List<Apple> basket 전체 사과 리스트를 하나씩 검사해서
+            if (a.test(apple)) {             // 조건에 부합하는 리스트에 넣음
+                filteredBasketA.add(apple);
+            } else if (b.test(apple)) {
+                filteredBasketB.add(apple);
+            } else if (c.test(apple)) {
+                filteredBasketC.add(apple);
+            } else if (d.test(apple)) {
+                filteredBasketD.add(apple);
+            }
+        }
+
+        Map<String, List<Apple>> result = new HashMap<>(); // HashMap을 통해 Key 명을 지칭 |  Value에 필터된 리스트들을 저장함
+        result.put("BasketA", filteredBasketA);                           // Key값을 호출하면 Value에 저장된 값을 호출할 수 있으며,
+        result.put("BasketB", filteredBasketB);
+        result.put("BasketC", filteredBasketC);
+        result.put("BasketD", filteredBasketD);
+
+        return result;                                    // 복수의 조건 결과 한 번에 반환(result)
+    }
+}
+```
+```java
+🚨 만약 3개의 조건(a, b, c)만 쓰고 d를 쓰지 않는다면?
+❌ 메모리 낭비 / 코드 가독성↓ / 유지보수 힘듬
+```
+<h3>④ 조건을 동적으로 생성(조건의 갯수만큼 배열, 필터링하여 반환함)</h3>
+```java
+public class FilterApple {                               // 필터링할 사과 객체들이 담긴 리스트 <┐
+    public static Map<String, List<Apple>> filterApples(List<Apple> basket, List<ApplePredicate> predicates) {
+        Map<String, List<Apple>> result = new HashMap<>();
+
+        // 조건별 리스트 생성    ┏> 조건의 개수만큼 새 리스트 생성
+        for (int i = 0; i < predicates.size(); i++) {
+            result.put("Basket" + (char) ('A' + i), new ArrayList<>());
+        }
+
+        // 조건별로 사과 분류
+        for (Apple apple : basket) {
+            for (int i = 0; i < predicates.size(); i++) {
+                if (predicates.get(i).test(apple)) {
+                    result.get("Basket" + (char) ('A' + i)).add(apple); // 형 변환(Casting) ↓↓↓↓
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+}
+```
+```java
+char 문자('A')는 유니코드(아스키코드) 숫자로 표현함
+'A' = 65
+('A' + 1) = int 66 [묵시적 형 변환(Up Casting)]
+char   int
+
+(char) ('A' + 1) = B [명시적 형 변환(Down Casting)] 
+(char) (int 66) = B
+```
+<h3>⭐ List 인터페이스 메서드</h3>
+
+| **기능**                   | **메서드 코드**                                                              | **예시**                                                                |
+|---------------------------|-------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| **① 추가**                | `.add`, `.add(index, element)`                                          | `list.add("Apple")`, `list.add(1, "Banana")`                          |
+| **② 조회**                | `.get(index)`                                                           | `list.get(0)`                                                         |
+| **③ 수정**                | `.set(index, element)`                                                  | `list.set(1, "Orange")`                                               |
+| **④ 삭제**                | `.remove(index)`, `.remove(element)`                                    | `list.remove(0)`, `list.remove("Apple")`                              |
+| **⑤ 요소 확인 (true/false)** | `.contains(element)`                                                    | `list.contains("Apple")`                                              |
+| **⑥ 크기 확인**            | `.size()`                                                               | `list.size()`                                                         |
+| **⑦ 초기화**               | `.clear()`                                                              | `list.clear()`                                                        |
+| **⑧ 공백 확인 (true/false)** | `.isEmpty()`                                                            | `list.isEmpty()`                                                      |
+| **⑨ 정렬**                | `.sort(list)`**(오름차순)**<br/>`.sort(list, reverseOrder())`**(내림차순)** | `Collections.sort(list)`<br/>`list.sort(Comparator.reverseOrder())` |
+
+<h3>⑤ 스트림 API 사용(JAVA 8↑): 가독성↑</h3>
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class FilterApple {                                                         
+    public static Map<String, List<Apple>> filterApples(List<Apple> basket, List<ApplePredicate> predicates) {
+        Map<String, List<Apple>> result = new HashMap<>();
+
+        // 조건별로 리스트 생성
+        for (int i = 0; i < predicates.size(); i++) {
+            String key = "Basket" + (char) ('A' + i);
+            result.put(key, basket.stream()
+                                  .filter(predicates.get(i)::test)
+                                  .collect(Collectors.toList()));
+        }
+        return result;
+    }
+}
+```
+```java
+🚨 중복 조건도 다시 검사(데이터 재활용 불가X)
+❌ → 반복 횟수↑
+```
+<h3>⑥ AND/OR 조건을 활용한 데이터 재사용</h3>
+```java
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+public class FilterApple {
+
+    public static Map<String, Long> filterAndCountApples(List<Apple> basket, List<Predicate<Apple>> conditions) {
+        Map<String, List<Apple>> intermediateResults = new HashMap<>();
+        Map<String, Long> counts = new HashMap<>();
+
+        // 조건별로 결과 저장
+        for (int i = 0; i < conditions.size(); i++) {
+            String conditionKey = "Condition" + (i + 1);
+            List<Apple> filtered = basket.stream()
+                                         .filter(conditions.get(i))
+                                         .collect(Collectors.toList());
+            intermediateResults.put(conditionKey, filtered);
+            counts.put(conditionKey, (long) filtered.size()); // 각 조건의 개수 저장
+        }
+
+        // 교집합 계산 (AND 조건)
+        for (int i = 0; i < conditions.size(); i++) {
+            for (int j = i + 1; j < conditions.size(); j++) {
+                String intersectionKey = "Intersection" + (i + 1) + "&" + (j + 1);
+                List<Apple> intersection = intermediateResults.get("Condition" + (i + 1)).stream()
+                                                              .filter(conditions.get(j))
+                                                              .collect(Collectors.toList());
+                counts.put(intersectionKey, (long) intersection.size()); // 교집합 개수 저장
+            }
+        }
+
+        return counts;
+    }
+}
+```
+```java
+✅ 장점
+ⓐ 네트워크 부하 감소↓: 데이터 재활용
+ⓑ 유연한 조합: 조건 추가/변경 용이
+ⓒ 데이터 캐싱:  SQL 부담↓ 감소
+
+❌ 단점
+ⓐ 메모리 사용량 증가
+ⓑ 데이터 동기화 문제: SQL에서 데이터가 실시간 변화 반영 힘듬
+```
+<h3>✨요약</h3>
+
+| 항목               | 서버 처리(데이터 재사용)              | SQL 처리                      | 서버 + SQL 결합              |
+|--------------------|-----------------------------|------------------------------|-----------------------------|
+| **장점**           | 동적/복잡한 조건 추가 가능, 재사용 + 캐싱 가능 | 대규모 데이터 계산 처리, 데이터베이스의 인덱스 최적화 기능 활용 | 성능 최적화, 유연성, 네트워크 부하 감소 |
+| **데이터 수**      | 1만 건 이하 ↓                   | 100만 건 이상 ↑              | 중간 규모 (1만 ~ 100만 건)  |
+| **데이터 용량**    | 수 MB ~ 500MB                | 5GB 이상 ↑                   | 500MB ~ 5GB                |
+| **데이터 수정**    | 조회만                         | 실시간 반영 O                 | 조회 + 최소 수정             |
+| **조건 조합**      | 동적 조합 용이                    | 고정된 조건에 적합             | 동적 조합 + SQL 필터링        |
+| **실시간성**       | 낮음                          | 높음                         | SQL 최신 데이터 + 서버 조합   |
+| **캐싱 활용**      | 가능 (메모리 캐싱)                 | 어려움                        | SQL + 캐싱으로 결합          |
+| **적합한 경우**    | 소규모 데이터, 자주 바뀌는 조건          | 대규모 데이터, 실시간 데이터     | 균형 잡힌 처리, 실무 적합     |
+
+</details>
 	<details>
-		<summary><b>ㅤ25/01/10/금: 동작의 추상화 | ① 동작(기능/메서드)의 추상화 ② 내부(중첩)/익명 클래스 </b></summary>	
-<h4>ApplePredicate 인터페이스, AppleWeightPredicate/AppleSomething 클래스 추가</h4>
+		<summary><b>ㅤ25/01/10/금: ① 동작(기능/메서드)의 추상화</b></summary>	
+<h3>ApplePredicate 인터페이스, AppleWeightPredicate/AppleSomething 클래스 추가</h3>
 
 ```java
 package chap2_7.lambda;
