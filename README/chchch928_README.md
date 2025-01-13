@@ -35,9 +35,105 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/13/월:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/13/월: 캐러셀 이동시 UI 업데이트하고 이미지 파일 업로드 드래그앤 드롭 이벤트와 피드내용 글자 수를 갱신처리</b></summary>	
+
+<h3> 1. 캐러셀 이동시 UI 업데이트 </h3>
+
+(1) 슬라이드의 index에 따라 이전, 다음 슬라이드 버튼 활성화 여부를 설정한다.
+- 만일 초기화면일 경우, 이전 버튼이 버튼이 보이지 않도록 설정한다.
+- 만일 슬라이드의 마지막 화면일 경우, 다음 버튼이 보이지 않도록 설정한다.
+
+(2) 슬라이드의 index에 따라 인디케이터도 움직이도록 설정한다.
+- 인디케이터에 active 클래스만 붙여주면 인디케이터가 활성화되도록 설정되어 있다
+- 인디케이터들을 다 잡아오기 위해서 indicatorContainer의 자식들을 $indicators 라고 지정한다.
+- ForEach문으로 각각의 인디케이터($ind)와 인덱스 (i)를 가져온다.
+- 각각의 인디케이터에 toggle 이벤트를 통해 가져온 i가 현재 슬라이드 위치와 같으면 active클래스가 활성화되도록 설정한다.
+
+```js
+ class CarouselManager {
+    goToSlide(index) {
+
+        // 이전, 다음 슬라이드 버튼 활성화 여부
+        this.prevBtn.style.display = index === 0 ? 'none' : 'flex';
+        this.nextBtn.style.display = index === this.slides.length - 1 ? 'none' : 'flex';
+
+        // 인디케이터 변화 업데이트
+        const $indicators = [...this.indicatorContainer.children];
+        $indicators.forEach(($ind, i) => {
+            $ind.classList.toggle('active', i === index);
+        });
+    }
+};
+
+```
+
+<h3> 2. 이미지 파일 업로드 드래그앤 드롭 이벤트 </h3>
+
+(1) 파일 드래그 이벤트를 설정한다.
+- create-feed-modal.js에서 DOM 객체 영역에 $uploadArea를 불러오고,
+  setUpFileUploadEvent에서 elements에 드래그할 영역인 $uploadArea를 가져온다.
+- css로 dragover라는 클래스를 만들어 파일을 넣을려고 할때, 업로드 영역에 변화가 생기도록 만든다.
+- $uploadArea에 드래그 했을때 dragover라는 클래스를 주고, $uploadArea에서 드래그 한 것이 벗어났을때 dragover라는 클래스를 제거함으로써 파일이 들어오고 나가는 것을 ui적으로 표현해준다.
+
+```js
+// 파일 드래그& 드롭 이벤트
+    // 드래그 영역에 진입했을 때
+    $uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        $uploadArea.classList.add('dragover');
+    });
+
+    // 드래그 영역에서 나갔을 때
+    $uploadArea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        $uploadArea.classList.remove('dragover');
+    });
+```
+
+(2) 파일 드롭 이벤트를 설정한다.
+- 파일을 업로드 영역에 떨어뜨렸을 때, 발생하는 이벤트를 만들고 떨어뜨린 파일 정보를 불러오도록 만든다.
+- 마지막으로 조건문을 만들어 파일을 검증한다.
+
+```js
+ // 드래그 영역에 드롭했을 때
+    $uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault(); // 드롭했을 때 이미지 새탭이 열리거나 파일이 다운로드되는 것을 방지
+
+        // 파일 정보 얻어오기
+        const files = [...e.dataTransfer.files];
+        // 파일 검증
+        if (files.length > 0) handleFiles(files);
+    });
+```
+
+<h3> 3. 피드 내용 글자 수 갱신처리  </h3>
+
+(1) 이벤트 바인딩을 할 준비를 한다.
+- DOM들을 저장할 객체에 contextTextarea, charCounter를 가져온다.
+- 이벤트 바인딩 관련함수에 텍스트 입력 관련 이벤트인 setupTextareaEvents(); 를 넣는다.
+
+(2) 피드 내용 입력 이벤트인 setupTextareaEvents를 만든다.
+- 아까 DOM으로 가져온 contextTextarea, charCounter를 elements로 가져온다.
+- 한글자 한글자 입력할때마다 event가 터지도록 input이벤트를 걸어 글자수를 가져온다.
+- 가져온 글자수를 바로바로 보이도록 charCounter에 갱신시킨다.
+- 2200글자가 넘으면 더이상 입력을 못하도록 exceed라는 charCounter에 클래스를 걸어 빨간색으로 표시하고 더이상 글자가 출력되지 않도록 contentTextarea의 value를 slice한다.
+
+```js
+function setupTextareaEvents() {
+    const { $contentTextarea, $charCounter } = elements;
+    $contentTextarea.addEventListener('input', () => {
+        const length = $contentTextarea.value.length;
+        $charCounter.textContent = `${length.toString()} / 2,200`;
+        if (length > 2200) {
+            $charCounter.classList.add('exceed');
+            $contentTextarea.value = $contentTextarea.value.slice(0, 2200);
+        } else {
+            $charCounter.classList.remove('exceed');
+        }
+    });
+}
+```
+</details>
 	<details>
 		<summary><b>ㅤ25/01/10/금: 인스타그램 포스트 이미지 개수만큼 캐러셀 인디케이터 생성하고 캐러셀 이동 이벤트 구현</b></summary>
 
