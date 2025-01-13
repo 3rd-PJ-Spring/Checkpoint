@@ -35,8 +35,207 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/13/월:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/13/월: 인스타 클론 - 회원가입 BE 3</b></summary>
+
+# 회원가입 빈 입력값 검증 (FE)
+
+## 13-1. 코드 리팩토링
+
+일단 `signup.js` 파일로 이동해서 기존 코드를 리팩토링 해보자.
+
+입력값들을 바로 받아오지 말고 태그들을 읽어와서 이들을 객체로 만들 것이다.
+
+value를 바로 읽지 말고 DOM만 가져와보자.
+
+```jsx
+// form submit 이벤트
+const $form = document.querySelector('.auth-form');
+
+// 입력 태그들을 읽어서 객체로 관리
+const $inputs = {
+    emailOrPhone: $form.querySelector('input[name="email"]'),
+    name: $form.querySelector('input[name="name"]'),
+    username: $form.querySelector('input[name="username"]'),
+    password: $form.querySelector('input[name="password"]'),
+};
+```
+
+각 네 개의 데이터들이 들어있는 상위 클래스를 가져온 후 **$form** 객체로 선언한다.
+
+여기서 `.querySelector`는 문서 전체(`document.`)에서 태그를 검색하면 **성능이 좋지 않다**. <br>
+문서 전체 내에서 탐색하는 건 범위가 굉장히 넓기 때문에 **좁은 범위**, 즉 위에 만들어 놓은 `$inputs`가 들어있는 `$form` 안에서 찾도록 코드를 수정한다.
+
+[  `document.querySelector` → `$form.querySelector`  ]
+
+다음으로 잠시 주석 처리를 해야 할 부분이 있다.
+
+서버로 전송하기 전에 검사부터 해야 하기 때문이다.
+
+이제 본격적으로 입력값 검증을 시작해보자.
+
+---
+
+## 13-2. 입력값 검증 이벤트
+
+위에 작성한 `$inputs` 안의 네 개의 input에 전부 이벤트를 걸어줘야 한다.
+
+아래처럼 이벤트를 걸어줄 수도 있겠지만, 우리는 반복문을 써볼 거다.
+
+```jsx
+$inputs.emailOrPhone.addEventListener('input', handler);
+$inputs.name.addEventListener('input', handler);
+$inputs.username.addEventListener('input', handler);
+$inputs.password.addEventListener('input', handler);
+```
+
+결국에는 `$inputs` 안에 있는 value들만 뽑아주면 되는데, 초기 기본 코드 원리는 다음과 같다.
+
+```jsx
+for (const key in $inputs) { // key에는 $inputs의 emailOrPhone, name ...이 들어온다.
+    // $inputs의 value를 가져오려면 아래와 같이 작성한다.
+    $inputs[key].addEventListener()
+}
+```
+
+위에서 조금 더 함수화 해보자.
+
+```jsx
+// 4개의 입력창에 입력 이벤트 바인딩
+
+// $inputs의 value들만 꺼내서 반복문을 돌리면 $input 태그들이 하나씩 출력된다.
+Object.values($inputs).forEach(($input) => { 
+    
+    // console.log($input); 을 실행하여 브라우저에 $input 값들이 출력되는지 확인.
+    
+    $input.addEventListener('input', e => {  // handler
+        
+        // 입력값 검증을 수행하는 함수 호출.
+        validateField($input); 
+    });
+});
+```
+
+`values`는 위의 `$input` 태그들의 value(입력값)들만 꺼내올 수 있게 된다!
+
+---
+
+## 13-3. 입력값 검증 함수 정의
+
+이제 맨 아래 메인 실행 코드 위에 함수를 정의해주자.
+
+```jsx
+// 함수 정의
+// 입력값을 검증하고 에러 메시지를 렌더링하는 함수
+function validateField($input) {
+    
+    // 1. 빈 값 체크
+    // 입력값 읽어오기
+    const inputValue = $input.value;
+    
+    // 2. 이게 어떤 태그인지 알아오기
+    const fieldName = $input.name;
+    
+    // 3. 로그 찍어보기
+    console.log(fieldName, inputValue);
+}
+```
+
+1. 빈 값 체크를 하기 위해서는 **입력값**을 읽어와야 한다.
+   **$input**의 **value**들을 읽어오는 `inputValue` 함수를 정의해주자.
+2. 입력값을 읽어오면 이 값이 어떤 태그인지 알아야 한다. (입력값의 타켓을 구분 및 명시)
+
+signup.jsp 파일에 들어가서 태그들을 살펴보자. **type**은 같으나, **name**이 다른 걸 알 수 있다!
+
+고로, **name**으로 각 태그들을 구분해주자.
+
+```jsx
+// 1. 빈 값 체크
+// 2. 이게 어떤 태그인지 알아오기
+const fieldName = $input.name;
+
+// 3. 입력값 읽어오기
+const inputValue = $input.value;
+
+if(!inputValue) {
+    console.log(fieldName, 'is empty!');
+}
+```
+
+입력창에 값을 적었다가 삭제했을 때 로그가 뜨면 정상이다.
+
+---
+
+## 13-4. 빈 값 검증
+
+어느 태그에 입력값이 어떤 식으로 출력되는지 알았으니 이제 **입력값 검증**을 추가하자.
+
+만약 입력창에 아무런 값도 없을 때(=빈 값) 어떻게 해야 할까? 우선 `if` 문을 작성하고 잘 작동하는지 로그를 찍어보자.
+
+```jsx
+if(!inputValue) {
+    // console.log(fieldName, 'is empty!');
+    showError();  // 에러 메시지 렌더링
+}
+```
+
+에러 메시지를 표시하는 함수를 추가로 작성하자.
+
+---
+
+## 13-5. 에러 클래스 부여
+
+다음 코드를 추가하자.
+
+```jsx
+/**
+ * 에러 메시지를 표시하고, 필드에 error 클래스를 부여
+ */
+function showError($formField, message) {
+    $formField.classList.add('error');
+    const $errorSpan = document.createElement('span');
+    $errorSpan.classList.add('error-message');
+    $errorSpan.textContent = message;
+    $formField.append($errorSpan);
+}
+```
+
+---
+
+## 13-6. 에러 메시지 제거
+
+마지막으로 에러 메시지가 중복되지 않도록 제거하는 함수를 작성한다.
+
+```jsx
+/**
+ * 에러 및 비밀번호 피드백을 제거한다.
+ */
+function removeErrorMessage($formField) {
+    $formField.classList.remove('error');
+    const error = $formField.querySelector('.error-message');
+    if (error) error.remove();
+}
+```
+
+이를 입력 이벤트 핸들러와 blur 이벤트 핸들러에 통합한다.
+
+```jsx
+// 4개의 입력창에 입력 이벤트 바인딩
+Object.values($inputs).forEach(($input) => {
+    $input.addEventListener('input', () => {
+        removeErrorMessage($input.closest('.form-field'));
+        validateField($input);
+    });
+
+    $input.addEventListener('blur', () => {
+        validateField($input);
+    });
+});
+```
+
+---
+
+회원가입 입력값 검증이 완료되었다!<br>
+이제 다음 단계로 에러 메시지를 객체로 설계 해보자.
 	</details>
 	<details>
 		<summary><b>ㅤ25/01/10/금: 인스타 클론 - 회원가입 BE 3</b></summary>
