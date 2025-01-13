@@ -35,8 +35,36 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/13/월:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/13/월:RESTful Service 복습</b></summary>
+<h2>RESTful</h2>
+<h3>REST 정의 및 원칙</h3>
+REST (Representational State Transfer): 자원의 상태를 표현하고 전송하는 아키텍처 스타일.<br>
+<h3>-6가지 원칙-</h3>
+1. 클라이언트-서버: 클라이언트는 UI를, 서버는 데이터와 로직을 처리하며 독립적으로 동작.<br>
+2. Stateless: 서버는 클라이언트의 상태를 유지하지 않으며, 각 요청은 독립적으로 처리.<br>
+3. 캐시 기능: 서버 응답을 캐싱하여 성능을 향상. HTTP 헤더로 캐시 가능 여부 명시.<br>
+4. 계층화 시스템: 중간 계층(프록시, 로드 밸런서 등)을 통해 통신 가능.<br>
+5. 통합 인터페이스: 일관된 URL 형식과 HTTP 메서드 사용.<br>
+6. Optional: 필요 시 실행 가능한 코드를 클라이언트로 전송 가능.<br>
+<h3>RESTful 서비스의 장점</h3>
+- 확장성: 클라이언트와 서버의 역할이 분리되어 시스템 확장이 용이.<br>
+- 유연성: 다양한 데이터 포맷(JSON, XML 등)을 지원.<br>
+- 성능 향상: 캐시 활용으로 네트워크 비용 절감.<br>
+- 일관성: HTTP 표준을 준수해 사용자와 개발자 모두 이해하기 쉬움.<br>
+<h3>Spring RESTful API 관련 주요 애노테이션</h3>
+@RestController: JSON, XML 직렬화 기본 포함.<br>
+@RequestBody: JSON → Java 객체로 변환.<br>
+@ResponseBody: 객체 → JSON으로 변환해 반환. (단, 상태 코드 처리가 불가능.)<br>
+ResponseEntity: 상태 코드, 헤더, 본문 제어가 가능한 유연한 HTTP 응답 객체.<br>
+<h3>주요 HTTP 상태 코드</h3>
+200: 요청 성공<br>
+201: 리소스 생성 성공<br>
+400: 잘못된 요청<br>
+401: 인증 실패<br>
+403: 권한 부족<br>
+404: 리소스 없음<br>
+500: 서버 내부 오류<br>
+<h4>tip - @RestController의 반환값은 대부분 ResponseEntity로 고정해서 사용하는 것이 유용.</h4>
 	</details>
 	<details>
 		<summary><b>ㅤ25/01/10/금: RequestDto 복습 </b></summary>
