@@ -31,11 +31,142 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/14/화:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/14/화: 피드 생성 모달 종료시 경고 중첩 모달 만들기 / 백엔드 파일 업로드 설정 추가 및 로컬 리소스 접근 설정 추가</b></summary>	
+
+<h3> 1. 피드 생성 모달 종료시 경고 중첩 모달만들기</h3>
+
+(1) 피드 생성 모달 종료시 경고 중첩모달 띄우기
+- create-feed-modal.js에서 DOM에 nested-modal(중첩모달), delete-button(중첩모달 내 삭제버튼), cancel-button(중첩모달 내 취소버튼)을 추가한다.
+- setUpModalEvents에 nested-modal을 가져오고 모달닫기(closeModal)에 step2부터 모달을 닫지말고 중첩된 모달을 띄우도록 한다.
+
+```js
+const elements = {
+  $nestedModal: $modal.querySelector('.nested-modal'),
+  $deleteBtn: $modal.querySelector('.delete-button'),
+  $cancelBtn: $modal.querySelector('.cancel-button'),
+};
+
+function setUpFileUploadEvents() {
+// 피드 생성 모달 관련 이벤트 함수
+    function setUpModalEvents() {
+
+        const {$closeBtn, $backdrop, $backStepBtn, $nextStepBtn, $nestedModal} = elements;
+
+        // 모달 닫기
+        const closeModal = e => {
+            e.preventDefault();
+
+            // step2부터는 모달을 닫으면 안됨. 대신 새로운 모달을 띄워야 함
+            if (currentStep >= 2) {
+                // 중첩 모달 띄우기
+                $nestedModal.style.display = 'flex';
+                return;
+            }
+        }
+    }
+}
+
+```
+
+(2) 중첩모달 클릭이벤트 처리
+- 피드 내용입력 이벤트인 setupNestedModalEvents 함수를 만들고, DOM에서 $nestedModal, $deleteBtn, $cancelBtn 를 가져온다.
+- 취소버튼을 눌렀을 때 중첩모달이 사라지게 하고, 삭제버튼을 눌렀을 때 다시 초기상태로 돌아가게 한다.
+- 이벤트 바인딩 관련함수에 setupNestedModalEvents 추가
+
+``` js
+// 피드 모달 닫을 때 삭제 취소 관련
+function setupNestedModalEvents() {
+  const { $nestedModal, $deleteBtn, $cancelBtn } = elements;
+  // 취소처리 - 중첩모달만 닫기
+  $cancelBtn.addEventListener('click', () => { 
+    $nestedModal.style.display = 'none';
+  });
+  // 삭제처리 - 모든 모달을 닫고 초기상태로 귀환
+  $deleteBtn.addEventListener('click', () => { 
+    // 새로고침시 모든것이 초기로 돌아감
+    window.location.reload();
+  });
+}
+
+// 이벤트 바인딩 관련 함수
+function bindEvents() {
+  setupNestedModalEvents(); // 중첩 모달 관련 이벤트
+}
+```
+
+<h3> 2. 백엔드 파일 업로드 설정 추가 및 로컬 리소스 접근 설정 추가</h3>
+
+(1) application.yml 설정
+- server port번호는 8900
+- spring.datasource는 데이터베이스 연결을 설정
+- mvc.view는 jsp파일을 열어주는 세팅
+- servlet은 파일 업로드 관련 설정
+- mybatis는 말그대로 mybatis를 설정
+- logging.level은 로그를 찍을때 루트패키지의 어디까지 볼지를 설정
+- file.upload.location은 피드에 올릴 이미지들을 저장할 장소를 지정
+
+(2) 파일 업로드를 위한 폴더를 생성할 FileUploadConfig 생성
+- 스프링 loC컨테이너를 구성하기 위한 설정 파일임을 알리기 위해서 @Configuration을 설정하고 값을 가져올 @Getter, 값을 설정해 줄 @Setter도 설정한다.
+- 업로드할 루트 디렉토리 location을 만들고, 아까 application.yml에서 설정한 루트를 가져오기 위해 @Value("${file.upload.location}")을 설정한다.
+- @PostConstruct로 설정클래스가 생성되고 자동으로 호출할 init 메서드를 설정한다.
+- init 메서드에 아까 지정한 location 경로에 해당하는 폴더를 나타내는 객체로 생성하고 폴더가 존재하지 않는다면 새 폴더를 생성한다.
+
+```java
+package com.example.instagramclone.config;
+import jakarta.annotation.PostConstruct;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import java.io.File;
+
+// 파일 업로드 루트 디렉토리 가져오기 및 생성
+@Configuration
+@Getter @Setter
+
+public class FileUploadConfig {
+    @Value("${file.upload.location}")
+    private String location; // 업로드할 루트 디렉토리
+
+    @PostConstruct // 이 설정클래스가 생성된 이후 자동으로 호출
+    public void init() {
+        File directory = new File(location);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+    }
+}
+```
+
+(3) 로컬에 있는 파일을 서버에서도 열 수 있도록 하는 WebResourceConfig 생성
+- 파일의 위치가 필요하기 때문에 아까와 동일하게 설정파일로 만들어주는 @Configuration을 넣고 @RequiredArgConstruct로 fileUploadConfig를 가져온다. (FileUploadConfig에 붙인 @Configuration에 @Component가 숨겨져 있으므로)
+- 로컬 URL을 서버 URL로 변환시키기 위해서  WebResourceConfig 클래스에 WebMvcConfigurer를 implements하고 addResourceHandler에 설정한 대로 로컬경로에서 해당하는 파일을 찾아서 서버에게 반환 시켜준다.
+
+```java
+package com.example.instagramclone.config;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+// 로컬에 저장된 파일을 서버에서 열 수 있도록 설정
+@Configuration
+@RequiredArgsConstructor
+
+public class WebResourceConfig implements WebMvcConfigurer {
+    private final FileUploadConfig fileUploadConfig;
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/uploads/**") // 서버 URL
+                .addResourceLocations("file:" + fileUploadConfig.getLocation()); // 로컬 URL
+    }
+}
+```
+
+</details>
 	<details>
-		<summary><b>ㅤ25/01/13/월: 캐러셀 이동시 UI 업데이트하고 이미지 파일 업로드 드래그앤 드롭 이벤트와 피드내용 글자 수를 갱신처리</b></summary>	
+		<summary><b>ㅤ25/01/13/월: 캐러셀 이동시 UI 업데이트 / 이미지 파일 업로드 드래그앤 드롭 이벤트 / 피드내용 글자 수를 갱신처리</b></summary>	
 
 <h3> 1. 캐러셀 이동시 UI 업데이트 </h3>
 
@@ -135,7 +266,7 @@ function setupTextareaEvents() {
 ```
 </details>
 	<details>
-		<summary><b>ㅤ25/01/10/금: 인스타그램 포스트 이미지 개수만큼 캐러셀 인디케이터 생성하고 캐러셀 이동 이벤트 구현</b></summary>
+		<summary><b>ㅤ25/01/10/금: 인스타그램 포스트 이미지 개수만큼 캐러셀 인디케이터 생성 / 캐러셀 이동 이벤트 구현</b></summary>
 
 <h3>1. 이미지 개수만큼 캐러셀 인디케이터 생성하기</h3>
 
@@ -216,7 +347,7 @@ function setupTextareaEvents() {
 
 </details>
 <details>
-		<summary><b>ㅤ25/01/09/목: 인스타그램 스텝 이동 버튼 바인딩 및 이미지 캐러셀 클래스 설계</b></summary>	
+		<summary><b>ㅤ25/01/09/목: 인스타그램 스텝 이동 버튼 바인딩 / 이미지 캐러셀 클래스 설계</b></summary>	
 
 <h3>1.스텝 이동 버튼 이벤트 바인딩 </h3>
 
@@ -350,7 +481,7 @@ function setUpFileUploadEvents() {
 
 </details>
 	<details>
-		<summary><b>ㅤ25/01/08/수: 인스타그램 이미지 파일 검증 및 모달 스텝이동하고 이동버튼 이벤트 바인딩하기</b></summary>	
+		<summary><b>ㅤ25/01/08/수: 인스타그램 이미지 파일 검증 및 모달 스텝이동 / 이동버튼 이벤트 바인딩하기</b></summary>	
 
 <h3>1. 이미지 파일 검증: 10메가 용량을 넘는 파일과 이미지가 아닌 파일은 필터링으로 제외한다.</h3>
 
@@ -527,7 +658,7 @@ function bindEvents() {
 </details>
 
 <details>
-  <summary><b>ㅤ25/01/06/월: 인스타그램 초기세팅 및 피드 모달 열고 닫기 공부 </b></summary>
+  <summary><b>ㅤ25/01/06/월: 인스타그램 초기세팅 / 피드 모달 열고 닫기 공부 </b></summary>
 
 <h3>1. 초기 세팅 : 데이터베이스 생성</h3>
 
