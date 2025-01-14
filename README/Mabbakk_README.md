@@ -31,8 +31,116 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/14/화:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/14/화: 인스타 클론 - 회원가입 BE 4</b></summary>
+
+## 회원가입 이메일, 전화번호 패턴 검증
+
+### 입력값 공백 제거
+입력값에 **스페이스바**로 입력된 **공백**도 제거하려면, 입력값을 읽어오는 코드에 `.trim()`을 추가하면 된다.
+
+```jsx
+// 입력값 읽어오기
+const inputValue = $input.value.trim();
+```
+
+### 상세 체크 (패턴 검증 및 중복 검증)
+빈 값 체크 후, 상세 검증을 진행한다. <br> 먼저 이메일과 전화번호에 대한 검증을 수행해보자.
+
+```jsx
+// 1. 빈 값 체크
+if (!inputValue) {
+    isValid = false;
+    showError($formField, ValidationRules[fieldName]?.requiredMessage); // 에러 메시지 렌더링
+} else {
+    // 2. 상세 체크 (패턴검증, 중복검증)
+    if (fieldName === 'email') {
+        validateEmailOrPhone($formField, inputValue);
+    } else if (fieldName === 'password') {
+        // 비밀번호 강도 체크 (DB 검증 불필요)
+    }
+}
+```
+
+### 이메일 또는 전화번호 검증 함수
+`validateEmailOrPhone` 함수를 작성하여 이메일과 전화번호를 상세 검증하도록 하자.
+
+```jsx
+async function validateEmailOrPhone($formField, inputValue) {
+    if (inputValue.includes('@')) {
+        // 이메일 체크
+        if (!ValidationRules.email.pattern.test(inputValue)) {
+            showError($formField, ValidationRules.email.message);
+        } else {
+            // 서버 통신을 통한 중복 체크
+        }
+    } else {
+        // 전화번호 체크
+        const numbers = inputValue.replace(/[^0-9]/g, ''); // 숫자만 추출
+        if (!ValidationRules.phone.pattern.test(numbers)) {
+            showError($formField, ValidationRules.phone.message);
+        } else {
+            // 서버 통신을 통한 중복 체크
+        }
+    }
+}
+```
+
+### 디바운스 적용
+입력 중간에 에러 메시지가 계속 표시되면 사용자 경험이 저하될 수 있다.<br>
+이를 방지하기 위해 **debounce**를 적용하여 입력이 멈춘 뒤에 검증이 실행되도록 하자.
+
+#### debounce 함수 작성
+`util/debounce.js` 파일에 다음과 같이 디바운스 함수를 작성한다 :
+
+```jsx
+/**
+ * 디바운스 함수
+ * @param {Function} fn - 실행할 함수
+ * @param {number} delay - 지연시간 (ms)
+ * @returns {Function} 디바운스된 함수
+ */
+export function debounce(fn, delay) {
+    let timer = null;
+    return function (...args) {
+        const context = this;
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            fn.apply(context, args);
+        }, delay);
+    };
+}
+
+/**
+ * 쓰로틀 함수
+ * @param {Function} fn - 실행할 함수
+ * @param {number} limit - 제한시간 (ms)
+ * @returns {Function} 쓰로틀된 함수
+ */
+export function throttle(fn, limit) {
+    let inThrottle;
+    return function (...args) {
+        const context = this;
+        if (!inThrottle) {
+            fn.apply(context, args);
+            inThrottle = true;
+            setTimeout(() => {
+                inThrottle = false;
+            }, limit);
+        }
+    };
+}
+```
+
+#### debounce 함수 사용
+`signup.js` 파일에서 디바운스 함수를 import하여 사용한다:
+
+```jsx
+import { debounce } from '../util/debounce.js';
+```
+
+`validateField` 함수에만 디바운스를 적용하여 입력값 검증이 입력이 멈춘 후에 실행되도록 설정하자. <br>
+에러 메시지 제거는 디바운스 없이 바로 처리하도록 구현한다.
+<hr>
 	</details>
 	<details>
 		<summary><b>ㅤ25/01/13/월: 인스타 클론 - 회원가입 BE 3</b></summary>
