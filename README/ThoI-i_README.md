@@ -2,39 +2,139 @@
 ### [↩ Go Back Main README](https://github.com/3rd-PJ-Spring/Checkpoint?tab=readme-ov-file#%EF%B8%8F-daily-study)
 <details>
   <summary><b>🐻‍❄️ThoI-i's footprint</b></summary>
-	<details>
+<details>
 		<summary><b>ㅤ25/01/23/목:</b></summary>	
 		ㅤㅤㅤ내용
-	</details>
-	<details>
-		<summary><b>ㅤ25/01/22/수:</b></span></summary>	
+</details>
+<details>
+		<summary><b>ㅤ25/01/22/수:</b></summary>	
 		ㅤㅤㅤ내용
-	</details>
-	<details>
-		<summary><b>ㅤ25/01/21/화:</b></span></summary>	
+</details>
+<details>
+		<summary><b>ㅤ25/01/21/화:</b></summary>	
 		ㅤㅤㅤ내용
-	</details>
-	<details>
+</details>
+<details>
 		<summary><b>ㅤ25/01/20/월:</b></summary>	
 		ㅤㅤㅤ내용
-	</details>
-	<details>
+</details>
+<details>
 		<summary><b>ㅤ25/01/17/금:</b></summary>	
 		ㅤㅤㅤ내용
-	</details>
-	<details>
+</details>
+<details>
 		<summary><b>ㅤ25/01/16/목:</b></summary>	
 		ㅤㅤㅤ내용
-	</details>
+</details>
+<details>
+		<summary><b>ㅤ25/01/15/수: GitHub push 실수 시 | ⭐⭐ 대상의 추상화: 제네릭 타입 매개변수</b></summary>
+<details>
+<summary><b>ㅤㅤ⭐GitHub push 실수 시(이전 버전으로 변경 | 커밋 로그 삭제 방법)</b></summary>
+<h3>⭐개인 브랜치 푸시한 커밋 수정</h3>
+
+<b>1. git revert #XXXX(커밋 해시): 변경 로그를 남김</b><br>
+`git switch 개인 브랜치` → `git revert #XXXX(커밋 해시: 변경 원하는 버전)` → `git push origin 개인 브랜치`
+
+<b>2. git reset --hard #XXXX(커밋 해시): 변경 로그 삭제**※ Main 브랜치에 PR→Merge되기 전이라면 git reset --hard 언제든 OK(**단, 작업한 파일이 혼자만 쓰는 경우)</b><br>
+`git switch 개인 브랜치` → `git reset --hard #XXXX(커밋 해시: 변경 원하는 버전)` → `git push --force origin 개인 브랜치`
+
+<h3>⭐⭐Main 브랜치에 머지된 커밋 수정(개인 브랜치 PR → Main 브랜치 Merge 후 수정 필요)</h3>
+<h4>0.main 브랜치 push 금지 설정 해제 </h4>
+
+<b>1. git revert #XXXX(커밋 해시): 변경 로그를 남김</b><br>
+`git switch main` → `git revert #XXXX(커밋 해시: 변경 원하는 버전)` → `git push origin main`
+
+<b>2. git reset --hard #XXXX(커밋 해시): 변경 로그 삭제 (⭐⭐⭐강사님 왈: 없다고 생각하세요)</b><br>
+`git switch main` → `git reset --hard #XXXX(커밋 해시: 변경 원하는 버전)` → `git push --force origin main`
+</details>
+<details>
+<summary><b>ㅤㅤ⭐⭐ 대상의 추상화: 제네릭 타입 매개변수</b></summary>
+
+<h3>Generic(제네릭): 일반화 ~ 특정 타입에 의존X, 다양한 타입에 대해 동작하도록 설계</h3>
+
+| **구분**               | **설명**                                                  | **예시**                                                                                |
+|------------------------|-----------------------------------------------------------|---------------------------------------------------------------------------------------|
+| **일반 타입**           | **구체적으로 정의된 고정된 타입**.<br>객체나 변수의 자료형을 명확히 지정. | `String`, `Integer`, `Apple`<br>`public String name;`, `public int value;`           |
+| **제네릭 타입 매개변수** | **선언 시 사용되는 타입 매개변수**.<br>추상화 및 설계에 사용.         | `<T>`, `<E>`<br>`GenericPredicate<T>`                                                |
+| **제네릭 타입**         | 제네릭이 적용된 **실제 타입**.<br>매개변수가 대체된 결과값.         | `String`, `Integer`, `Apple`<br>`GenericPredicate<String>`, `GenericPredicate<Apple>` |
+
+
+<h3>GenericPredicate<T>, GenericPredicate<Apple>, GenericPredicate 비교 표</h3>
+
+| **구분**             | **GenericPredicate<T>**                        | **GenericPredicate<Apple>**                          | **GenericPredicate (Raw Type)**                     |
+|----------------------|------------------------------------------------|-----------------------------------------------------|----------------------------------------------------|
+| **제네릭 타입 선언**  | 제네릭 타입 `T`가 선언됨<br>타입을 전달받아야 함       | 제네릭 타입이 `Apple`로 고정                        | 제네릭 타입 없이 사용<br>(Raw Type)                |
+| **타입 지정**         | 동적으로 설정 가능                                     | `Apple` 타입으로 고정                               | 타입 지정하지 않고 사용                            |
+| **타입 지정 필요 여부** | `GenericPredicate<Apple>`,<br>`GenericPredicate<String>` 등<br>명시적으로 타입을 지정해야 함 | `GenericPredicate<Apple>`로 타입이 고정<br>다른 객체를 사용할 수 없음 | 타입 지정하지 않고<br>간단히 사용 가능           |
+| **타입 안전성**       | 타입이 명확히 지정<br>**컴파일 시 타입 체크 가능**     | 컴파일 시 타입 체크<br>(안전)                       | 타입 정보가 없어<br>**컴파일 시 타입 체크 불가**   |
+| **유연성**            | 다양한 객체에 동작 가능                                 | 특정 타입 (`Apple`)에 맞게 설계                     | 타입 제한이 없으나,<br>**런타임 에러 발생 가능**   |
+
+<h3>Raw 타입</h3>
+
+
+```java
+package chap2_7.lambda;
+
+@FunctionalInterface // ⭐람다 표기법 O: 추상 메서드가 단 1개인 메서드(오버라이딩할 메서드)
+public interface GenericPredicate<T> {
+    boolean test(T t);
+}
+```
+```java
+package chap2_7.lambda;
+
+import chap1_6.modi.pac1.A;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class FilterApple { // 여러 객체가 필터링 가능토록 제네릭 사용
+    public static <T> List<T> filter(List<T> list, GenericPredicate<T> p) {
+        List<T> filteredList = new ArrayList<>();
+        for (T t : list) {
+            if (p.test(t)) {
+                filteredList.add(t);
+            }
+        }
+        return filteredList;
+    }
+}
+```
+```java
+public class Main {
+
+    public static void main(String[] args) {
+        // 숫자목록에서 짝수 필터링
+        List<Integer> numbers = List.of(1,2,3,4,5,6);
+        List<Integer> filterNumbers = filter(numbers, n -> n % 2 == 0); // 람다 표기법
+        System.out.println("filterNumbers = " + filterNumbers);
+        // 출력: filterNumbers = [2, 4, 6]
+
+        // 3글자 이상인 문자열만 필터링
+        List<String> foods = List.of("짜장면", "우동", "김", "탕수육"); // 람다 표기법
+        List<String> filterFoods = filter(foods, f -> f.length() == 3);
+        System.out.println("filterFoods = " + filterFoods);
+        // 출력: filterFoods = [짜장면, 탕수육]
+    }
+}
+```
+</details>
+</details>
 	<details>
-		<summary><b>ㅤ25/01/15/수: ⭐⭐ 대상의 추상화: 제네릭 타입</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
-	<details>
-		<summary><b>ㅤ25/01/14/화: ⭐객체와 인스턴스 | ② 내부(중첩)/익명 클래스+람다 표기법</b></summary>	
+		<summary><b>ㅤ25/01/14/화: 클래스/메서드와 생성자 | ⭐객체와 인스턴스 | ② 내부(중첩)/익명 클래스+람다 표기법</b></summary>	
+<h3>클래스(설계도)와 메서드[동작(로직)] 생성자(객체 생성, 필드 초기화)</h3>
+
+| **구분**       | **클래스**                     | **메서드**                        | **생성자**                                      |
+|----------------|--------------------------------|------------------------------------|------------------------------------------------|
+| **매개변수**   | **사용 불가**                  | **사용 가능**                     | **사용 가능**                                  |
+| **사용 목적**  | 객체의 설계도 제공              | 객체의 동작(로직)을 정의           | **객체 생성 및 필드 초기화**                   |
+| **예시**       | `public class ApplePredicate {}` | `public boolean test(Apple apple) {}` | `public ApplePredicate(String color) {}`        |
+
+
 <h3>⭐객체와 인스턴스</h3>
 
-| **구분**       | **클래스 / 인터페이스 / 추상화 (설계도)**        | **객체 (new 키워드)**                   | **인스턴스 (결과물)**                  |
+| **구분**       | **클래스 / 인터페이스 / 추상화 (설계도)**        | **객체 (`new 키워드`)**                   | **인스턴스 (결과물)**                  |
 |--------------|--------------------------------------------------|-----------------------------------------|----------------------------------------|
 | **필드 / 메서드** | 정의만 존재 (설계도 상태, 필드/메서드 정의)       | 값이 미입력된 상태 (null, 0, false)      | 모든 필드 값이 할당됨, 메서드 실행 가능 |
 | **메모리**      | 미생성                                            | 생성                                    | 값 입력                                |
@@ -88,6 +188,7 @@ public class Main { // 외부 클래스
     }
 }
 ```
+<img src="https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/img/ThoI-i/250114(%ED%99%94)/%237_ThoI-i_BE_%EA%B0%9D%EC%B2%B4%EC%99%80%20%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4%20%20%E2%91%A1%20%EB%82%B4%EB%B6%80(%EC%A4%91%EC%B2%A9)%EC%9D%B5%EB%AA%85%20%ED%81%B4%EB%9E%98%EC%8A%A4%2B%EB%9E%8C%EB%8B%A4%20%ED%91%9C%EA%B8%B0%EB%B2%95.png" alt="Add on-demand static import for">
 <h3>익명 클래스(Anonymous)</h3>
 인터페이스/추상 클래스(또는 일반 클래스)를 구현/상속 → 메서드 오버라이드 → 인스턴스 생성
 
