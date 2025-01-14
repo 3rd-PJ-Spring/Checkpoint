@@ -27,17 +27,136 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/15/수:</b></summary>	
+		<summary><b>ㅤ25/01/15/수: ⭐⭐ 대상의 추상화: 제네릭 타입</b></summary>	
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/14/화: ⭐객체와 인스턴스 | ② 내부(중첩)/익명 클래스</b></summary>	
+		<summary><b>ㅤ25/01/14/화: ⭐객체와 인스턴스 | ② 내부(중첩)/익명 클래스+람다 표기법</b></summary>	
+<h3>⭐객체와 인스턴스</h3>
 
 | **구분**       | **클래스 / 인터페이스 / 추상화 (설계도)**        | **객체 (new 키워드)**                   | **인스턴스 (결과물)**                  |
 |--------------|--------------------------------------------------|-----------------------------------------|----------------------------------------|
 | **필드 / 메서드** | 정의만 존재 (설계도 상태, 필드/메서드 정의)       | 값이 미입력된 상태 (null, 0, false)      | 모든 필드 값이 할당됨, 메서드 실행 가능 |
 | **메모리**      | 미생성                                            | 생성                                    | 값 입력                                |
 
+<h3>⭐ 내부(중첩)/익명 클래스</h3>
+
+|                 | 인터페이스 (Interface)                                | 내부 클래스 (Inner)                                   | 익명 클래스 (Anonymous)               |
+|-----------------|-------------------------------------------------------|-------------------------------------------------------|----------------------------------|
+| **재사용**      | O                                                     | 클래스 내부에서 재사용                                | 1회용                              |
+| **구현 여부**   | 인터페이스(설계도) + 실체 클래스(구현체) + 동작 클래스(Main) | 인터페이스(설계도) + 동작 클래스(Main)               | 동작 클래스(Main) + 동작 클래스(Main - 축약) |
+
+<h3>⭐ 내부(중첩) 클래스 ~ Inner(Nested)</h3>
+
+① 역할(Responsibilitiy) 분리 필요 시 → 한 클래스 내 관련 로직을 내부 클래스로 모아둠<br>
+② 여러 메서드가 결과 값을 공유하는 경우(캡슐화 1) → 물건 구매-할인 적용-포인트 적립-현재 포인트 조회<br>
+③ 개인/중요 정보 외부에서 접근/변경 방지(캡슐화 2) → 내부 클래스에서 private 선언<br>
+④ 디자인 패턴(Iterator, Builder) 활용<br>
+```java
+package chap2_7.lambda;
+
+public interface ApplePredicate { // 사과를 전달받아 특정 조건에 의해 사과를 필터링
+    boolean test(Apple apple);
+}
+```
+```java
+public class Main { // 외부 클래스
+
+    private static class AppleGreenOrRed implements ApplePredicate { // 내부 클래스
+        @Override
+        public boolean test(Apple apple) {
+            return apple.getColor() == RED || apple.getColor() == GREEN;
+            //                          ┗> 하단 이미지 참고         ┗> 하단 이미지 참고
+            // Alt + Enter: Add on-demand static import for 'chap2_7.lambda.Color' 적용함
+        }
+    }
+
+    public static void main(String[] args) { // main 메소드
+        // 사과 바구니 생성
+        List<Apple> appleBasket = List.of(
+                new Apple(80, GREEN)
+                , new Apple(155, GREEN)
+                , new Apple(120, RED)
+                , new Apple(97, RED)
+                , new Apple(200, GREEN)
+                , new Apple(50, RED)
+                , new Apple(85, YELLOW)
+                , new Apple(75, YELLOW)
+        );
+        List<Apple> applesGorR = filterApples(appleBasket, new AppleGreenOrRed());
+        System.out.println("applesGorR = " + applesGorR);
+    }
+}
+```
+<h3>익명 클래스(Anonymous)</h3>
+인터페이스/추상 클래스(또는 일반 클래스)를 구현/상속 → 메서드 오버라이드 → 인스턴스 생성
+
+```java
+package chap2_7.lambda;
+
+public interface ApplePredicate { // 사과를 전달받아 특정 조건에 의해 사과를 필터링
+    boolean test(Apple apple);
+}
+```
+```java
+public class Main {
+    
+    public static void main(String[] args) { // main 메소드
+        // 사과 바구니 생성
+        List<Apple> appleBasket = List.of(
+                new Apple(80, GREEN)
+                , new Apple(155, GREEN)
+                , new Apple(120, RED)
+                , new Apple(97, RED)
+                , new Apple(200, GREEN)
+                , new Apple(50, RED)
+                , new Apple(85, YELLOW)
+                , new Apple(75, YELLOW)
+        );
+        
+        List<Apple> weightGT150 = filterApples(appleBasket, new ApplePredicate() { // 익명 클래스
+            @Override                     // 익명 클래스를 구현/상속 <┘           ┖> class 내부 내용
+            public boolean test(Apple apple) {
+                return apple.getWeight() >= 150;
+            }
+        });
+        
+        System.out.println("weightGT150 = " + weightGT150);
+    }
+}
+```
+<h3>람다 표기법(익명 클래스)</h3>
+
+<b>@FunctionalInterface ⭐추상 메서드가 단 1개인 메서드 = 오버라이딩할 메서드 1개</b><br>
+└> **람다 표기법을 쓸 수 있다!**
+```java
+List<Apple> weightGT150 = filterApples(appleBasket, new ApplePredicate() { // 익명 클래스
+            @Override                     // 익명 클래스를 구현/상속 <┘           ┖> class 내부 내용
+            public boolean test(Apple apple) {
+                return apple.getWeight() >= 150;
+            }
+        });
+```
+                            // 파라미터 <┒
+① 객체 생성 생략 가능 [ new ___(){} ] → () -> {}<br>
+```java                         
+List<Apple> weightGT150 = filterApples(appleBasket, (apple) -> { // 람다 표현식 ① 
+            @Override
+            public boolean test(Apple apple) {
+                return apple.getWeight() >= 150;
+            }
+        });
+```
+② 메서드 명 생략 가능 [ @Override public ____() ]<br>
+```java
+List<Apple> weightGT150 = filterApples(appleBasket, (apple) -> { // 람다 표현식 ②
+                apple.getWeight() >= 150
+        });
+```
+③ **코드 1줄** 중괄호{}, return 생략 가능 → 단일 표현식<br>
+```java
+List<Apple> weightGT150 = filterApples(appleBasket, (apple) -> apple.getWeight() >= 150);  // 람다 표현식 ③
+```
 </details>
 	<details>
 		<summary><b>ㅤ25/01/13/월: ⭐⭐️① 동작의 추상화 분석 + 복수 메서드(조건) + 스트림 API + 데이터 재활용(서버)과 SQL</b></summary>
@@ -49,6 +168,7 @@ public interface ApplePredicate {
 }
 ```
 <h3>② FilterApple 클래스에서 ApplePredicate a 파라미터를 통해서 1개의 조건(메서드)</h3>
+
 ```java
 public class FilterApple {
     public static List<Apple> filterApples(List<Apple> basket, ApplePredicate a) {
@@ -67,6 +187,7 @@ public class FilterApple {
 ```
 <h3>③ 만약 파라미터 수 = 조건(메서드) 수 = 새 배열 수 = 필터링 수 = 조건에 맞게 반환해야한다면?</h3>
 <h4>⭐️⭐️1개의 메서드 = 1개의 결과값을 반환</h4>
+
 ```java
 public class FilterApple {      // 필터링할 사과 객체들이 담긴 리스트 <┐            ┌>조건을 정의하는 객체
     public static Map<String, List<Apple>> filterApples(List<Apple> basket, ApplePredicate a, ApplePredicate b, ApplePredicate c, ApplePredicate d) {
@@ -105,6 +226,7 @@ public class FilterApple {      // 필터링할 사과 객체들이 담긴 리�
 ❌ 메모리 낭비 / 코드 가독성↓ / 유지보수 힘듬
 ```
 <h3>④ 조건을 동적으로 생성(조건의 갯수만큼 배열, 필터링하여 반환함)</h3>
+
 ```java
 public class FilterApple {                               // 필터링할 사과 객체들이 담긴 리스트 <┐
     public static Map<String, List<Apple>> filterApples(List<Apple> basket, List<ApplePredicate> predicates) {
@@ -152,6 +274,7 @@ char   int
 | **⑨ 정렬**                | `.sort(list)`**(오름차순)**<br/>`.sort(list, reverseOrder())`**(내림차순)** | `Collections.sort(list)`<br/>`list.sort(Comparator.reverseOrder())` |
 
 <h3>⑤ 스트림 API 사용(JAVA 8↑): 가독성↑</h3>
+
 ```java
 import java.util.*;
 import java.util.stream.Collectors;
@@ -176,6 +299,7 @@ public class FilterApple {
 ❌ → 반복 횟수↑
 ```
 <h3>⑥ AND/OR 조건을 활용한 데이터 재사용</h3>
+
 ```java
 import java.util.*;
 import java.util.function.Predicate;
@@ -578,7 +702,7 @@ Calculator multiCal = (class MultiCalculator) implements Calculator{}
 Calculator multiCal = implements Calculator {}
 ↓
 Calculator multiCal = new Calculator() {}
-       implements를 대체 <<┘       ┖>> class를 의미
+            implements를 대체 <<┘       ┖>> class를 의미
 ```
 ```java
 package chap2_6.inner;
