@@ -27,8 +27,108 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/15/수:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/15/수: 회원가입 처리 작업 내용 정리</b></summary>
+<h2>백엔드 작업</h2>
+<h3>SignUpRequest 클래스 생성</h3>
+
+```java
+    @NotBlank(message = "필수 입력창입니다.")
+    private String newName;
+
+    @NotBlank(message = "필수 입력창입니다.")
+    private String newEmail;
+    
+    @NotBlank(message = "필수 입력창입니다.")
+    private String newPassword;
+```   
+회원가입 시 클라이언트로부터 전달받을 데이터를 정의.<br>
+<h3>UserController 작업</h3>
+
+```java
+//회원가입 요청 받아오기
+@PostMapping("/signup")
+public ResponseEntity<?> signUp(@RequestBody @Valid signUpRequest signUpRequest){
+log.info("request for signup : {}", signUpRequest.getNewName());
+userService.signUp(signUpRequest);
+        return ResponseEntity
+                .ok()
+                .body("user registered!");
+    }
+```
+@PostMapping을 통해 클라이언트로부터 전달받은 SignUpRequest 데이터를 수신<br>
+수신한 데이터를 UserService에 전달<br>
+<h3>UserService 작업</h3>
+
+```java
+//회원가입 중간 처리
+public void signUp(signUpRequest signUpRequest){
+//데이터베이스에 저장
+userRepository.insert(signUpRequest.toEntity());
+}
+```
+회원가입 과정에서 데이터 변환 및 중간 처리를 담당<br>
+데이터베이스에 저장하기 위해 엔터티로 변환 과정을 수행<br>
+변환된 엔터티를 UserRepository에 전달<br>
+<h3>엔터티 변환 및 데이터베이스 저장</h3>
+
+```java
+<mapper namespace="com.example.instagramclone.shop.repository.UserRepository">
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO user
+        (username, password, email)
+        VALUES
+        (#{username}, #{password}, #{email})
+    </insert>
+```
+SignUpRequest 데이터를 엔터티로 변환<br>
+UserRepository에서 UserMapper.xml에 정의된 insert 메서드를 호출하여 데이터베이스에 저장<br>
+데이터 저장 후 회원가입 절차 완료<br>
+<h2>프론트엔드 작업</h2>
+<h3>회원가입 폼 제출 이벤트 생성</h3>
+
+```java
+//초기화 함수
+function initSignUp() {
+    //form submit 이벤트
+    const $form = document.querySelector('.signup-form');
+    $form.addEventListener('submit', e => {
+        e.preventDefault();
+        const username = document.querySelector('input[name="username"]').value;
+        const password = document.querySelector('input[name="password"]').value;
+        const email = document.querySelector('input[name="email"]').value;
+        // const passwordConfirm = document.querySelector('input[name="password-confirm"]').value;        
+        const payload = {
+            newName : username ,
+            newEmail : email ,
+            newPassword: password
+        };
+```        
+폼에 submit 이벤트 리스너를 등록<br>
+새로고침 방지를 위해 e.preventDefault() 호출<br>
+<h3>사용자 입력값 수집</h3>
+폼에서 입력된 값을 객체로 생성<br>
+이때 객체의 키 값은 SignUpRequest에서 정의한 데이터 구조와 동일하게 매핑해야 함<br>
+<h3>백엔드로 데이터 전송</h3>
+
+```java
+//회원가입 정보를 서버에 전송
+async function fetchToSignUp(userData){
+await fetch('/user/signup', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json'},
+body: JSON.stringify(userData)
+});
+console.log("회원가입 성공!");
+alert("회원가입 성공");
+document.querySelector('.signup-form').reset();
+}
+```
+fetch를 사용하여 비동기 방식으로 데이터 전송<br>
+UserController의 @PostMapping URL과 일치하도록 설정<br>
+데이터를 JSON 형식으로 변환 후 서버에 전달<br>
+<h3>향후 업데이트 사항</h3>
+입력값 검증, 데이터 암호화, 보안 및 예외 처리 로직을 추가하여 안정성을 강화<br>
+다음 작업으로 회원가입된 사용자 정보로 로그인 기능 구현 예정.<br>
 	</details>
 	<details>
 		<summary><b>ㅤ25/01/14/화: 로그인, 회원가입 화면구성 완료 기능구현 로드맵 그리기</b></summary>
