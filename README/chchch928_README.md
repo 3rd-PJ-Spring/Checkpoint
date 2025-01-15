@@ -27,11 +27,221 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/15/수:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/15/수: 인스타그램 기본 예외처리 글로벌 핸들러 설정/ 피드 및 피드 이미지 테이블 생성, SQL 매퍼 추가</b></summary>	
+
+<h3>1. 기본 예외처리 글로벌 핸들러 설정 </h3>
+
+(1) API에서 나올 에러들을 상수로 표현할 열거형 ErrorCode 만들기
+- Httpstatus와 message가 있는 알 수 없는 서버 오류를 추가한다.
+- HttpStatus와 message를 각각 필드로 생성한다.
+- status와 message를 뽑아와야 하므로 @Getter와 final인 필드의 생성자를 자동으로 만들어주는 @RequiredArgsConstructor를 설정한다.
+
+```java
+// API에서 나오는 여러가지 에러상황들을 상수로 표현
+@RequiredArgsConstructor
+@Getter
+
+public enum ErrorCode {
+
+    // 알 수 없는 서버오류
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "알 수 없는 서버 오류입니다. 점검 후 조치하겠습니다."),
+    ;
+    
+    private final HttpStatus status;
+    private final String message;
+}
+```
+
+(2) 에러가 발생했을때 구체적으로 클라이언트에게 전송해 줄 json인 ErrorResponse 만들기
+- 에러가 발생한 시간, 상태코드, 이름, 원인메세지, 발생한 경로를 각각 필드로 생성한다.
+
+```java
+@Getter
+@Builder
+// 에러가 발생했을 때 클라이언트에게 전송할 구체적인 에러내용들을 담은 JSON
+public class ErrorResponse {
+    private final LocalDateTime timestamp; // 에러가 발생한 시간
+    private final int status;  // 에러 상태코드
+    private final String error; // 에러 이름
+    private final String message; // 에러 원인 메시지
+    private final String path;   // 에러가 발생한 경로
+}
+```
+
+(3) API에서 발생한 모든 에러들을 모아서 일괄 처리할 AOP 클래스인 GlobalExceptionHandler 만들기
+- 어플리케이션의 모든 컨트롤러에서 발생하는 예외를 전역적으로 처리하는 @ControllerAdvice와 로그를 찍기위해서 @Slf4j을 설정한다.
+- 우리가 처리할 수 없는 에러들을 처리하기 위해 @ExceptionHandler로 모든 에러의 부모를 가져와 handleGlobalException 메서드를 생성하고 그 메서드에 필요한 예외객체와 요청에 대한 정보를 가져온다.
+- @Builder로 만든 ErrorResponse을 가져와서 에러가 발생한 시간을 현재로 지정하고, ErrorCode에서 만든 메세지를 가져오고, request 객체에서 경로를 가져오고, ErrorCode에서 에러의 이름을 가져오고, ErrorCode에서 status의 값을 가져온다.
+- 에러의 정보가 담긴 ResponseEntity에서 status에는 500 상태코드를, 응답 본문에는 ErrorResponse 객체를 보내준다.
+
+```java
+// API에서 발생한 모든 에러들을 모아서 일괄 처리
+@ControllerAdvice
+@Slf4j
+
+public class GlobalExceptionHandler {
+    
+// 알 수 없는 기타 등등 에러를 일괄 처리
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleGlobalException(Exception e, HttpServletRequest request) {
+        log.error("Unexpected error occurred: {}", e.getMessage(), e);
+        
+// 에러 응답 객체 생성
+        ErrorResponse response = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .message(ErrorCode.INTERNAL_SERVER_ERROR.getMessage())
+                .path(request.getRequestURI())
+                .error(ErrorCode.INTERNAL_SERVER_ERROR.name())
+                .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus().value())
+                .build();
+        return ResponseEntity
+                .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus())
+                .body(response);
+    }
+}
+```
+
+<h3> 2. 피드 및 피드 이미지 테이블 생성, SQL매퍼 추가 </h3>
+
+(1) ddl.sql에 게시물 테이블, 게시물 이미지 테이블 만들기
+- 게시물 테이블에는 피드 게시물의 식별자인 id, 피드 내용인 content, 게시물 작성자의 이름인 writer, 조회수인 view_count, 생성시간인 created_at, 갱신시간인 updated_at으로 구성한다.
+- 게시물 이미지 테이블에는 각 이미지를 구분하는 식별자인 id, 어떤 피드에 속해있는지 구분해주는 post_id,
+  서버 어느 곳애 저장되었는지 보여주는 image_url, 이미지의 순서를 알려주는 image_order, 생성시간인 created_at으로 구성하고 post_id를 외래키로 설정해서 게시물 테이블의 id를 참조해서 피드가 삭제되면 이미지도 자동으로 삭제할 수 있게 만든다.
+
+```sql
+-- 게시물 테이블
+CREATE TABLE posts
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    content    TEXT,
+    writer     VARCHAR(100) NOT NULL,
+    view_count INT       DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- 게시물 이미지 테이블
+CREATE TABLE post_images
+(
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    post_id     BIGINT       NOT NULL,
+    image_url   VARCHAR(255) NOT NULL,
+    image_order INT          NOT NULL,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE
+);
+```
+
+(2) 게시물 테이블과 게시물 이미지 테이블에 맞는 엔터티 클래스인 Post, PostImage를 설계한다.
+- DB의 게시물 테이블과 동일하게 Post 클래스를 만든다. (다만, 자바의 관례에 맞게)
+- DB의 게시물 이미지 테이블과 동일하게 PostImage 클래스를 만든다.
+```java
+package com.example.instagramclone.domain.post.entity;
+
+import lombok.*;
+import java.time.LocalDateTime;
+
+@Getter @Setter @ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+
+public class Post {
+    private Long id;
+    private String content;
+    private String writer;
+    private int viewCount;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+}
+```
+
+```java
+package com.example.instagramclone.domain.post.entity;
+import lombok.*;
+import java.time.LocalDateTime;
+@Getter @Setter @ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class PostImage {
+    private Long id;
+    private Long postId;
+    private String imageUrl;
+    private int imageOrder;
+    private LocalDateTime createdAt;
+}
+```
+
+(3) DB와 엔터티 클래스를 연결시켜줄 repository 레이어인 PostRepository를 만든다.
+- mybatis에서는 인터페이스 설계대로 만들어주기 때문에 인터페이스로 만들어주고 @Mapper를 붙인다
+- 피드 게시물을 저장하는 기능, 피드 이미지를 저장하는 기능, 특정 피드에 첨부된 이미지 목록을 조회하는 기능, 전체 피드 게시물 목록을 조회하는 기능이 실행되도록 구성한다.
+
+```java
+package com.example.instagramclone.repository;
+import com.example.instagramclone.domain.post.entity.Post;
+import com.example.instagramclone.domain.post.entity.PostImage;
+import org.apache.ibatis.annotations.Mapper;
+import java.util.List;
+@Mapper
+public interface PostRepository {
+    // 피드 게시물 저장
+    void saveFeed(Post post);
+    // 피드 이미지 저장
+    void saveFeedImage(PostImage postImage);
+    // 특정 피드에 첨부된 이미지 목록 조회
+    List<PostImage> findImagesByPostId(Long postId);
+    // 전체 피드 게시물 목록 조회
+    List<Post> findAll();
+}
+```
+
+(4) 위에서 실행되도록 한 기능들을 구현해 줄 PostMapper.xml을 만든다
+- 설정할 때 mapper 폴더 아래에 xml을 구성하기로 했으므로 resources의 mapper에 PostMapper.xml을 만든다
+- mapper의 namespace에 아까 만든 인터페이스랑 연결하기 위해서 패키지명과 인터페이스명을 넣어준다
+- 피드 게시물 저장을 구현하기 위해서 insert문에 id는 saveFeed, keyProperty로 id를 지정해주면 저장되자마자 id가 리턴되는 역할을 해준다. 그리고 content와 writer값을 넣어준다. (나머지는 자동생성되므로 넣을 필요없다.) INSERT INTO의 뒤에는 데이터베이스의 컬럼명으로,  VALUES 뒤에는 #{자바이름}으로 넣어주어야 한다.
+- 피드 이미지 저장 구현도 마찬가지로 구성하고, post_id와 image_url, image_order 값을 넣어준다.
+- 특정 피드에 첨부된 이미지 목록을 조회하기 위해서는 select문에 return이 있으므로 return은 resultType으로 클래스 이름인 PostImage를 적는다. (yml에서 미리 이름을 설정해두었기때문에 패키지 이름은 적을 필요가 없다.) 그리고 원본 피드의 id를 기준으로 찾아야 하므로 WHERE post_id = #{postId}로, ORDER BY를 이용해서 이미지 순서대로 정렬한다.
+- 전체 피드 게시물 목록조회도 마찬가지로 구현하고, 모두 조회하는 것이므로 WHERE절은 없고 최신 피드가 위로 올라가야하므로 ORDER BY를 이용해서 생성시간이 내림차순이 되게 설정한다.
+
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.instagramclone.repository.PostRepository">
+    <!-- insert만 특별하게 auto_increment로 지정한 key를 지정해줌   -->
+    <insert id="saveFeed" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO posts
+            (content, writer)
+        VALUES
+            (#{content}, #{writer})
+    </insert>
+    <insert id="saveFeedImage" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO post_images
+            (post_id, image_url, image_order)
+        VALUES
+            (#{postId}, #{imageUrl}, #{imageOrder})
+    </insert>
+    <select id="findImagesByPostId" resultType="PostImage">
+        SELECT
+            *
+        FROM post_images
+        WHERE post_id = #{postId}
+        ORDER BY image_order
+    </select>
+    <select id="findAll" resultType="Post">
+        SELECT
+            *
+        FROM posts
+        ORDER BY created_at DESC
+    </select>
+</mapper>
+```
+</details>
 	<details>
-		<summary><b>ㅤ25/01/14/화: 피드 생성 모달 종료시 경고 중첩 모달 만들기 / 백엔드 파일 업로드 설정 추가 및 로컬 리소스 접근 설정 추가</b></summary>	
+		<summary><b>ㅤ25/01/14/화: 인스타그램 피드 생성 모달 종료시 경고 중첩 모달 만들기 / 백엔드 파일 업로드 설정 추가 및 로컬 리소스 접근 설정 추가</b></summary>	
 
 <h3> 1. 피드 생성 모달 종료시 경고 중첩 모달만들기</h3>
 
@@ -166,7 +376,7 @@ public class WebResourceConfig implements WebMvcConfigurer {
 
 </details>
 	<details>
-		<summary><b>ㅤ25/01/13/월: 캐러셀 이동시 UI 업데이트 / 이미지 파일 업로드 드래그앤 드롭 이벤트 / 피드내용 글자 수를 갱신처리</b></summary>	
+		<summary><b>ㅤ25/01/13/월: 인스타그램 캐러셀 이동시 UI 업데이트 / 이미지 파일 업로드 드래그앤 드롭 이벤트 / 피드내용 글자 수를 갱신처리</b></summary>	
 
 <h3> 1. 캐러셀 이동시 UI 업데이트 </h3>
 
