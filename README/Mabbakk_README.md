@@ -27,14 +27,9 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/15/수: 개인 사이트 제작 1</b></summary>
-
-### 새 프로젝트 생성 후 사이트 제작 시작.<br><hr>
-#### FE - HTML / CSS 코드 작성 중
-#### BE -  회원가입 / 로그인 기능 구현 예정
-#### 인스타 클론 - 회원가입 BE 추가 공부 내용 내일 업로드 예정
-	
-</details>
+		<summary><b>ㅤ25/01/15/수:</b></summary>	
+		ㅤㅤㅤ내용
+	</details>
 	<details>
 		<summary><b>ㅤ25/01/14/화: 인스타 클론 - 회원가입 BE 4</b></summary>
 
