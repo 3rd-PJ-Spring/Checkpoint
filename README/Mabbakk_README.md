@@ -23,8 +23,8 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/16/목:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/16/목: 개인 사이트 제작 - 회원가입 구현 1</b></summary>	
+		ㅤㅤㅤ다시 클론 후 일단 커밋
 	</details>
 	<details>
 		<summary><b>ㅤ25/01/15/수: 개인 사이트 제작 1</b></summary>
