@@ -23,8 +23,136 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/16/목:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/16/목:Spring Security와 로그인 처리</b></summary>	
+<h2>📚 오늘의 공부 기록: Spring Security와 로그인 처리</h2>
+<h3>1. 패스워드 암호화 (PasswordEncoder)</h3>
+Spring에서는 **PasswordEncoder**를 사용해 비밀번호를 안전하게 암호화 및 관리할 수 있습니다.<br>
+<h3>🔑 주의사항</h3>
+같은 이름의 Bean을 두 번 등록하면 Spring에서 에러가 발생합니다.<br>
+해결 방법: @Bean에 고유한 이름을 부여합니다.<br>
+
+```java
+@Bean(name = "shopPasswordEncoder")
+public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+}
+```
+<h4>🛠️ 비밀번호 암호화 처리 흐름</h4>
+- 클라이언트가 보낸 비밀번호를 서비스에서 암호화합니다.<br>
+-> 요청 데이터를 엔터티(Entity)로 변환한 후 비밀번호를 암호화된 값으로 재설정합니다.<br>
+-> DB에 암호화된 비밀번호를 저장합니다.<br>
+<h3>2. 로그인 처리 (인증 처리)</h3>
+   <h4>🔒 로그인 과정</h4>
+- 클라이언트가 아이디와 비밀번호 전달<br>
+  -> DB에서 아이디로 회원 정보 조회<br>
+  -> 아이디가 존재하지 않으면 예외 처리<br>
+  -> DB에 저장된 비밀번호를 가져와 사용자가 입력한 비밀번호와 비교<br>
+  -> Spring의 PasswordEncoder.matches() 메서드를 사용해 암호화된 비밀번호 비교<br>
+  -> 비밀번호가 일치하면 로그인 성공<br>
+   <h4>🔑 로그인 API 설계</h4>
+-  POST 요청 사용 권장: 보안상 @PostMapping을 사용해 데이터를 전달합니다.<br>
+<h3>3. 코드 정리</h3> 
+<h3>요청 DTO</h3>
+
+```java
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class LoginRequest {
+    @NotBlank(message = "아이디 입력은 필수입니다.")
+    private String username;
+
+    @NotBlank(message = "비밀번호 입력은 필수입니다.")
+    private String password;
+}
+```
+<h3>Service</h3>
+   비즈니스 로직: 아이디로 회원 조회 → 비밀번호 비교 → 성공 시 JSON 반환.<br>
+   
+```java
+@Transactional(readOnly = true)
+public Map<String, Object> authenticate(LoginRequest loginRequest) {
+    String username = loginRequest.getUsername();
+
+    User foundUser = userRepository.findByUserName(username)
+            .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND, "존재하지 않는 회원입니다."));
+
+    String inputPassword = loginRequest.getPassword();
+    String storedPassword = foundUser.getPassword();
+
+    if (!passwordEncoder.matches(inputPassword, storedPassword)) {
+        throw new MemberException(ErrorCode.INVALID_PASSWORD);
+    }
+
+    return Map.of(
+        "message", "로그인에 성공했습니다.",
+        "username", foundUser.getUsername()
+    );
+}
+```
+<h3>Repository</h3>
+- 아이디로 회원 조회 쿼리<br>
+
+```java
+Optional<User> findByUserName(String username);
+```
+- MyBatis 쿼리 매핑<br>
+
+```java
+<select id="findByUserName" resultType="com.example.instagramclone.shop.user.User">
+    SELECT * FROM user WHERE username = #{username}
+</select>
+```
+<h3>Controller</h3>
+- 클라이언트 요청을 처리하고 서비스 계층 호출<br>
+
+```java
+@PostMapping("/login")
+public ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest) {
+    Map<String, Object> responseMap = userService.authenticate(loginRequest);
+    return ResponseEntity.ok().body(responseMap);
+}
+```
+<h3>클라이언트 요청 처리 (JavaScript)</h3>
+
+```java
+async function fetchToLogin(userData) {
+    await fetch("/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+    });
+    console.log("로그인!");
+    alert("로그인 성공");
+    document.querySelector(".bj-login-form").reset();
+}
+
+function initLogin() {
+    const $form = document.querySelector(".bj-login-form");
+    $form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const username = document.querySelector('input[name="username"]').value;
+        const password = document.querySelector('input[name="password"]').value;
+
+        const payload = { username, password };
+        fetchToLogin(payload);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", initLogin);
+```
+<h3>>정리된 흐름</h3>
+   <h4>비밀번호 암호화:<br>
+   Spring의 PasswordEncoder로 안전하게 관리.</h4>
+   <h4>로그인 요청 처리:<br>
+   아이디로 회원 조회 → 비밀번호 비교 → 성공 시 JSON 반환.</h4>
+   <h4>클라이언트 요청 처리:<br>
+   JavaScript로 로그인 폼 데이터 전송 및 성공 메시지 표시.</h4>
+<h3>추가 공부 필요 사항</h3>
+- Spring Security 기본 구성과 사용자 정의 보안 설정.
 	</details>
 	<details>
 		<summary><b>ㅤ25/01/15/수: 회원가입 처리 작업 내용 정리</b></summary>
