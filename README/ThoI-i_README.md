@@ -27,7 +27,7 @@
 		ㅤㅤㅤ내용
 </details>
 <details>
-		<summary><b>ㅤ25/01/15/수: GitHub push 실수 시 | ⭐⭐ 대상의 추상화: 제네릭 타입 매개변수</b></summary>
+		<summary><b>ㅤ25/01/15/수: GitHub push 실수 시 | ⭐⭐ 대상의 추상화: 제네릭 타입 파라미터<T>와 와일드카드<?>, Row 타입</b></summary>
 <details>
 <summary><b>ㅤㅤ⭐GitHub push 실수 시(이전 버전으로 변경 | 커밋 로그 삭제 방법)</b></summary>
 <h3>⭐개인 브랜치 푸시한 커밋 수정</h3>
@@ -48,7 +48,7 @@
 `git switch main` → `git reset --hard #XXXX(커밋 해시: 변경 원하는 버전)` → `git push --force origin main`
 </details>
 <details>
-<summary><b>ㅤㅤ⭐⭐ 대상의 추상화: 제네릭 타입 매개변수</b></summary>
+<summary><b>ㅤㅤ⭐⭐ ⭐⭐ 대상의 추상화: 제네릭 타입 파라미터<T>와 와일드카드<?>, Row 타입</b></summary>
 
 <h3>Generic(제네릭): 일반화 ~ 특정 타입에 의존X, 다양한 타입에 대해 동작하도록 설계</h3>
 
@@ -59,17 +59,146 @@
 | **제네릭 타입**         | 제네릭이 적용된 **실제 타입**.<br>매개변수가 대체된 결과값.         | `String`, `Integer`, `Apple`<br>`GenericPredicate<String>`, `GenericPredicate<Apple>` |
 
 
-<h3>GenericPredicate<T>, GenericPredicate<Apple>, GenericPredicate 비교 표</h3>
+<h3>`GenericPredicate<T>`, `GenericPredicate<Apple>`, `GenericPredicate (Row Tpye)` 비교</h3>
 
-| **구분**             | **GenericPredicate<T>**                        | **GenericPredicate<Apple>**                          | **GenericPredicate (Raw Type)**                     |
-|----------------------|------------------------------------------------|-----------------------------------------------------|----------------------------------------------------|
-| **제네릭 타입 선언**  | 제네릭 타입 `T`가 선언됨<br>타입을 전달받아야 함       | 제네릭 타입이 `Apple`로 고정                        | 제네릭 타입 없이 사용<br>(Raw Type)                |
-| **타입 지정**         | 동적으로 설정 가능                                     | `Apple` 타입으로 고정                               | 타입 지정하지 않고 사용                            |
+| **구분**             |`GenericPredicate<T>`                                                   |`GenericPredicate<Apple>`                          | `GenericPredicate (Raw Type)`                     |
+|----------------------|---------------------------------------------------------------------------|----------------------------------------------------|--------------------------------------------------|
+| **제네릭 타입 선언**  | 제네릭 타입 `T`가 선언됨<br>타입을 전달받아야 함                                            | 제네릭 타입이 `Apple`로 고정                        | 제네릭 타입 없이 사용<br>(Raw Type)                |
+| **타입 지정**         | 동적으로 설정 가능                                                                | `Apple` 타입으로 고정                               | 타입 지정하지 않고 사용                            |
 | **타입 지정 필요 여부** | `GenericPredicate<Apple>`,<br>`GenericPredicate<String>` 등<br>명시적으로 타입을 지정해야 함 | `GenericPredicate<Apple>`로 타입이 고정<br>다른 객체를 사용할 수 없음 | 타입 지정하지 않고<br>간단히 사용 가능           |
-| **타입 안전성**       | 타입이 명확히 지정<br>**컴파일 시 타입 체크 가능**     | 컴파일 시 타입 체크<br>(안전)                       | 타입 정보가 없어<br>**컴파일 시 타입 체크 불가**   |
-| **유연성**            | 다양한 객체에 동작 가능                                 | 특정 타입 (`Apple`)에 맞게 설계                     | 타입 제한이 없으나,<br>**런타임 에러 발생 가능**   |
+| **타입 안전성**       | 타입이 명확히 지정<br>**컴파일 시 타입 체크 가능**                                          | 컴파일 시 타입 체크<br>(안전)                       | 타입 정보가 없어<br>**컴파일 시 타입 체크 불가**   |
+| **유연성**            | 다양한 객체에 동작 가능                                                             | 특정 타입 (`Apple`)에 맞게 설계                     | 타입 제한이 없으나,<br>**런타임 에러 발생 가능**   |
 
 <h3>Raw 타입</h3>
+- 제네릭 도입되기 전(Java 5 이전) 사용 방식 → **타입 안정성 없이 사용(String, int, 객체 한 리스트에 추가 가능)**
+- 제네릭 도입 후 **레거시 코드/API와 호환성 유지를 위해** Raw 타입 허용
+
+<h4>🚨 문제점</h4>
+- **타입 안정성 부족**: 컴파일 시 타입 체크X | 잘못된 타입 포함될 가능성 有
+- **런타임 오류 발생 가능성**↑: 잘못된 타입을 캐스팅 시 ClassCastingException 발생
+
+<h3>제네릭 타입 파라미터 `<T>`와 와일드카드 `<?>`</h3>
+
+| **구분**                  | **제네릭 타입 파라미터 `<T>`**                     | **와일드카드 `<?>`**                            |
+|--------------------------|--------------------------------------------------|-----------------------------------------------|
+| **주된 목적**             | 새로운 타입 매개변수 선언<br>(메서드나 클래스에서 타입을 정의) | 이미 정의된 타입을 느슨하게 받아들임                 |
+| **쓰기 작업**             | 타입 매개변수에 따라 추가 가능                           | 쓰기 작업은 불가능<br>(컴파일러가 타입을 알 수 없기 때문) |
+| **읽기 작업**             | 타입 매개변수를 통해 읽을 수 있음                        | `Object`로 업 캐스팅되어 읽기 가능                  |
+| **읽기 작업만 필요할 때**   | 가능하지만 불필요하게 복잡할 수 있음                      | 적합: 단순하고 직관적인 코드 작성 가능                |
+| **타입 범위 제한 (`extends`, `super`)** | 직접 작성해야 함                                   | 상/하한 제한<br>(`? extends T`, `? super T`)로 타입 제어 가능 |
+| **특정 타입이 명확히 정해져 있을 때** | 적합: 타입을 명확히 선언하고, 쓰기/읽기 작업 모두 가능        | 부적합: 타입이 불명확해 쓰기 작업에 제한됨              |
+| **타입이 다양한 리스트를 처리할 때**   | 부적합: 매번 타입을 선언해야 함                          | 적합: 타입에 관계없이 읽기 작업만 수행 가능             |
+
+<h3>상한 제한 (`? extends T`) : `T`와 `T`의 하위 클래스만 허용</h3>
+<h4>이 메서드는 `Number`와 그 하위 타입(`List<Integer>`,`List<Double>`)만 받을 수 있음</h4>
+
+```java
+public void printNumbers(List<? extends Number> numbers) { // ?는 Interger / Double이다
+    for (Number num : numbers) {
+        System.out.println(num);
+    }
+}
+```
+<h3>하한 제한 (`? super T`) : `T`와 `T` 의 상위 클래스만 허용</h3>
+<h4>이 메서드는 `Integer`와 그 상위 타입(`List<Number>`, `List<Object>`)만 받을 수 있음</h4>
+
+```java
+public void addNumbers(List<? super Integer> list) { // Interger의 부모는 ?이다. 
+    list.add(42);
+    list.add(99);
+}
+```
+
+<h3>상한 제한 / 하한 제한</h3>
+
+| **구분**              | **상한 제한 (`? extends T`)**                              | **하한 제한 (`? super T`)**                              |
+|----------------------|---------------------------------------------------------|---------------------------------------------------------|
+| **허용 범위**          | `T`와 `T`의 하위 클래스만 허용                                  | `T`와 `T`의 상위 클래스만 허용                                  |
+| **주요 사용 사례**      | 데이터를 **읽기 전용**으로 처리할 때                             | 데이터를 **쓰기 작업** 중심으로 처리할 때                              |
+| **읽기 작업**          | 가능: 타입 안정성을 유지하며 읽기 가능                           | 제한적: 항상 `Object` 타입으로 반환                              |
+| **쓰기 작업**          | 불가능: 삽입 작업은 허용되지 않음                               | 가능: 타입 안정성을 유지하며 데이터 추가 가능                              |
+| **사용 가능한 키워드**   | `? extends T` (T와 그 하위 클래스)                           | `? super T` (T와 그 상위 클래스)                              |
+
+
+<h3>기본 자료형과 래퍼 클래스의 관계</h3>
+
+| **기본 자료형** | **래퍼 클래스**    |
+|----------------|------------------|
+| `int`          | `Integer`       |
+| `double`       | `Double`        |
+| `float`        | `Float`         |
+| `long`         | `Long`          |
+| `short`        | `Short`         |
+| `byte`         | `Byte`          |
+| `char`         | `Character`     |
+| `boolean`      | `Boolean`       |
+
+
+
+<h3>Int, String이 혼합된 List를 분리하기(Row Type)</h3>
+
+```java
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+
+        List<Object> mixedList = new ArrayList<>(); // String과 Integer 타입이 섞인 리스트
+        mixedList.add("Hello");
+        mixedList.add(42);
+        mixedList.add("World");
+        mixedList.add(99);
+
+        printMixedList(mixedList); // 와일드카드의 List 값들을 출력
+ }
+
+// For-each 방식
+public static void printMixedList(List<?> list) {
+    // for-each 반복문으로 변경
+    for (Object element : list) { // IntelliJ의 iter 템플릿 자동완성 사용
+        if (element instanceof String) {
+            System.out.println("String: " + element);
+        } else if (element instanceof Integer) {
+            System.out.println("Integer: " + element);
+        } else {
+            System.out.println("Unknown Type: " + element);
+        }
+    }
+}
+
+
+// Iterator 방식
+public static void printMixedList(List<?> list) { 
+        Iterator<?> iterator = list.iterator(); // 타입이 와일드카드<?>로 된 List 생성
+                                                        // 와일드카드<?>로 된 리스트는 읽기(get, iterator.next)는 가능하지만 쓰기(삽입)은 불가능
+        while (iterator.hasNext()) { // .hasNext 반복자에 값이 있으면 true / 값이 없으면 false로 반환
+            Object element = iterator.next();   // .next()는 현재 포인터의 요소를 반환하고 다음 포인터로 이동시킴
+							   // 컴파일러는 안정성을 위해 모든 요소 Object 타입으로 강제 반환
+            if (element instanceof String) {     // instanceof : element가 String 타입이냐? → True/False 반환
+                System.out.println("String: " + element);
+            } else if (element instanceof Integer) {
+                System.out.println("Integer: " + element);
+            } else {
+                System.out.println("Unknown Type: " + element);
+            }
+        }
+    }
+}
+```
+<h3>Iterator와 for-each</h3>
+
+| **구분**            | **Iterator**                                                                 | **for-each**                                                                             |
+|---------------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| **사용 목적**        | 컬렉션(리스트, 셋 등)의 요소를 순차적으로 접근하며, **요소 삭제**와 같은 추가 작업 가능.                | 간결하게 컬렉션이나 배열의 모든 요소를 순회. **요소 삭제 불가.**                                     |
+| **구문**            | `Iterator<String> it = list.iterator();`<br>`while (it.hasNext()) {}`      | `for (String element : list) {}`                                                       |
+| **코드 가독성**      | 상대적으로 복잡: **명시적으로 Iterator 생성** 및 `hasNext`, `next` 호출 필요.   | 간단하고 직관적: 추가적인 작업 없이 바로 컬렉션의 요소를 순회 가능.                                    |
+| **요소 삭제 여부**    | 가능: `it.remove()`로 요소 삭제 가능.                                         | 불가능: 요소 삭제와 같은 작업은 지원되지 않음.                                                       |
+| **컬렉션 타입**       | **모든 컬렉션에 사용 가능** (리스트, 셋, 맵 등).                                   | **Iterable을 구현한 컬렉션 및 배열만 사용 가능.**                                                     |
+| **내부 동작**         | **Iterator 객체를 명시적으로 사용**하여 요소에 접근.                            | **컴파일러가 Iterator로 변환**하여 내부적으로 처리함.                                                |
+| **장점**            | - 요소를 순회하면서 삭제 또는 수정 작업 가능.<br>- 컬렉션 외에도 다양한 데이터 구조에 사용 가능. | - 코드가 간결하고 직관적.<br>- 컬렉션이나 배열을 단순히 순회하는 데 적합.                                       |
+| **단점**            | - 코드가 상대적으로 길고 복잡.<br>- 단순히 순회만 할 경우 과잉 설계일 수 있음.       | - 삭제 작업이나 Iterator의 세부 동작을 수행할 수 없음.<br>- 특정 조건에 따라 순회를 중단하기 어려움.                      |
 
 
 ```java
