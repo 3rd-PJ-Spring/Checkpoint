@@ -23,9 +23,144 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/16/목:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/16/목: 인스타그램 피드 메서드 테스트 </b></summary>
+
+<h3> 1. 피드가 제대로 생성되는지 확인해보기 위해 테스트 </h3>
+
+(1) 테스트를 실행해보기 위해서 설정한다.
+- PostRepository 에서 test를 만든다.
+- 스프링이 관리하고 있는 빈들을 모두 불러오기 위해서 @SpringBootTest를 붙이면, PostRepository를 @Autowired로 주입받을 수 있다.
+
+(2) 피드를 제대로 생성되는지 확인하기 위해
+- 테스트를 위해 @Test를 붙이고,  @Displayname("테스트이름")로 테스트를 설명하는 이름을 붙인다.
+- test를 반복해서 실행하면 실제로 데이터베이스에 계속 쌓이기때문에 이를 방지하기 위해서 테스트 종료 후 데이터를 초기상태로 원상복구해주는 @Transactional을 붙여준다.
+-  GWT 패턴인 given(테스트를 위해 주어지는 데이터), when(실제 실행될 테스트 핵심코드), then(테스트 검증)으로 구성한다.
+- given에서는 테스트를 위해 내용, 작성자 데이터를 임의로 작성한다.
+-  when에서는 postRepository에  아까 가져온 데이터인 givenPost를 넣어주면서 피드 게시물을 저장할 saveFeed 명령을 내린다.
+- then에서는 생성된 피드 게시물의 id를 가져오고 id가 잘찍히는지 확인을 위해 콘솔을 출력해보고, postId가 null이 아니라고 단언을 하면 postId가 생기면 테스트가 통과하고  postId가 생기지 않는다면 테스트가 통과하지 않는 것으로 직관적으로 알 수 있다.
+
+```java
+package com.example.instagramclone.repository;
+import com.example.instagramclone.domain.post.entity.Post;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest // 스프링이 관리하고 있는 빈들을 모두 불러옴
+class PostRepositoryTest {
+    @Autowired
+    PostRepository postRepository;
+    // 테스트는 케이스별 메서드를 한개씩 만듬
+    @Test
+    // 테스트를 설명하는 이름 - 단언 (Assertion)
+    @DisplayName("피드의 내용을 2200자 내로 작성하면 피드가 반드시 생성된다.")
+    void saveFeedTest() {
+
+        // GWT 패턴
+        // given - 테스트를 위해 주어지는 데이터
+        Post givenPost = Post.builder()
+                .content("테스트 컨텐츠입니다")
+                .writer("임시작성자")
+                .build();
+
+        // when - 실제 실행될 테스트 핵심 코드
+        postRepository.saveFeed(givenPost);
+
+        // then - 테스트 검증 (단언)
+        Long postId = givenPost.getId(); // 생성된 피드게시물의 id를 가져옴
+        // System.out.println("postId = " + postId);
+
+	// postId가 null이 아닐 것이라고 확신한다.
+        assertThat(postId).isNotNull();
+    }
+}
+```
+
+<h3> 2. 피드 생성 단위를 테스트하기 </h3>
+
+(1) 모든 피드를 조회하는 테스트 만들기
+- 아까와 같이 GWT패턴으로 모든 피드를 조회하는 findAllTest를 만든다.
+- given에서는 for문으로 3개의 피드를 입력해보도록 데이터를 임의로 만들고 저장한다.
+- when에서는 실제로 조회를 해보기 위해서 findAll로 feedList를 받아온다.
+- then에서는 forEach문으로 콘솔을 출력해서 확인하고, assertThat으로 feedList의 크기가 3개라고 하고, feedList의 첫번째 게시물의 작성자가 임시작성자2가 맞는지 단언한다.
+
+```java
+@Test
+    @DisplayName("피드를 3개 작성하고 피드 목록조회하면 리스트의 크기는 3이어야 한다.")
+    void findAllTest() {
+        //given
+        for (int i = 0; i < 3; i++) {
+            Post givenPost = Post.builder()
+                    .content("테스트 컨텐츠입니다" + i)
+                    .writer("임시작성자" + i)
+                    .build();
+            postRepository.saveFeed(givenPost);
+        }
+        //when
+        List<Post> feedList = postRepository.findAll();
+        //then
+        // feedList.forEach(System.out::println);
+        assertThat(feedList.size()).isEqualTo(3);
+        assertThat(feedList.get(0).getWriter()).isEqualTo("임시작성자2");
+    }
+```
+
+(2) 이미지가 피드에 잘 생성되는지 테스트하기
+- 아까와 같이 GWT 패턴으로 이미지를 저장하고 조회하는 saveImagesAndFindImages를 만든다.
+- given에서는 피드를 한개 생성하고 saveFeed로 피드를 저장한다. 그리고 피드에서 postId를 받아온다.
+- 그리고 받아온 postId, imageOrder, imageUrl로 구성된 첨부 이미지를 두개 생성해본다.
+- when에서는 saveFeedImage를 활용해서 각각 이미지를 저장하고 findImagesByPostId로 imageList를 조회해본다.
+- then에서는 imageList를 forEach문으로 콘솔로 출력해본다.
+  -그리고 imageList의 크기가 2이고, imageList의 0번인덱스의 imageOrder가 1이고, imageList의 1번 인덱스의 imageUrl에 아꺼 지정한 second가 포함되어 있는지 단언한다.
+
+
+```java
+ @Test
+    @DisplayName("""
+            피드를 하나 생성하고 해당 피드에 이미지를
+            2개 첨부했을 때 이미지 생성과 함께 해당 이미지 목록이 조회된다.
+            """)
+    void saveImagesAndFindImages() {
+        
+	//given
+        // 피드를 한 개 생성
+        Post feed = Post.builder()
+                .writer("하츄핑")
+                .content("ㅎㅎㅎㅎ")
+                .build();
+        postRepository.saveFeed(feed);
+        
+	// 첨부 이미지를 2개 생성
+        Long postId = feed.getId();
+        
+	PostImage image1 = PostImage.builder()
+                .postId(postId) // 원본 피드 번호
+                .imageOrder(1)
+                .imageUrl("/uploads/first-image.jpg")
+                .build();
+        
+	PostImage image2 = PostImage.builder()
+                .postId(postId)
+                .imageOrder(2)
+                .imageUrl("/uploads/second-image.jpg")
+                .build();
+        
+	//when
+        postRepository.saveFeedImage(image1);
+        postRepository.saveFeedImage(image2);
+        List<PostImage> imageList = postRepository.findImagesByPostId(postId);
+        
+	//then
+        imageList.forEach(System.out::println);
+        assertThat(imageList.size()).isEqualTo(2);
+        assertThat(imageList.get(0).getImageOrder()).isEqualTo(1);
+        assertThat(imageList.get(1).getImageUrl()).contains("second");
+    }
+```
+
+</details>
 	<details>
 		<summary><b>ㅤ25/01/15/수: 인스타그램 기본 예외처리 글로벌 핸들러 설정/ 피드 및 피드 이미지 테이블 생성, SQL 매퍼 추가</b></summary>	
 
