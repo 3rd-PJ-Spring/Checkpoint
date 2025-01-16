@@ -23,8 +23,11 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/16/목: 개인 사이트 제작 - 회원가입 구현 1</b></summary>	
-		ㅤㅤㅤ다시 클론 후 일단 커밋
+		<summary><b>ㅤ25/01/16/목: 개인 사이트 제작 - 회원가입 구현 1</b></summary>
+
+#### DB 설계 - Entity 생성 - Repository 생성 - xml 파일 생성 후 예외처리 완료<br>
+##### postman에서 회원가입 테스트 중 500 에러 발생하여 해결 중.. DB 관련 문제로 추정 <br>
+금일 내 원인 파악 후 에러 해결, 중복 확인 전 빈 입력값 검증까지 완료할 것.
 	</details>
 	<details>
 		<summary><b>ㅤ25/01/15/수: 개인 사이트 제작 1</b></summary>
