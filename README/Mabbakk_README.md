@@ -19,9 +19,112 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/17/금:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/17/금: 개인 사이트 제작 - 회원가입 구현 2</b></summary>ㅤㅤㅤ
+
+## 금일 작업 현황<hr>
+#### 회원가입 구현 - 이메일, 사용자 이름, 전화번호 패턴 검증 구현 완료.
+```jsx
+// 초기화 함수 생성
+function initSignUp() {
+
+	// form submit 이벤트
+	const $form = document.querySelector('.auth-form');
+
+
+	// 입력 태그들을 읽어서 객체로 관리
+	const $inputs = {
+		username: $form.querySelector('input[name=name]'),
+		email: $form.querySelector('input[name=email]'),
+		password: $form.querySelector('input[name=password]'),
+	};
+
+	// 3개의 입력창에 입력 이벤트 바인딩
+	Object.values($inputs).forEach($input => {
+
+		$input.addEventListener('input', e => {  // 핸들러
+			validateField($input);  // 입력값 검증 함수 호출
+		});
+		$input.addEventListener('blur', e => {  // 핸들러
+			validateField($input);  // 입력값 검증 함수 호출 - 해당 칸을 다 입력하지 않았는데 다른 칸으로 넘어간 경우 검증!
+		});
+
+	});
+
+
+	// 폼 이벤트 핸들러 바인딩
+	$form.addEventListener('submit', e => {
+				e.preventDefault(); // 폼 전송 시 발생하는 새로고침 방지
+
+				// // 사용자가 입력한 모든 입력값 읽어오기
+				// const username = document.querySelector('input[name="name"]').value;
+				// const email = document.querySelector('input[name="email"]').value;
+				// const password = document.querySelector('input[name="password"]').value;
+				//
+				// const payload = {
+				//     name: username,
+				//     email: email,
+				//     password: password,
+				// };
+				//
+				// // 서버로 데이터 전송
+				// fetchToSignUp(payload);
+
+			}
+	);
+
+
+}
+
+
+//====== 함수 정의 ======//
+// 입력값을 검증하고 에러메시지를 렌더링하는 함수
+function validateField($input) {
+
+	// 1. 빈 값 체크
+	// 빈 값 체크를 하기 위해서는 입력값을 읽어와야 함.
+
+	// 2. 이게 어떤 태그인지 알아오기
+	const fieldName = $input.name;
+
+	// // 2-1. 로그 찍어보기
+	// console.log(inputValue, fieldName);
+
+	// 3. 입력값 읽어오기
+	const inputValue = $input.value;
+
+	// input의 부모 가져오기
+	const $formField = $input.closest('.form-field');
+
+	if (!inputValue) {
+		// console.log(fieldName, '비어있음!!');
+		showError($formField, '필수 입력란 입니다.');
+	}
+
+
+}
+
+/**
+ * 에러 메시지를 표시하고, 필드에 error 클래스를 부여
+ */
+function showError($formField, message) {   // formField는 input 태그의 부모, message는 각 input마다 보낼 에러메시지!
+	$formField.classList.add('error');  // 입력창에 빨간 테두리
+	const $errorSpan = document.createElement('span'); // input 태그 아래에 span 태그 생성
+	$errorSpan.classList.add('error-message');   // span 태그에도 글자 색상 빨갛게
+	$errorSpan.textContent = message;  // 에러 메시지를 넣어주고
+	$formField.append($errorSpan);  // 출력
+}
+
+//====== 메인 실행 코드 ======//
+document.addEventListener('DOMContentLoaded', initSignUp);
+``` 
+<hr>
+
+### 트러블 슈팅 - 메인 서버 실행 관련 에러
+- 상황 : main 서버를 재실행 했는데 브라우저는 계속 돌아가고 인텔리제이 내에서는 계속 **포트 충돌**이 일어남.
+- 원인 : 하단에 main 서버 실행창이 두 개가 떠있었고, 나는 그것 중에 하나를 꺼버림.
+- 결과 : 브라우저에서는 서버가 계속 돌아가는 상태였고, 이 서버를 중단시킬 수단을 내가 꺼버렸기 때문에 서버를 조작할 수 있는 방법이 없음.
+- 해결 : **서버 재부팅을 위한 PC 재부팅**을 실시 -> 포트 넘버를 변경할 필요 없이 서버 자체가 재부팅 되었기 때문에 정상 작동.
+</details>
 	<details>
 		<summary><b>ㅤ25/01/16/목: 개인 사이트 제작 - 회원가입 구현 1</b></summary>
 
