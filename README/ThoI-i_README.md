@@ -1,3 +1,6 @@
+제네릭 타입 파라미터＜T＞ 와일드카드＜?＞
+
+
 ## ✏️ Daily Study
 ### [↩ Go Back Main README](https://github.com/3rd-PJ-Spring/Checkpoint?tab=readme-ov-file#%EF%B8%8F-daily-study)
 <details>
@@ -19,65 +22,19 @@
 		ㅤㅤㅤ내용
 </details>
 <details>
-		<summary><b>ㅤ25/01/17/금:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/17/금: GitHub 브랜치 로컬에서 삭제 방법</b></summary>	
+		ㅤㅤㅤ<h3>GitHub 브랜치 로컬에서 삭제 방법</h3>
+
+<b>1. 로컬의 GitHub 브랜치 이력이 남은 경우(GitHub에 없는 로컬 브랜치 삭제) + fetch O</b><br>
+`git fetch --prune`<br>
+<b>2. 로컬의 GitHub 브랜치 이력이 남은 경우(GitHub에 없는 로컬 브랜치 삭제) + fetch X</b><br>
+`git remote prune origin`<br>
+<b>3. 로컬의 특정 원격 브랜치만 삭제가 필요한 경우</b><br>
+`git branch -dr origin/<브랜치명>`<br>
+
 </details>
 <details>
-		<summary><b>ㅤ25/01/16/목:</b></summary>	
-		ㅤㅤㅤ내용
-</details>
-<details>
-		<summary><b>ㅤ25/01/15/수: GitHub push 실수 시 | ⭐⭐ 대상의 추상화: 제네릭 타입 파라미터<T>와 와일드카드<?>, Row 타입</b></summary>
-<details>
-<summary><b>ㅤㅤ⭐GitHub push 실수 시(이전 버전으로 변경 | 커밋 로그 삭제 방법)</b></summary>
-<h3>⭐개인 브랜치 푸시한 커밋 수정</h3>
-
-<b>1. git revert #XXXX(커밋 해시): 변경 로그를 남김</b><br>
-`git switch 개인 브랜치` → `git revert #XXXX(커밋 해시: 변경 원하는 버전)` → `git push origin 개인 브랜치`
-
-<b>2. git reset --hard #XXXX(커밋 해시): 변경 로그 삭제**※ Main 브랜치에 PR→Merge되기 전이라면 git reset --hard 언제든 OK(**단, 작업한 파일이 혼자만 쓰는 경우)</b><br>
-`git switch 개인 브랜치` → `git reset --hard #XXXX(커밋 해시: 변경 원하는 버전)` → `git push --force origin 개인 브랜치`
-
-<h3>⭐⭐Main 브랜치에 머지된 커밋 수정(개인 브랜치 PR → Main 브랜치 Merge 후 수정 필요)</h3>
-<h4>0.main 브랜치 push 금지 설정 해제 </h4>
-
-<b>1. git revert #XXXX(커밋 해시): 변경 로그를 남김</b><br>
-`git switch main` → `git revert #XXXX(커밋 해시: 변경 원하는 버전)` → `git push origin main`
-
-<b>2. git reset --hard #XXXX(커밋 해시): 변경 로그 삭제 (⭐⭐⭐강사님 왈: 없다고 생각하세요)</b><br>
-`git switch main` → `git reset --hard #XXXX(커밋 해시: 변경 원하는 버전)` → `git push --force origin main`
-</details>
-<details>
-<summary><b>ㅤㅤ⭐⭐ ⭐⭐ 대상의 추상화: 제네릭 타입 파라미터<T>와 와일드카드<?>, Row 타입</b></summary>
-
-<h3>Generic(제네릭): 일반화 ~ 특정 타입에 의존X, 다양한 타입에 대해 동작하도록 설계</h3>
-
-| **구분**               | **설명**                                                  | **예시**                                                                                |
-|------------------------|-----------------------------------------------------------|---------------------------------------------------------------------------------------|
-| **일반 타입**           | **구체적으로 정의된 고정된 타입**.<br>객체나 변수의 자료형을 명확히 지정. | `String`, `Integer`, `Apple`<br>`public String name;`, `public int value;`           |
-| **제네릭 타입 매개변수** | **선언 시 사용되는 타입 매개변수**.<br>추상화 및 설계에 사용.         | `<T>`, `<E>`<br>`GenericPredicate<T>`                                                |
-| **제네릭 타입**         | 제네릭이 적용된 **실제 타입**.<br>매개변수가 대체된 결과값.         | `String`, `Integer`, `Apple`<br>`GenericPredicate<String>`, `GenericPredicate<Apple>` |
-
-
-<h3>`GenericPredicate<T>`, `GenericPredicate<Apple>`, `GenericPredicate (Row Tpye)` 비교</h3>
-
-| **구분**             |`GenericPredicate<T>`                                                   |`GenericPredicate<Apple>`                          | `GenericPredicate (Raw Type)`                     |
-|----------------------|---------------------------------------------------------------------------|----------------------------------------------------|--------------------------------------------------|
-| **제네릭 타입 선언**  | 제네릭 타입 `T`가 선언됨<br>타입을 전달받아야 함                                            | 제네릭 타입이 `Apple`로 고정                        | 제네릭 타입 없이 사용<br>(Raw Type)                |
-| **타입 지정**         | 동적으로 설정 가능                                                                | `Apple` 타입으로 고정                               | 타입 지정하지 않고 사용                            |
-| **타입 지정 필요 여부** | `GenericPredicate<Apple>`,<br>`GenericPredicate<String>` 등<br>명시적으로 타입을 지정해야 함 | `GenericPredicate<Apple>`로 타입이 고정<br>다른 객체를 사용할 수 없음 | 타입 지정하지 않고<br>간단히 사용 가능           |
-| **타입 안전성**       | 타입이 명확히 지정<br>**컴파일 시 타입 체크 가능**                                          | 컴파일 시 타입 체크<br>(안전)                       | 타입 정보가 없어<br>**컴파일 시 타입 체크 불가**   |
-| **유연성**            | 다양한 객체에 동작 가능                                                             | 특정 타입 (`Apple`)에 맞게 설계                     | 타입 제한이 없으나,<br>**런타임 에러 발생 가능**   |
-
-<h3>Raw 타입</h3>
-- 제네릭 도입되기 전(Java 5 이전) 사용 방식 → **타입 안정성 없이 사용(String, int, 객체 한 리스트에 추가 가능)**
-- 제네릭 도입 후 **레거시 코드/API와 호환성 유지를 위해** Raw 타입 허용
-
-<h4>🚨 문제점</h4>
-- **타입 안정성 부족**: 컴파일 시 타입 체크X | 잘못된 타입 포함될 가능성 有
-- **런타임 오류 발생 가능성**↑: 잘못된 타입을 캐스팅 시 ClassCastingException 발생
-
-<h3>제네릭 타입 파라미터 `<T>`와 와일드카드 `<?>`</h3>
+		<summary><b>ㅤ25/01/16/목:⭐⭐ 대상의 추상화: 제네릭 타입 파라미터＜T＞ 와일드카드＜?＞[상한/하한 제한 + Class 타입 변수와 클래스 객체] | Iterator와 for-each</b></summary>
 
 | **구분**                  | **제네릭 타입 파라미터 `<T>`**                     | **와일드카드 `<?>`**                            |
 |--------------------------|--------------------------------------------------|-----------------------------------------------|
@@ -89,18 +46,20 @@
 | **특정 타입이 명확히 정해져 있을 때** | 적합: 타입을 명확히 선언하고, 쓰기/읽기 작업 모두 가능        | 부적합: 타입이 불명확해 쓰기 작업에 제한됨              |
 | **타입이 다양한 리스트를 처리할 때**   | 부적합: 매번 타입을 선언해야 함                          | 적합: 타입에 관계없이 읽기 작업만 수행 가능             |
 
-<h3>상한 제한 (`? extends T`) : `T`와 `T`의 하위 클래스만 허용</h3>
-<h4>이 메서드는 `Number`와 그 하위 타입(`List<Integer>`,`List<Double>`)만 받을 수 있음</h4>
+<h3>상한 제한(Upper Bound Wildcard) (? extends T) : T와 T의 하위 클래스만 허용</h3>
+
+<b>이 메서드는 `Number`와 그 하위 타입(`List<Integer>`,`List<Double>`)만 받을 수 있음</b>
 
 ```java
-public void printNumbers(List<? extends Number> numbers) { // ?는 Interger / Double이다
+public void printNumbers(List<? extends Number> numbers) { // ?는 Number이다
     for (Number num : numbers) {
         System.out.println(num);
     }
 }
 ```
-<h3>하한 제한 (`? super T`) : `T`와 `T` 의 상위 클래스만 허용</h3>
-<h4>이 메서드는 `Integer`와 그 상위 타입(`List<Number>`, `List<Object>`)만 받을 수 있음</h4>
+<h3>하한 제한(Lower Bound Wildcard) (? super T) : T와 T 의 상위 클래스만 허용</h3>
+
+<b>이 메서드는 `Integer`와 그 상위 타입(`List<Number>`, `List<Object>`)만 받을 수 있음</b>
 
 ```java
 public void addNumbers(List<? super Integer> list) { // Interger의 부모는 ?이다. 
@@ -108,17 +67,52 @@ public void addNumbers(List<? super Integer> list) { // Interger의 부모는 ?�
     list.add(99);
 }
 ```
-
 <h3>상한 제한 / 하한 제한</h3>
 
-| **구분**              | **상한 제한 (`? extends T`)**                              | **하한 제한 (`? super T`)**                              |
-|----------------------|---------------------------------------------------------|---------------------------------------------------------|
-| **허용 범위**          | `T`와 `T`의 하위 클래스만 허용                                  | `T`와 `T`의 상위 클래스만 허용                                  |
-| **주요 사용 사례**      | 데이터를 **읽기 전용**으로 처리할 때                             | 데이터를 **쓰기 작업** 중심으로 처리할 때                              |
-| **읽기 작업**          | 가능: 타입 안정성을 유지하며 읽기 가능                           | 제한적: 항상 `Object` 타입으로 반환                              |
-| **쓰기 작업**          | 불가능: 삽입 작업은 허용되지 않음                               | 가능: 타입 안정성을 유지하며 데이터 추가 가능                              |
-| **사용 가능한 키워드**   | `? extends T` (T와 그 하위 클래스)                           | `? super T` (T와 그 상위 클래스)                              |
+| **구분**              | **상한 제한 (`? extends T`)**   | **하한 제한 (`? super T`)**                    |
+|----------------------|-----------------------------|--------------------------------------------|
+| **허용 범위**          | `T`와 `T`의 하위 클래스만 허용        | `T`와 `T`의 상위 클래스만 허용                       |
+| **주요 사용 사례**      | **읽기 전용**으로 처리 시            | **쓰기 작업** 중심으로 처리 시                        |
+| **읽기 작업**          | 가능: 타입 안정성을 유지하며 읽기 가능      | 제한적: 항상 `Object` 타입으로 반환 → 다운 캐스팅으로 필요타입 축출 |
+| **쓰기 작업**          | 불가능: 삽입 작업은 허용되지 않음         | 가능: 타입 안정성을 유지하며 데이터 추가 가능                 |
+| **사용 가능한 키워드**   | `? extends T` (T와 그 하위 클래스) | `? super T` (T와 그 상위 클래스)                  |
 
+```java
+public void printSpecificType(List<? extends Number> list, Class<?> type) { 
+// List<? extends Number> list : 상한 제한 와일드카드가 사용된 리스트
+// Class<?> type : 클래스 객체 변수 ex) Integer.class
+    for (Number num : list) { // iter 반복문
+        if (type.isInstance(num)) { // 클래스 객체가 일치하면
+            System.out.println("Filtered: " + num); // 출력해라
+        }
+    }
+}
+
+List<Number> numbers = List.of(1, 2.5, 3, 4.2);
+printSpecificType(numbers, Integer.class);
+```
+```java
+// 출력 결과
+Filtered: 1
+Filtered: 3
+```
+<h3>Class<?> 타입 변수와 클레스 객체</h3>
+
+| **구분**              | **설명**                                                                                      | **추가 설명**                                                                                                     |
+|-----------------------|----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| **Class<?> 타입 변수** | 클래스 객체를 저장하는 변수 타입.                                                             | - `Class<?>` 타입은 클래스 객체를 다루기 위한 Java에서 제공하는 기본 클래스.<br>- 특정 클래스의 메타데이터를 저장. |
+| **클래스 객체**        | 특정 클래스의 정보를 담고 있는 Java 객체.                                                      | - 클래스 객체는 `Class` 클래스의 인스턴스.<br>- 클래스 이름, 메서드, 필드, 상속 계층, 인터페이스 구현 정보 등 포함.|
+| **주요 기능**          | 클래스 정보를 동적으로 분석하거나 실행 시에 타입 확인 및 작업 수행 가능.                                      | - 리플렉션 API를 통해 클래스 구조에 대한 상세 작업 가능.<br>- 부모 클래스 및 인터페이스 구현 정보도 확인 가능.   |
+| **사용 예시**          | `Class<?> clazz = Integer.class;` → Integer 클래스의 클래스 객체 저장.                          | - 메서드 호출: `clazz.getName()`, `clazz.getSuperclass()`, `clazz.getInterfaces()`.<br>- 객체 타입 비교: `clazz.isInstance(obj)`.|
+
+<h3>⭐️클래스 메서드와 인스턴스 메서드 비교</h3>
+
+| **종류**       | **메서드**              | **설명**                                                        | **예시**                        | **예시 설명**                                                                                  |
+|----------------|----------------------|------------------------------------------------------------------|---------------------------------|-----------------------------------------------------------------------------------------------|
+| **클래스 메서드** | **`.class`**         | 특정 래퍼 클래스를 `클래스 객체(Class Object)`로 변환             | `Integer.class`                | `Integer` 클래스의 클래스 객체 생성                                                            |
+| **인스턴스 메서드** | **`.isInstance`**    | 클래스 객체끼리 비교하여 해당 객체가 지정된 클래스의 인스턴스인지 판별 | `Integer.class.isInstance(obj)` | `obj`가 `Integer` 클래스의 인스턴스인지 `true/false`로 반환                                     |
+| **인스턴스 메서드** | **`.getSuperclass`** | 해당 클래스의 부모 클래스 객체를 반환                               | `Integer.class.getSuperclass()` | `Integer` 클래스의 부모 클래스(`Number`)의 클래스 객체 반환                                     |
+| **인스턴스 메서드** | **`.getInterfaces`** | 해당 클래스가 구현한 모든 인터페이스의 클래스 객체 목록을 배열로 반환   | `ArrayList.class.getInterfaces()` | `ArrayList`가 구현한 인터페이스 목록(`List`, `RandomAccess`, `Serializable` 등)을 반환          |
 
 <h3>기본 자료형과 래퍼 클래스의 관계</h3>
 
@@ -187,6 +181,7 @@ public static void printMixedList(List<?> list) {
     }
 }
 ```
+
 <h3>Iterator와 for-each</h3>
 
 | **구분**            | **Iterator**                                                                 | **for-each**                                                                             |
@@ -249,8 +244,57 @@ public class Main {
 }
 ```
 </details>
+<details>
+		<summary><b>ㅤ25/01/15/수: GitHub push 실수 시 | ⭐⭐ 대상의 추상화: 제네릭 타입 파라미터＜T＞와 Row 타입 </b></summary>
+<h2>⭐GitHub push 실수 시(이전 버전으로 변경 | 커밋 로그 삭제 방법)</h2>
+
+<h3>⭐개인 브랜치 푸시한 커밋 수정</h3>
+
+<b>1. git revert #XXXX(커밋 해시): 변경 로그를 남김</b><br>
+`git switch 개인 브랜치` → `git revert #XXXX(커밋 해시: 변경 원하는 버전)` → `git push origin 개인 브랜치`
+
+<b>2. git reset --hard #XXXX(커밋 해시): 변경 로그 삭제**※ Main 브랜치에 PR→Merge되기 전이라면 git reset --hard 언제든 OK(**단, 작업한 파일이 혼자만 쓰는 경우)</b><br>
+`git switch 개인 브랜치` → `git reset --hard #XXXX(커밋 해시: 변경 원하는 버전)` → `git push --force origin 개인 브랜치`
+
+<h3>⭐⭐Main 브랜치에 머지된 커밋 수정(개인 브랜치 PR → Main 브랜치 Merge 후 수정 필요)</h3>
+<h4>0.main 브랜치 push 금지 설정 해제 </h4>
+
+<b>1. git revert #XXXX(커밋 해시): 변경 로그를 남김</b><br>
+`git switch main` → `git revert #XXXX(커밋 해시: 변경 원하는 버전)` → `git push origin main`
+
+<b>2. git reset --hard #XXXX(커밋 해시): 변경 로그 삭제 (⭐⭐⭐강사님 왈: 없다고 생각하세요)</b><br>
+`git switch main` → `git reset --hard #XXXX(커밋 해시: 변경 원하는 버전)` → `git push --force origin main`
+
+<h2>⭐⭐ 대상의 추상화: 제네릭 타입 파라미터<T>와 와일드카드<?>, Row 타입 </h2>
+
+<h3>Generic(제네릭): 일반화 ~ 특정 타입에 의존X, 다양한 타입에 대해 동작하도록 설계</h3>
+
+| **구분**               | **설명**                                                  | **예시**                                                                                |
+|------------------------|-----------------------------------------------------------|---------------------------------------------------------------------------------------|
+| **일반 타입**           | **구체적으로 정의된 고정된 타입**.<br>객체나 변수의 자료형을 명확히 지정. | `String`, `Integer`, `Apple`<br>`public String name;`, `public int value;`           |
+| **제네릭 타입 매개변수** | **선언 시 사용되는 타입 매개변수**.<br>추상화 및 설계에 사용.         | `<T>`, `<E>`<br>`GenericPredicate<T>`                                                |
+| **제네릭 타입**         | 제네릭이 적용된 **실제 타입**.<br>매개변수가 대체된 결과값.         | `String`, `Integer`, `Apple`<br>`GenericPredicate<String>`, `GenericPredicate<Apple>` |
+
+
+<h3>`GenericPredicate<T>`, `GenericPredicate<Apple>`, `GenericPredicate (Row Tpye)` 비교</h3>
+
+| **구분**             |`GenericPredicate<T>`                                                   |`GenericPredicate<Apple>`                          | `GenericPredicate (Raw Type)`                     |
+|----------------------|---------------------------------------------------------------------------|----------------------------------------------------|--------------------------------------------------|
+| **제네릭 타입 선언**  | 제네릭 타입 `T`가 선언됨<br>타입을 전달받아야 함                                            | 제네릭 타입이 `Apple`로 고정                        | 제네릭 타입 없이 사용<br>(Raw Type)                |
+| **타입 지정**         | 동적으로 설정 가능                                                                | `Apple` 타입으로 고정                               | 타입 지정하지 않고 사용                            |
+| **타입 지정 필요 여부** | `GenericPredicate<Apple>`,<br>`GenericPredicate<String>` 등<br>명시적으로 타입을 지정해야 함 | `GenericPredicate<Apple>`로 타입이 고정<br>다른 객체를 사용할 수 없음 | 타입 지정하지 않고<br>간단히 사용 가능           |
+| **타입 안전성**       | 타입이 명확히 지정<br>**컴파일 시 타입 체크 가능**                                          | 컴파일 시 타입 체크<br>(안전)                       | 타입 정보가 없어<br>**컴파일 시 타입 체크 불가**   |
+| **유연성**            | 다양한 객체에 동작 가능                                                             | 특정 타입 (`Apple`)에 맞게 설계                     | 타입 제한이 없으나,<br>**런타임 에러 발생 가능**   |
+
+<h3>Raw 타입</h3>
+<b>제네릭 도입되기 전(Java 5 이전) 사용 방식 → 타입 안정성 없이 사용(String, int, 객체 한 리스트에 추가 가능)</b>
+<b>제네릭 도입 후 레거시 코드/API와 호환성 유지를 위해 Raw 타입 허용</b>
+
+<h4>🚨 문제점</h4>
+<b>타입 안정성 부족: 컴파일 시 타입 체크X | 잘못된 타입 포함될 가능성 有</b><br>
+<b>런타임 오류 발생 가능성↑: 잘못된 타입을 캐스팅 시 ClassCastingException 발생</b>
 </details>
-	<details>
+<details>
 		<summary><b>ㅤ25/01/14/화: 클래스/메서드와 생성자 | ⭐객체와 인스턴스 | ② 내부(중첩)/익명 클래스+람다 표기법</b></summary>	
 <h3>클래스(설계도)와 메서드[동작(로직)] 생성자(객체 생성, 필드 초기화)</h3>
 
@@ -388,7 +432,7 @@ List<Apple> weightGT150 = filterApples(appleBasket, (apple) -> { // 람다 표�
 List<Apple> weightGT150 = filterApples(appleBasket, (apple) -> apple.getWeight() >= 150);  // 람다 표현식 ③
 ```
 </details>
-	<details>
+<details>
 		<summary><b>ㅤ25/01/13/월: ⭐⭐️① 동작의 추상화 분석 + 복수 메서드(조건) + 스트림 API + 데이터 재활용(서버)과 SQL</b></summary>
 <h3>① 인터페이스(메서드 형식(규격)을 설계/생성해서 필요한 기능을 바로바로 넣을 수 있게 만듬</h3>
 
@@ -842,19 +886,18 @@ greenApples = [Apple{weight=80, color=GREEN}, Apple{weight=155, color=GREEN}, Ap
 
 <h3>⭐️ 내부(중첩) 클래스 ~ Inner(Nested)</h3>
 **① 역할(Responsibilitiy) 분리 필요 시**
-    → 한 클래스 내 관련 로직을 내부 클래스로 모아둠<br>
+→ 한 클래스 내 관련 로직을 내부 클래스로 모아둠<br>
 **② 여러 메서드가 결과 값을 공유하는 경우(캡슐화 1)**
-    → 물건 구매-할인 적용-포인트 적립-현재 포인트 조회<br>
+→ 물건 구매-할인 적용-포인트 적립-현재 포인트 조회<br>
 **③ 개인/중요 정보 외부에서 접근/변경 방지(캡슐화 2)**
-    → 내부 클래스에서 private 선언<br>
+→ 내부 클래스에서 private 선언<br>
 **④ 디자인 패턴(Iterator, Builder) 활용**
 
 <h3>⭐️ 익명 클래스(Anonymous)</h3>
 **단, 한 번 결과값을 보고 재사용하지 않는 경우** <br>
 인터페이스/추상 클래스(또는 일반 클래스)를 구현/상속 → 메서드 오버라이드 → 인스턴스 생성
-
 <details>
-		<summary><b>ㅤㅤ인터페이스(Interface): 재사용 多</b></summary>
+		    <summary><b>ㅤㅤ인터페이스(Interface): 재사용 多</b></summary>
 
 ```java
 package chap2_6.inner;
@@ -1220,5 +1263,5 @@ public class FileInputExample {
 }
 ```
 </details>
-</details>
-</details>
+    </details>
+        </details>
