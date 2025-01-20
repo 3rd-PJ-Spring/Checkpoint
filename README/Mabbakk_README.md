@@ -15,9 +15,31 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/20/월:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/20/월: 개인 사이트 제작 - 회원가입 구현 3</b></summary>
+
+## 금일 작업 현황<hr>
+#### 회원가입 구현- 중복 확인 완료 및 fetch 진행 중
+```jsx
+// 회원 가입 정보를 서버에 전송하기
+async function fetchToSignUp(userData) {
+
+    const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type' : 'application/json' },
+        body: JSON.stringify(userData)
+    });
+
+    const data = await response.json();
+    console.log(data);
+    if (data.success) {
+        window.location.href = '/login';  // 회원가입이 성공하면 로그인 페이지로 이동
+    } else {
+        alert('회원가입 실패:', data.message);
+    }
+}
+```
+#### - 막힌 부분 : 마무리 작업 중 fetch가 제대로 이루어지지 않는 이유?
+</details>
 	<details>
 		<summary><b>ㅤ25/01/17/금: 개인 사이트 제작 - 회원가입 구현 2</b></summary>ㅤㅤㅤ
 
