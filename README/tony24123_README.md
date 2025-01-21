@@ -11,12 +11,12 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/21/화:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/21/화: 기능 개발 - DB 정보 업데이트 + 전적 기록 남기기(FE,BE,DB 목표치 달성)</b></summary>	
+		ㅤㅤㅤ<h3>Img폴더에 사진 첨부</h3>
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/20/월:</b></summary>	
-		ㅤㅤㅤ내용
+		<summary><b>ㅤ25/01/20/월: 기능 개발 - 사용자 데이터 정보 화면에 렌더링</b></summary>	
+		ㅤㅤㅤ<h3>Img폴더에 사진 첨부</h3>
 	</details>
 	<details>
 		<summary><b>ㅤ25/01/17/금: 인증인가 JWT 토큰 학습</b></summary>
