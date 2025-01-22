@@ -1,6 +1,3 @@
-제네릭 타입 파라미터＜T＞ 와일드카드＜?＞
-
-
 ## ✏️ Daily Study
 ### [↩ Go Back Main README](https://github.com/3rd-PJ-Spring/Checkpoint?tab=readme-ov-file#%EF%B8%8F-daily-study)
 <details>
