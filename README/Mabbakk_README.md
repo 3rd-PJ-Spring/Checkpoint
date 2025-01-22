@@ -11,9 +11,11 @@
 		ㅤㅤㅤ내용
 	</details>
 	<details>
-		<summary><b>ㅤ25/01/21/화:</b></summary>	
-		ㅤㅤㅤ내용
-	</details>
+		<summary><b>ㅤ25/01/21/화: 회원가입 구현 완료 및 FE구현</b></summary>
+
+## 금일 작업 현황<hr>
+#### 회원가입 구현 완료 및 인덱스 페이지 FE 구현 완료
+</details>
 	<details>
 		<summary><b>ㅤ25/01/20/월: 개인 사이트 제작 - 회원가입 구현 3</b></summary>
 
