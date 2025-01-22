@@ -1,0 +1,436 @@
+body {
+  background: #437a5b;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+body .player-right-hand {
+  position: fixed;
+  width: 200px;
+  height: 200px;
+  /* 박스에 이미지 바로 넣기 */
+  background: url("/images/bjimg/blackjack/player-right-hand.png") no-repeat center/
+    cover;
+  pointer-events: none; /* 이미지가 다른 요소의 클릭을 방해하지 않도록 */
+  z-index: 10;
+}
+html:hover .player-right-hand {
+  transform: scale(1.5) translate(50px, 50px);
+}
+
+body .card {
+  height: 220px;
+  margin-top: 10px;
+}
+
+body .card img {
+  height: 100%;
+}
+
+body .top {
+  background: rgb(12, 12, 12);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  margin-bottom: 100px;
+}
+
+body .top .logo {
+  width: 12%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+body .top .logo .logo-img {
+  height: 40px;
+}
+body .top .logo .logo-img img {
+  height: 100%;
+}
+
+body .top .logo .title {
+  font-size: 2.5rem;
+  color: #fff;
+}
+
+body .game-board {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+body .chipimg {
+  position: absolute;
+  width: 400px;
+}
+body .chipimg img {
+  width: 100%;
+}
+
+body .hand {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+}
+body .hand img {
+  width: 100%;
+}
+
+body .player-left-hand {
+  bottom: -160px;
+  left: 300px;
+}
+
+body .dealer-left-hand {
+  top: -140px;
+  left: 300px;
+}
+body .dealer-right-hand {
+  top: -140px;
+  right: 300px;
+}
+
+body .game-board .game-player {
+  font-size: 2.1rem;
+  color: #fff;
+}
+
+body .game-board .row1 {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+body .game-board .row1 .row1-left {
+  width: 65%;
+}
+
+body .game-board .row1 .row1-left .row1-card-box .hidden-card {
+  /* position: absolute;
+    left: -250px;
+    top: 150px; */
+  position: fixed;
+  top: 350px;
+  left: 40px;
+}
+/* 카드 겹쳐서 쌓기 */
+/* 딜러 카드 배분 */
+body .game-board .row1 .row1-left .row1-card-box .dealer-card {
+  display: flex;
+  position: relative;
+}
+body .game-board .row1 .row1-left .row1-card-box .dealer-card img:nth-child(1) {
+  position: absolute;
+  animation: move-toDealer 1s;
+}
+body .game-board .row1 .row1-left .row1-card-box .dealer-card img:nth-child(2) {
+  position: absolute;
+  left: 82px;
+  animation: move-toDealer2 1s;
+}
+body .game-board .row1 .row1-left .row1-card-box .dealer-card img:nth-child(3) {
+  position: absolute;
+  left: 164px;
+  animation: move-toDealer3 1.5s;
+}
+body .game-board .row1 .row1-left .row1-card-box .dealer-card img:nth-child(4) {
+  position: absolute;
+  left: 246px;
+  animation: move-toDealer4 1.5s;
+}
+body .game-board .row1 .row1-left .row1-card-box .dealer-card img:nth-child(5) {
+  position: absolute;
+  left: 328px;
+  animation: move-toDealer5 1.5s;
+}
+body .game-board .row1 .row1-left .row1-card-box .dealer-card img:nth-child(6) {
+  position: absolute;
+  left: 410px;
+  animation: move-toDealer6 1.5s;
+}
+
+/* 플레이어 카드 배분 */
+body .game-board .row2 .row2-left .row2-card-box .player-card {
+  display: flex;
+  position: relative;
+}
+body .game-board .row2 .row2-left .row2-card-box .player-card img:nth-child(1) {
+  position: absolute;
+  animation: move-toPlayer 1s;
+}
+body .game-board .row2 .row2-left .row2-card-box .player-card img:nth-child(2) {
+  position: absolute;
+  left: 82px;
+  animation: move-toPlayer2 1s;
+}
+body .game-board .row2 .row2-left .row2-card-box .player-card img:nth-child(3) {
+  position: absolute;
+  left: 164px;
+  animation: move-toPlayer3 1.5s;
+}
+body .game-board .row2 .row2-left .row2-card-box .player-card img:nth-child(4) {
+  position: absolute;
+  left: 246px;
+  animation: move-toPlayer4 1.5s;
+}
+body .game-board .row2 .row2-left .row2-card-box .player-card img:nth-child(5) {
+  position: absolute;
+  left: 328px;
+  animation: move-toPlayer5 1.5s;
+}
+body .game-board .row2 .row2-left .row2-card-box .player-card img:nth-child(6) {
+  position: absolute;
+  left: 410px;
+  animation: move-toPlayer6 1.5s;
+}
+
+body .game-board .row1 .row1-right {
+  width: 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.1rem;
+  color: #fff;
+  padding: 10px;
+}
+
+body .game-board .row1 .row1-right .betting-box {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+body .game-board .row1 .row1-right .betting-box .betting-chip-img {
+  width: 100px;
+  margin-bottom: 5px;
+  margin-top: 100px;
+}
+body .game-board .row1 .row1-right .betting-box .betting-chip-img img {
+  width: 100%;
+}
+
+body .game-board .row1 .row1-right .gamechip-box {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+body .game-board .row1 .row1-right .gamechip-box .gamechip-img {
+  width: 100px;
+  margin-bottom: 5px;
+  margin-top: 100px;
+}
+body .game-board .row1 .row1-right .gamechip-box .gamechip-img img {
+  width: 100%;
+}
+
+body .game-board .row2 {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+body .game-board .row2 .row2-left {
+  width: 65%;
+}
+
+body .game-board .row2 .row2-right {
+  width: 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.1rem;
+  color: #fff;
+}
+
+body .game-board .row2 .row2-right .button-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  /* border: 1px solid #000; */
+}
+
+body .game-board .row2 .row2-right .button-box .playbtn {
+  /* 이미지에 가려져서 버튼이 안눌림 -> z-index설정해서 해결
+  z-index: 10; */
+  width: 40%;
+  margin: 4px;
+  background: rgb(18, 61, 28);
+}
+body .game-board .row2 .row2-right .button-box .playbtn:hover {
+  background: rgb(12, 12, 12);
+  cursor: pointer;
+}
+body .game-board .row2 .row2-right .button-box .playbtn p {
+  text-align: center;
+  padding: 10px;
+}
+
+/* 카드 크기 164px 220px */
+/* 딜러 카드 배분 */
+@keyframes move-toDealer {
+  0% {
+    transform: translateX(-270px) translateY(120px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+@keyframes move-toDealer2 {
+  0% {
+    transform: translateX(-352px) translateY(120px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+@keyframes move-toDealer3 {
+  0% {
+    transform: translateX(-434px) translateY(120px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+@keyframes move-toDealer4 {
+  0% {
+    transform: translateX(-516px) translateY(120px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+@keyframes move-toDealer5 {
+  0% {
+    transform: translateX(-598px) translateY(120px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+@keyframes move-toDealer6 {
+  0% {
+    transform: translateX(-680px) translateY(120px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+/* 플레이어 카드 배분 */
+@keyframes move-toPlayer {
+  0% {
+    transform: translateX(-270px) translateY(-180px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+@keyframes move-toPlayer2 {
+  0% {
+    transform: translateX(-352px) translateY(-180px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes move-toPlayer3 {
+  0% {
+    transform: translateX(-434px) translateY(-180px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes move-toPlayer4 {
+  0% {
+    transform: translateX(-516px) translateY(-180px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes move-toPlayer5 {
+  0% {
+    transform: translateX(-598px) translateY(-180px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes move-toPlayer6 {
+  0% {
+    transform: translateX(-680px) translateY(-180px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+/* 모달 */
+/* 모달 배경 레이어 스타일 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 모달 내용 */
+.modal-content {
+  background-color: white; /* 흰 배경 */
+  padding: 20px; /* 내용 안쪽 여백 */
+  border-radius: 10px; /* 둥근 모서리 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 50%; /* 모달의 고정 너비 */
+  text-align: center; /* 내용 중앙 정렬 */
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 15px; /* 제목과 내용 간 간격 */
+  color: #333; /* 제목 색상 */
+}
+
+.modal-text {
+  font-size: 16px;
+  margin-bottom: 20px; /* 텍스트와 버튼 간 간격 */
+  color: #666; /* 텍스트 색상 */
+}
+
+.close-btn {
+  background-color: #007bff; /* 버튼 배경색 */
+  color: white; /* 버튼 글자색 */
+  padding: 10px 20px; /* 버튼 안쪽 여백 */
+  border: none;
+  border-radius: 5px; /* 둥근 모서리 */
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.close-btn:hover {
+  background-color: #0056b3; /* 버튼 호버 시 색상 변화 */
+}
