@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.instagramclone.shop.repository.UserRepository">
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO user
+        (username, password, email)
+        VALUES
+        (#{username}, #{password}, #{email})
+    </insert>
+
+    <update id="update">
+        UPDATE user
+        SET game_chips = #{gameChips}
+        WHERE username = #{username}
+    </update>
+
+    <select id="findById" resultType="com.example.instagramclone.shop.user.User">
+        SELECT
+        *
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByUserName" resultType="com.example.instagramclone.shop.user.User">
+        SELECT
+        *
+        FROM user
+        WHERE username = #{username}
+    </select>
+
+    <select id="findAll" resultType="com.example.instagramclone.shop.user.User">
+        SELECT
+        *
+        FROM user
+    </select>
+
+</mapper>
