@@ -43,21 +43,22 @@ function initSignUp() {
     //     validateField($input); // 입력값 검증 함수 호출
     // };
 
+    const handleInput = ($input) => {
+        removeErrorMessage($input.closest('.form-group'));
+        validateField($input); // 입력값 검증 함수 호출
+    };
+
+
     let throttleTimeout;
 
-    const handleInput = ($input) => {
-        if (throttleTimeout) clearTimeout(throttleTimeout);
+    const handleBlur =  ($input) => {
         throttleTimeout = setTimeout(() => {
-            removeErrorMessage($input.closest('.form-group'));
+            const $formField = $input.closest('.form-group');
+            removeErrorMessage($formField);
             validateField($input);
-        }, 300); // 300ms 동안 새로운 호출 무시
-    };
+        }, 300);
 
-    const handleBlur = async ($input) => {
-        const $formField = $input.closest('.form-group');
-        removeErrorMessage($formField); // 기존 에러 메시지 제거
-        await validateField($input); // 유효성 검사 수행
-    };
+    }
 
 
 
