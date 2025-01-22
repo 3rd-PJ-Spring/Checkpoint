@@ -1,5 +1,5 @@
 # 3rd-PJ-Spring ~ CHECKPOINT
-![CHECKPOINT LOGO]()
+![CHECKPOINT LOGO](https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/img/ThoI-i/250122(%EC%88%98)/CHECKPOINT%20LOGO.png)<br>
 세 번째 프로젝트: 홈페이지 기본 기능 구현<br>
 HTML + CSS + Javascript[FE] + Spring Boot + MyBatis[BE] + MariaDB[DB]<br>
 
@@ -77,7 +77,7 @@ SQL 데이터의 length가 2가 나와야 하는데 9가 나옴. (생성된 모�
 <details>
 		<summary><b>🔹회원가입시 중복검증하는 부분에서만 에러메세지가 두번씩 생기는 경우 발생</b></summary>	
          input와  blur를 같이 바인딩하니 두번처리되는 경우가 발생 <br>
-        ㅤ➽ㅤhandleBlur와 handleInput을 나누고, handleBlur의 validateField에 await을 걸고 $input에 async를 걸고 handleInput에 setTimeOut으로 300ms 동안 새로운 호출을 무시하도록 설정 
+        ㅤ➽ㅤhandleBlur와 handleInput을 나누고, handleBlur의 validateField에 await을 걸고 $input에 async를 걸고 handleInput에 setTimeOut으로 300ms 동안 새로운 호출을 무시하도록 설정해서 에러 메세지가 두번쌓이는 현상을 방지
 </details>
 
 
