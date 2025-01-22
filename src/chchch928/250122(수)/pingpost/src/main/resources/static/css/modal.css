@@ -1,0 +1,68 @@
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+}
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 420px;
+animation: fadeIn 0.4s ease; /* 등장 애니메이션 */
+}
+.modal-header {
+    font-size: 3rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #202124;
+}
+.modal-footer {
+    text-align: right;
+    margin-top: 20px;
+}
+.modal-footer button {
+    padding: 10px 20px;
+    background-color: crimson;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.modal-footer button:hover {
+    background-color: #1669c1;
+}
+
+input #title{
+    height: 40px;
+    width: 200px;
+}
+
+
+
+
+/* 오버레이와 모달 등장 애니메이션 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}

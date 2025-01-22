@@ -1,0 +1,50 @@
+/*.board-item {*/
+/*    background: white;*/
+/*    margin-bottom: 15px;*/
+/*    margin-top: 20px;*/
+/*    padding: 20px;*/
+/*    border-radius: 12px;*/
+/*    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
+/*    display: flex; !* Flexbox를 사용하여 좌/우 정렬 *!*/
+/*    justify-content: space-between; !* 좌/우 사이 간격 유지 *!*/
+/*    align-items: flex-start; !* 아이템 위쪽 정렬 *!*/
+/*    transition: transform 0.3s ease, box-shadow 0.3s ease;*/
+/*}*/
+
+/*.board-item:hover {*/
+/*    transform: translateY(-5px);*/
+/*    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);*/
+/*}*/
+
+/* 게시물 항목 스타일 */
+.board-item {
+    background: white;
+    margin: 15px 0; /* 위아래 간격만 설정 */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 가벼운 그림자 효과 */
+    display: block; /* 단순 블록형으로 정렬 */
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+/* 호버 효과 */
+.board-item:hover {
+    transform: translateY(-3px); /* 살짝 들어 올리는 효과 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 호버 시 더 뚜렷한 그림자 */
+}
+
+/* 게시물 제목 스타일 */
+.board-item h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* 게시물 내용 요약 스타일 */
+.board-item p {
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.5; /* 가독성을 위한 줄 간격 */
+}
+
