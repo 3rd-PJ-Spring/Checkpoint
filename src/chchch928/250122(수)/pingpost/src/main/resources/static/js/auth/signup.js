@@ -38,15 +38,35 @@ function initSignUp() {
         password: $form.querySelector('input[name="password"]'),
     };
 
+    // const handleInput = ($input) => {
+    //     removeErrorMessage($input.closest('.form-group'));
+    //     validateField($input); // 입력값 검증 함수 호출
+    // };
+
+    let throttleTimeout;
+
     const handleInput = ($input) => {
-        removeErrorMessage($input.closest('.form-group'));
-        validateField($input); // 입력값 검증 함수 호출
+        if (throttleTimeout) clearTimeout(throttleTimeout);
+        throttleTimeout = setTimeout(() => {
+            removeErrorMessage($input.closest('.form-group'));
+            validateField($input);
+        }, 300); // 300ms 동안 새로운 호출 무시
     };
+
+    const handleBlur = async ($input) => {
+        const $formField = $input.closest('.form-group');
+        removeErrorMessage($formField); // 기존 에러 메시지 제거
+        await validateField($input); // 유효성 검사 수행
+    };
+
+
+
+
 
     // 4개의 입력창에 입력 이벤트 바인딩
     Object.values($inputs).forEach($input => {
         $input.addEventListener('input', () => handleInput($input));
-        $input.addEventListener('blur', () => handleInput($input));
+        $input.addEventListener('blur', () => handleBlur($input));
     });
 
     $form.addEventListener('submit', e => {
