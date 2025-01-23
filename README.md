@@ -4,7 +4,7 @@
 HTML + CSS + Javascript[FE] + Spring Boot + MyBatis[BE] + MariaDB[DB]<br>
 
 ## 🗓️ 프로젝트 기간: 25/01/06 ~ 25/01/24
-
+![Timetable](https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/img/ThoI-i/250123(%EB%AA%A9)/%EC%9D%BC%EC%A0%95.png)
 ## 👤 프로젝트 맴버
 
 [![GitHub Badge](https://img.shields.io/badge/tony24123-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/tony24123)
@@ -33,17 +33,28 @@ HTML + CSS + Javascript[FE] + Spring Boot + MyBatis[BE] + MariaDB[DB]<br>
 ![Windows 11 Badge](https://img.shields.io/badge/Windows%2011-0078D6?logo=windows&logoColor=white)
 
 ## 🎬 시연 영상
-[![GitHub Badge](https://img.shields.io/badge/tony24123-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/tony24123) <br>
+[![GitHub Badge](https://img.shields.io/badge/tony24123-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/tony24123) <br><br>
+<b>🔹회원가입</b><br>
+![회원가입](https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/img/ThoI-i/250123(%EB%AA%A9)/%EC%8B%9C%EC%97%B0%20%EC%98%81%EC%83%81/tony24123/%ED%8E%B8%EC%A7%91/gif/tony24123_1_%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85%2C%20%EB%A1%9C%EA%B7%B8%EC%9D%B8%2C%20%ED%86%A0%ED%81%B0%20%EB%B0%9C%ED%96%89.gif)<br><br>
+<b>🔹게임 로그 DB 연동</b><br>
+![게임 로그 DB 연동](https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/img/ThoI-i/250123(%EB%AA%A9)/%EC%8B%9C%EC%97%B0%20%EC%98%81%EC%83%81/tony24123/%ED%8E%B8%EC%A7%91/gif/tony24123_2_%20%EA%B2%8C%EC%9E%84%20%EA%B2%B0%EA%B3%BC%20DB%20%EC%97%B0%EB%8F%99.gif)
+___
+[![GitHub Badge](https://img.shields.io/badge/ThoI－i-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/ThoI-i) <br><br>
 🔹
 ___
-[![GitHub Badge](https://img.shields.io/badge/ThoI－i-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/ThoI-i) <br>
-🔹
+[![GitHub Badge](https://img.shields.io/badge/chchch928-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/chchch928) <br><br>
+<b>🔹회원가입 검증</b><br>
+![회원가입 검증](https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/img/ThoI-i/250123(%EB%AA%A9)/%EC%8B%9C%EC%97%B0%20%EC%98%81%EC%83%81/chchch928/%ED%8E%B8%EC%A7%91/gif/chchch928_1_%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85%EC%8B%A4%ED%8C%A8(%ED%8E%B8%EC%A7%91).gif)<br><br>
+<b>🔹로그인 검증</b><br>
+![로그인 검증](https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/img/ThoI-i/250123(%EB%AA%A9)/%EC%8B%9C%EC%97%B0%20%EC%98%81%EC%83%81/chchch928/%ED%8E%B8%EC%A7%91/gif/chchch928_2_%EB%A1%9C%EA%B7%B8%EC%9D%B8%20%EC%8B%A4%ED%8C%A8(%ED%8E%B8%EC%A7%91).gif)<br><br>
+<b>🔹회원가입 / 로그인</b><br>
+![회원가입 / 로그인](https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/img/ThoI-i/250123(%EB%AA%A9)/%EC%8B%9C%EC%97%B0%20%EC%98%81%EC%83%81/chchch928/%ED%8E%B8%EC%A7%91/gif/chchch928_3_%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85%EB%B0%8F%20%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%84%B1%EA%B3%B5(%ED%8E%B8%EC%A7%91).gif)<br>
 ___
-[![GitHub Badge](https://img.shields.io/badge/chchch928-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/chchch928) <br>
-🔹
-___
-[![GitHub Badge](https://img.shields.io/badge/Mabbakk-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/Mabbakk)<br>
-🔹
+[![GitHub Badge](https://img.shields.io/badge/Mabbakk-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/Mabbakk)<br><br>
+<b>🔹페이지 소개</b><br>
+![페이지 소개](https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/img/ThoI-i/250123(%EB%AA%A9)/%EC%8B%9C%EC%97%B0%20%EC%98%81%EC%83%81/mabbakk/%ED%8E%B8%EC%A7%91/gif/mabbakk_1.%ED%8E%98%EC%9D%B4%EC%A7%80%20%EC%86%8C%EA%B0%9C.gif)<br><br>
+<b>🔹회원가입</b><br>
+![회원가입](https://github.com/3rd-PJ-Spring/Checkpoint/blob/main/img/ThoI-i/250123(%EB%AA%A9)/%EC%8B%9C%EC%97%B0%20%EC%98%81%EC%83%81/mabbakk/%ED%8E%B8%EC%A7%91/gif/mabbakk_2.%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85.gif)
 ___
 
 
