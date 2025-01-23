@@ -117,8 +117,7 @@ ___
 
 [![GitHub Badge](https://img.shields.io/badge/tony24123-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/tony24123) <br>
 🔹백엔드로 넘어와서 개념이 정리되지 않은 상태로 다음 단계를 진행하다보니 어느 순간 궁금한 것이 무엇이고 어디부터 흐름을 잡아나아가야 할지 막막했다.<br>
-이번 프로젝트에 무엇을 할 수 있을지 자신이 없었다.
-　내가 부족한 부분을 채워나가고 해보고 싶은 작업을 편히 진행할 수 있게 시간을 마련해 준 팀원들에게 감사하다.
+이번 프로젝트에 무엇을 할 수 있을지 자신이 없었다. <br>내가 부족한 부분을 채워나가고 해보고 싶은 작업을 편히 진행할 수 있게 시간을 마련해 준 팀원들에게 감사하다.
 ___
 [![GitHub Badge](https://img.shields.io/badge/ThoI－i-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/ThoI-i) <br>
 🔹
@@ -127,8 +126,10 @@ ___
 [![GitHub Badge](https://img.shields.io/badge/chchch928-181717?logo=github&logoColor=white&labelColor=181717)](https://github.com/chchch928) <br>
 🔹풀스택 개발의 복잡함을 체감<br>
 혼자서 모든 부분을 처리해야 하는 어려움을 느꼈고, 팀으로 작업했다면 더 효율적으로 프로젝트를 진행할 수 있었을 것 같음<br>
+
 🔹공부와 프로젝트 병행의 중요성을 느낌<br>
 　프로젝트 진행중 발생한 문제를 해결하면서 실력을 쌓았고 단순히 결과물을 만드는 것이 아니라 공부과정을 통해 성장했다고 생각함<br>
+
 🔹앞으로의 목표<br>
 　이번 프로젝트는 모든 부분을 스스로 만들어 나가는 것이 쉽지않아 기존에 공부한것을 많이 참조해서 만들었기 때문에 다음 프로젝트 때에는 더 체계적으로 좋은 결과물을 만들고 싶음<br>
 ___
