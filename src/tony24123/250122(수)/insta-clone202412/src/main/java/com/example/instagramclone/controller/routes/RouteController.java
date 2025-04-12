@@ -21,21 +21,9 @@ public class RouteController {
     ) {
         log.info("메인페이지에서 인증된 사용자명: {}", username);
         if (username.equals("anonymousUser")) {
-            return "auth/login";
+            return "practice/bj-login";
         }
-        return "index";  // 나중에 로그인 후 복귀할 때 주석해제
-    }
-
-    // 회원가입 페이지 열기
-    @GetMapping("/signup")
-    public String signUp() {
-        return "auth/signup";
-    }
-
-    // 프로필 페이지 열기
-    @GetMapping("/{username}")
-    public String profilePage() {
-        return "components/profile-page";
+        return "practice/blackjack";  // 나중에 로그인 후 복귀할 때 주석해제
     }
 
     //블랙잭 페이지 열기
